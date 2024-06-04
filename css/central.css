@@ -1,0 +1,48 @@
+/* colour palette */
+:root {
+    --primary: #EAA843;
+    --primary-dark: #8a6226;
+    --secondary: #4275B0;
+    --secondary-light: #c0ddfe;
+    --light-grey: #f7f7f7;
+    --transparent: #ffffff00;
+    --text-grey: rgb(151, 151, 151);
+}
+
+/* form aesthetics */
+input{
+    padding: 10px;
+    border-radius: 5px;
+    border: 0px;
+}
+
+input[type=checkbox]{
+    accent-color: var(--secondary);
+}
+
+label {
+    font-weight: 500;
+}
+
+button {
+    padding: 10px 30px 10px 30px;
+    background-color: var(--secondary);
+    border-color: var(--transparent);
+    border-radius: 5px;
+    color: white !important;
+}
+
+button:hover {
+    background-color: var(--transparent) !important;
+    border-color: var(--secondary);
+    color: black !important;
+}
+
+/* miscellaneous */
+.greyText {
+    color: var(--text-grey);
+}
+
+.smallIcon {
+    width: 20px;
+}
