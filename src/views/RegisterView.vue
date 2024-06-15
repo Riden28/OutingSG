@@ -3,7 +3,7 @@
     <NavBar />
 
     <div class="row">
-        <!-- left side of the login page -->
+        <!-- left side of the register page -->
         <div class='rowBackground'>
             <div class="column left">
                 <h2>Welcome to</h2>
@@ -12,13 +12,12 @@
                 <br><h4>But with OutingSG, we can solve this problem.</h4>
             </div>
         
-            <!-- User login form -->
+            <!-- User register form -->
             <div class="column right">
-                <p class='pageTitle'>User Login</p>
+                <p class='pageTitle'>User Register</p>
                 <hr>
-                <form id="login">
-
-                    <!-- Username and Password -->
+                <form id="register">
+                    
                     <div class="formRow">
                         <!-- Username -->
                         <div class="formColumn">
@@ -32,7 +31,38 @@
                                 <br>
                             </p>
                         </div>
+                    </div>
 
+                    <!-- Email and Number -->
+                    <div class="formRow">
+                        <!-- Email -->
+                        <div class="formColumn">
+                            <p>
+                                <label for="email"><img src='../assets/icons/email.png' class="smallIcon"> Email</label>
+                                <br><input type="email" 
+                                            id='email'
+                                            placeholder="Enter your email"
+                                            required 
+                                            v-model="email">
+                                <br>
+                            </p>
+                        </div>
+
+                        <!-- Number -->
+                        <div class="formColumn">
+                            <p>
+                                <label for="mobileNumber"><img src='../assets/icons/mobileNumber.png' class="smallIcon"> Mobile Number</label>
+                                <br><input type="tel" 
+                                            id='mobileNumber'
+                                            placeholder="Enter your mobile no."
+                                            required 
+                                            v-model="mobileNumber">
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Password and Confirmation -->
+                    <div class="formRow">
                         <!-- Password -->
                         <div class="formColumn">
                             <p>
@@ -42,6 +72,19 @@
                                             placeholder="Enter your password"
                                             required 
                                             v-model="password">
+                                <br>
+                            </p>
+                        </div>
+
+                        <!-- Confirmation -->
+                        <div class="formColumn">
+                            <p>
+                                <label for="confirmPassword"><img src='../assets/icons/password.png' class="smallIcon"> Confirm Password</label>
+                                <br><input type="password" 
+                                            id='confirmPassword'
+                                            placeholder="Re-type password"
+                                            required 
+                                            v-model="confirmPassword">
                             </p>
                         </div>
                     </div>
@@ -56,12 +99,11 @@
 
                     
                     <center>
-                    <br><button style="width:80%;">Login</button>
+                    <br><button style="width:80%;">Register</button>
 
-                    <!-- click to go to register or forget pw page -->
+                    <!-- click to go to login page -->
                     <p style="margin-top: 10px;" class="greyText">
-                        <router-link to='/forgetPw' id="forgetPw">Forget Password?</router-link><br>
-                        Are you a new user? Register <router-link to='/register' style="color: var(--secondary) !important;">here</router-link>
+                        Are you an existing user? Login <router-link to='/login' style="color: var(--secondary) !important;">here</router-link>
                     </p>
                     </center>
                     
@@ -81,7 +123,7 @@
     import NavBar from '@/components/NavBar.vue';
 
     export default {
-        name: 'login',
+        name: 'register',
         components: {
             NavBar
         },

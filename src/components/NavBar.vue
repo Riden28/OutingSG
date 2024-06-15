@@ -39,7 +39,7 @@
                 <li><router-link to="/saved"><img src='../assets/icons/bookmark.png' class='nav-icon'> Saved outings</router-link></li>
                 <li id="loginStatus">
                     <router-link to="/profile" v-if="userIsLoggedIn"><img src='../assets/icons/profile.png' class='nav-icon'> Profile</router-link>
-                    <router-link to="/login"><img src='../assets/icons/login.png' class='nav-icon'> Login</router-link>
+                    <router-link to="/login" v-else><img src='../assets/icons/login.png' class='nav-icon'> Login</router-link>
                 </li>
             </ul>
         </div>
@@ -55,17 +55,13 @@ import '../assets/bootstrap.css';
 import '../router/bootstrap.js';
 
 export default {
-    name: 'NavBar'
+    name: 'NavBar',
+    data() {
+        return {
+            userIsLoggedIn: false,
+        };
+    }
 };
-
-// const loginStatus = Vue.createApp({
-//     data() {
-//         return {
-//         userIsLoggedIn: false
-//         }
-//     }
-// });
-// loginStatus.mount('#loginStatus')
 
 </script>
 

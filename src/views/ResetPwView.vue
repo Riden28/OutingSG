@@ -12,27 +12,14 @@
                 <br><h4>But with OutingSG, we can solve this problem.</h4>
             </div>
         
-            <!-- User login form -->
+            <!-- Reset Password Form -->
             <div class="column right">
-                <p class='pageTitle'>User Login</p>
+                <p class='pageTitle'>Reset Password</p>
                 <hr>
-                <form id="login">
+                <form id="resetPw">
 
-                    <!-- Username and Password -->
+                    <!-- Password and New Password -->
                     <div class="formRow">
-                        <!-- Username -->
-                        <div class="formColumn">
-                            <p>
-                                <label for="username"><img src='../assets/icons/username.png' class="smallIcon"> Username</label>
-                                <br><input type="text" 
-                                            id='username'
-                                            placeholder="Enter your username"
-                                            required 
-                                            v-model="username">
-                                <br>
-                            </p>
-                        </div>
-
                         <!-- Password -->
                         <div class="formColumn">
                             <p>
@@ -42,26 +29,29 @@
                                             placeholder="Enter your password"
                                             required 
                                             v-model="password">
+                                <br>
+                            </p>
+                        </div>
+
+                        <!-- New Password -->
+                        <div class="formColumn">
+                            <p>
+                                <label for="newPassword"><img src='../assets/icons/password.png' class="smallIcon"> New Password</label>
+                                <br><input type="password" 
+                                            id='newPassword'
+                                            placeholder="Enter your new password"
+                                            required 
+                                            v-model="newPassword">
                             </p>
                         </div>
                     </div>
 
-                    <!-- Remember Me -->
-                    <div class="formRow" style="margin-top: -10px;">
-                        <br><input type="checkbox" 
-                        id='rememberme'
-                        v-model="rememberme">
-                        <label for="rememberme" style="font-weight: 100;">&nbsp;Remember Me</label>
-                    </div>
-
-                    
                     <center>
-                    <br><button style="width:80%;">Login</button>
+                    <br><button style="width:80%;">Confirm Change Password</button>
 
-                    <!-- click to go to register or forget pw page -->
+                    <!-- click to go to login page -->
                     <p style="margin-top: 10px;" class="greyText">
-                        <router-link to='/forgetPw' id="forgetPw">Forget Password?</router-link><br>
-                        Are you a new user? Register <router-link to='/register' style="color: var(--secondary) !important;">here</router-link>
+                        Back to <router-link to='/login' style="color: var(--secondary) !important;">login</router-link>
                     </p>
                     </center>
                     
@@ -81,7 +71,7 @@
     import NavBar from '@/components/NavBar.vue';
 
     export default {
-        name: 'login',
+        name: 'resetPw',
         components: {
             NavBar
         },
