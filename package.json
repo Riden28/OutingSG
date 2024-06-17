@@ -9,10 +9,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@jamescoyle/vue-icon": "^0.1.2",
+    "@mdi/font": "^7.4.47",
+    "@mdi/js": "^7.4.47",
     "vue": "^3.4.21",
     "vue-load-script-plus": "^1.6.6",
     "vue-meta": "^2.4.0",
-    "vue-router": "^4.3.0"
+    "vue-router": "^4.3.0",
+    "vuetify": "^3.6.9"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",

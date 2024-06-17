@@ -70,7 +70,7 @@ export default {
 </script>
 
 
-<style>
+<style scoped>
     .navbar {
         background-color: var(--primary);
         /* background-color: #EAA843; */

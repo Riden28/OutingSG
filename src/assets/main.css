@@ -30,8 +30,8 @@ button {
   padding: 10px 30px 10px 30px;
   background-color: var(--secondary);
   border-color: var(--transparent);
-  border-radius: 5px;
-  color: white !important;
+  border-radius: 5px; 
+  color: white;
 }
 
 button:hover {
