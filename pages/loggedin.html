@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Use CSS to hide body, authCheck.js will show if user is authenticated -->
+    <style>
+        body {
+          display: none;
+        }
+    </style>
+    <title>Protected page</title>
+    <script type="module" src="authCheck.js"></script>
+</head>
+<body>
+    <h1>This is a test page if you see this you have logged in</h1>
+    <button onclick="logOut()">Logout</button>
+    <script type="module" src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Use CSS to hide body, redirectIfAuth.js will show if user is unauthenticated -->
+  <style>
+  body {
+    display: none;
+  }
+  </style>
+  <title>Login</title>
+  <link rel="shortcut icon" type="image/x-icon" href="./images/logo1.png" /> <!-- this is required on every page so the icon on the tab shows up-->
+  <link rel="stylesheet" href="css/central.css">
+  <link rel="stylesheet" href="css/login.css">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+  <script type="module" src="redirectIfAuth.js"></script>
+</head>
+
+<body>
+  <div id="nav-placeholder"></div>
+
+  <div class="row">
+    <!-- left side of the login page -->
+    <div class='rowBackground'>
+      <div class="column left">
+        <h2>Welcome to</h2>
+        <p><img src='./images/OutingSG_white.png'></p>
+        <p>Singapore, a bustling city-state renowned for its vibrant culture and diverse entertainment options...</p>
+        <br>
+        <h4>But with OutingSG, we can solve this problem.</h4>
+      </div>
+
+      <!-- User login form -->
+      <div class="column right" id="login">
+        <h2 style="font-weight: 800; padding-top: 30px !important;">
+          <center>User Login</center>
+        </h2>
+        <hr>
+        <form id="loginForm" onsubmit="logIn(event)"> <!-- Prevent default form submission and call logIn -->
+          <div class="formRow">
+            <div class="formColumn">
+              <p>
+                <label for="username"><img src='./images/icons/username.png' class="smallIcon"> Username</label>
+                <br><input type="text" id="username" placeholder="Enter your username" required>
+                <br>
+              </p>
+            </div>
+
+            <div class="formColumn">
+              <p>
+                <label for="password"><img src='./images/icons/password.png' class="smallIcon"> Password</label>
+                <br><input type="password" id="password" placeholder="Enter your password" required>
+              </p>
+            </div>
+          </div>
+
+          <!-- Remember Me -->
+          <div class="formRow" style="margin-top: -10px;">
+            <br><input type="checkbox" id='rememberme'>
+            <label for="rememberme" style="font-weight: 100;">&nbsp;Remember Me</label>
+          </div>
+
+          <center>
+            <br><button type="submit" style="width:80%;">Login</button>
+            <p style="margin-top: 10px;" class="greyText">
+              <a href='forgetPassword.html' id="forgetPw">Forget Password?</a><br>
+              Are you a new user? Register <a href="register.html" style="color: var(--secondary) !important;">here</a>
+            </p>
+          </center>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Loading the navigation bar
+    $(function () {
+      $("#nav-placeholder").load("navBar.html");
+    });
+  </script>
+  <script type="module" src="app.js"></script>
+</body>
+
+</html>

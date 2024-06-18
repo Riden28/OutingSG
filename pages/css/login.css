@@ -1,0 +1,74 @@
+/* Create two equal columns that floats next to each other */
+.rowBackground {
+    float: left;
+    width: 100%;
+    height: 70vh;
+    border-radius: 10px;
+    background-color:var(--secondary);
+}
+
+.left {
+    float: left;
+    width: 50%;
+    height: 70vh;
+    padding: 70px;
+    border-radius: 10px;
+    color: white;
+}
+
+.right {
+    float: left;
+    width: 50%;
+    height: 70vh;
+    border-radius: 10px;
+    background-color:var(--light-grey);
+}
+
+.row {
+    width: 100%;
+    padding: 70px 50px 70px 70px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+@media screen and (max-width: 600px) {
+    .column {
+        width: 100%;
+    }
+}
+
+body {
+    background-image: url("../images/background/login_bg.jpg");
+    background-size: cover;
+}
+
+.formColumn {
+    float: left;
+    padding-right: 30px;
+}
+
+.formRow {
+    width: 60%;
+    margin: auto;
+    padding-left: 10px;
+}
+
+/* Clear floats after the columns */
+.formRow:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+#forgetPw:link {
+    color: var(--text-grey) !important;
+}
+
+#forgetPw:hover {
+    text-decoration: underline;
+}
