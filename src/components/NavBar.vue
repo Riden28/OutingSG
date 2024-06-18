@@ -58,8 +58,8 @@ export default {
     name: 'NavBar',
     data() {
         return {
-            userIsLoggedIn: false
-        }
+            userIsLoggedIn: false,
+        };
     }
 };
 
