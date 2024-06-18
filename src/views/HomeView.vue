@@ -5,11 +5,15 @@
   <div class="CategoryBar">
     <CategorySelector/>
   </div>
+  <div class="ListingDisplay">
+    <ListingsDisplay/>
+  </div>
 </template>
 
 <script>
   import CategorySelector from '@/components/CategorySelector.vue';
   import ImageCarousel from '@/components/ImageCarousel.vue';
+  import ListingsDisplay from '@/components/ListingsDisplay.vue';
   import NavBar from '@/components/NavBar.vue';
   
 
@@ -19,7 +23,8 @@
     components: {
       NavBar,
       ImageCarousel,
-      CategorySelector
+      CategorySelector,
+      ListingsDisplay
       
       
     },
