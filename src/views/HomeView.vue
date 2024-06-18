@@ -8,7 +8,6 @@
   <div class="ListingDisplay">
     <ListingsDisplay/>
   </div>
-  <NavBar/>
   <OutingSGFooter/>
 
 </template>
@@ -18,6 +17,7 @@
   import ImageCarousel from '@/components/ImageCarousel.vue';
   import ListingsDisplay from '@/components/ListingsDisplay.vue';
   import NavBar from '@/components/NavBar.vue';
+  import OutingSGFooter from '@/components/Footer.vue';
 
   export default {
     name: 'home',
