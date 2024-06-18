@@ -1,35 +1,50 @@
 @import './base.css';
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
+/* colour palette */
+:root {
+  --primary: #EAA843;
+  --primary-dark: #8a6226;
+  --secondary: #4275B0;
+  --secondary-light: #c0ddfe;
+  --light-grey: #f7f7f7;
+  --transparent: #ffffff00;
+  --text-grey: rgb(151, 151, 151);
 }
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
+/* form aesthetics */
+input{
+  padding: 10px;
+  border-radius: 5px;
+  border: 0px;
 }
 
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
+input[type=checkbox]{
+  accent-color: var(--secondary);
 }
 
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
+label {
+  font-weight: 500;
+}
 
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
+button {
+  padding: 10px 30px 10px 30px;
+  background-color: var(--secondary);
+  border-color: var(--transparent);
+  border-radius: 5px;
+  color: white !important;
+}
+
+button:hover {
+  background-color: var(--transparent) !important;
+  border-color: var(--secondary);
+  color: black !important;
+}
+
+/* miscellaneous */
+.greyText {
+  color: var(--text-grey);
+}
+
+.smallIcon {
+  width: 20px;
 }
