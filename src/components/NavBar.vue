@@ -72,6 +72,7 @@ export default {
         /* background-color: #EAA843; */
         border: 0;
         border-radius: 0px;
+        margin: 0px;
     }
 
     .navbar-search {

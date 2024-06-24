@@ -1,8 +1,10 @@
 <template>
    <div class="v-carousel">
-    <v-carousel show-arrows="hover"
+    <v-carousel
+    show-arrows="hover" 
     cycle
-    height="373">
+    height="373"
+    hide-delimiter-background>
         <v-carousel-item
         v-for="(slide, index) in slides"
             :src="slide.url"
@@ -33,11 +35,8 @@
 <style scoped>
     .v-carousel {
         width: auto;
-        padding: 0px 24px 0px 24px;
+        padding: 0px 0px 0px 0px;
         justify-content: center;
         align-items: center;
-    }
-    .button {
-      color:red!important;
     }
 </style>
