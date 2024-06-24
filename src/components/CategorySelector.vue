@@ -10,7 +10,7 @@
             <v-icon :icon="category.icon" size="x-large"></v-icon>
           </v-btn>
             
-          <p class="text-center">{{ category.name }}</p>
+          <div class="text-center" width="80px">{{ category.name }}</div>
             
         </v-col>
   
@@ -37,10 +37,16 @@ export default {
           buttonWidth: 80,
           buttonColor: 'var(--secondary)',
           outingCategories: [
-            {id: "food", name: "F&B", icon: "mdi-food"},
-            {id: "sport", name: "Sport", icon: "mdi-bike"},
-            {id: "cultural", name: "Cultural", icon: "mdi-bank"},
-            {id: "music", name: "Music", icon: "mdi-music"}
+            {id: "F&B", name: "F&B", icon: "mdi-food-outline"},
+            {id: "Nature", name: "Nature", icon: "mdi-forest-outline"},
+            {id: "Cultural", name: "Cultural", icon: "mdi-bank-outline"},
+            {id: "Entertainment", name: "Entertainment", icon: "mdi-drama-masks"},
+            {id: "Outdoor", name: "Outdoor Activities", icon: "mdi-bike"},
+            {id: "Educational", name: "Educational", icon: "mdi-human-male-board"},
+            {id: "Adventure", name: "Adventure", icon: "mdi-airballoon-outline"},
+            {id: "Shopping", name: "Shopping", icon: "mdi-shopping-outline"},
+            {id: "Wellness", name: "Wellness", icon: "mdi-spa-outline"},
+            {id: "Events", name: "Events & Festivals", icon: "mdi-calendar"}
           ]
       }
 	}
