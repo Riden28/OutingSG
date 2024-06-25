@@ -27,9 +27,6 @@
       ImageCarousel,
       CategorySelector,
       ListingsDisplay,
-      
-      
-      NavBar, 
       OutingSGFooter
     },
   };
