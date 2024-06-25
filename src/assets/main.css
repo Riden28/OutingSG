@@ -37,7 +37,7 @@ button {
 
 button:hover {
   background-color: var(--transparent) !important;
-  border-color: var(--secondary);
+  border: solid var(--secondary);
   color: black !important;
 }
 
