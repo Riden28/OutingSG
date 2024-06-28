@@ -17,6 +17,7 @@
     "vue-load-script-plus": "^1.6.6",
     "vue-meta": "^2.4.0",
     "vue-router": "^4.3.0",
+    "vue-slide-bar": "^1.2.0",
     "vuetify": "^3.6.9"
   },
   "devDependencies": {
