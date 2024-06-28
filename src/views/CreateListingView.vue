@@ -1,5 +1,6 @@
 <template> 
     <NavBar /> 
+<<<<<<< HEAD
     <div class="cover">
     <form action="">
       <div class="top"></div>
@@ -70,6 +71,36 @@
       </div>
     </form>
   </div>
+=======
+    <form action="">
+      <div class="upper">
+
+      </div>
+      <div class="lower">
+        <div class="left">
+
+        </div>
+        <div class="right">
+          <div class="row1">
+            <div class="category">
+              <select name="category" id="">
+                <option value="F&B">F</option>
+                <option value="nature">nature</option>
+              </select>
+            </div>
+            <div class="price"></div>
+            <div class="recommended-pax"></div>
+          </div>
+          <div class="row2">
+            <div class="area"></div>
+            <div class="location"></div>
+          </div>
+        </div>
+    </div>
+    </form>
+
+
+>>>>>>> 23c9ff4eecef99fabb907d4c3a1dedf4f744a25e
     <OutingSGFooter/>
 </template> 
  
@@ -96,6 +127,7 @@
 </script>
 
 <style scoped>
+<<<<<<< HEAD
   .cover {
     background-color: white;
   }
@@ -123,4 +155,7 @@
   .location {
     margin-left: 3rem;
   }
+=======
+
+>>>>>>> 23c9ff4eecef99fabb907d4c3a1dedf4f744a25e
 </style>
