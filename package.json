@@ -1,0 +1,33 @@
+{
+  "name": "outingsg",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@jamescoyle/vue-icon": "^0.1.2",
+    "@mdi/font": "^7.4.47",
+    "@mdi/js": "^7.4.47",
+    "bootstrap": "^5.3.3",
+    "firebase": "^10.12.2",
+    "git": "^0.1.5",
+    "vue": "^3.4.21",
+    "vue-load-script-plus": "^1.6.6",
+    "vue-meta": "^2.4.0",
+    "vue-router": "^4.3.0",
+    "vuetify": "^3.6.9"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.4",
+    "vite": "^5.2.8"
+  },
+  "description": "This template should help get you started developing with Vue 3 in Vite.",
+  "main": "vite.config.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
