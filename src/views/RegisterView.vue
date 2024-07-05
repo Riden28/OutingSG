@@ -99,9 +99,8 @@
 
                     
                     <center>
-                        <br><button type="submit" @click.stop.prevent="submit()">testing</button>
                     
-                    <br><button style="width:80%;">Register</button>
+                    <br><button  type="submit" @click.stop.prevent="submit()" style="width:80%;">Register</button>
 
                     <!-- click to go to login page -->
                     <p style="margin-top: 10px;" class="greyText">
