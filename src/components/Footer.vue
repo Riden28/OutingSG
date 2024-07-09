@@ -18,6 +18,10 @@
     import '../assets/main.css';
     import '../assets/bootstrap.css';
     import '../router/bootstrap.js';
+
+    export default {
+        name: 'OutingSGFooter'
+    }
 </script>
 
 <style>
