@@ -95,9 +95,12 @@
         components: {
             NavBar
         },
+        created() {
+            this.username = this.$route.query.username
+        },
         data() {
             return {
-                username: "Username here",
+                username: "",
                 bio: "yadyaydgwygwkgnlwrkngkaerngjkrejk",
                 profilePicture: "/src/assets/icons/profile.png",
             };

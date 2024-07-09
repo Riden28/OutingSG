@@ -101,7 +101,8 @@
                     <center>
                     
                     <!-- <br><button type="submit" @click.stop.prevent="submit()" style="width:80%;">Register</button> -->
-                    <br><router-link to='/editProfile'><button style="width:80%;">Register</button></router-link>
+                    <!-- <br><router-link to='/editProfile'><button @click="nextpage()" style="width:80%;">Register</button></router-link> -->
+                    <br><button @click="toProfile()" style="width:80%;">Register</button>
 
                     <!-- click to go to login page -->
                     <p style="margin-top: 10px;" class="greyText">
@@ -148,6 +149,17 @@
                     console.log("Error: ", error.message)
                 });
                 this.$router.push("./")
+            },
+            toProfile(){
+                this.$router.push({
+                    path: '/editProfile', 
+                    query: {
+                        username: this.username, 
+                        email: this.email,
+                        mobileNumber: this.mobileNumber,
+                        password: this.password
+                    }
+                })
             }
         },
         name: 'register',
@@ -155,6 +167,9 @@
             NavBar
         },
     };
+
+    
+
 </script>
 
 <!-- const username = ref("");
