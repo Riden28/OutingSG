@@ -65,7 +65,7 @@
                         <router-link to="/profile"><button class="cancelButton">Cancel</button></router-link>
                     </v-col>
                     <v-col>
-                        <router-link to="/profile"><button>Save Changes</button></router-link>
+                        <router-link to="/profile"><button @click.stop.prevent="submit()">Save Changes</button></router-link>
                     </v-col>
                 </v-row>
             </center>
@@ -81,8 +81,14 @@
     import '../assets/main.css';
     import '../assets/bootstrap.css';
     import '../router/bootstrap.js';
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import firebaseConfig from './../../firebase/firebaseConfig.js';
 
     import NavBar from '@/components/NavBar.vue';
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
 
     export default {
         name: 'profile',
@@ -95,7 +101,21 @@
                 bio: "yadyaydgwygwkgnlwrkngkaerngjkrejk",
                 profilePicture: "/src/assets/icons/profile.png",
             };
-        }
+        },
+        methods: {
+            submit(){
+                const auth = getAuth();
+                const { email, password } = this;
+                createUserWithEmailAndPassword(auth, email, password)
+                .then(() => {
+                    console.log("Successfully registered")
+                })
+                .catch((error) => {
+                    console.log("Error: ", error.message)
+                });
+                this.$router.push("./")
+            }
+        },
     };
 </script>
 

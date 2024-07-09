@@ -100,7 +100,8 @@
                     
                     <center>
                     
-                    <br><button  type="submit" @click.stop.prevent="submit()" style="width:80%;">Register</button>
+                    <!-- <br><button type="submit" @click.stop.prevent="submit()" style="width:80%;">Register</button> -->
+                    <br><router-link to='/editProfile'><button style="width:80%;">Register</button></router-link>
 
                     <!-- click to go to login page -->
                     <p style="margin-top: 10px;" class="greyText">
@@ -125,7 +126,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import firebaseConfig from './../../firebase/firebaseConfig.js';
 
-// Initialize Firebase
+    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     
     export default {
