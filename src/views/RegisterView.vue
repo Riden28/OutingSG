@@ -99,7 +99,8 @@
 
                     
                     <center>
-                    <br><button style="width:80%;">Register</button>
+                    
+                    <br><button  type="submit" @click.stop.prevent="submit()" style="width:80%;">Register</button>
 
                     <!-- click to go to login page -->
                     <p style="margin-top: 10px;" class="greyText">
@@ -119,13 +120,54 @@
     import '../assets/bootstrap.css';
     import '../router/bootstrap.js';
     import '../assets/loginRegister.css';
-
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
     import NavBar from '@/components/NavBar.vue';
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import firebaseConfig from './../../firebase/firebaseConfig.js';
 
+// Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    
     export default {
+        data(){
+            return{
+                email: '',
+                password: '',
+            }
+        },
+        methods: {
+            submit(){
+                const auth = getAuth();
+                const { email, password } = this;
+                createUserWithEmailAndPassword(auth, email, password)
+                .then(() => {
+                    console.log("Successfully registered")
+                })
+                .catch((error) => {
+                    console.log("Error: ", error.message)
+                });
+                this.$router.push("./")
+            }
+        },
         name: 'register',
         components: {
             NavBar
         },
     };
 </script>
+
+<!-- const username = ref("");
+const password = ref("");
+
+const logIn = async () => {
+    signInWithEmailAndPassword(auth, username.value, password.value)
+        .then((data) => {
+            console.log("Successfully logged in");
+            router.push("/");
+        })
+        .catch((error) => {
+            console.log(error.code); 
+            alert(error.message);
+        })
+}; -->
+

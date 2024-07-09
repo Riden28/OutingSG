@@ -8,6 +8,7 @@ import ListingView from '../views/ListingView.vue'
 import ProfileView from '../views/ProfileView.vue'
 import SettingsView from '../views/SettingsView.vue'
 import EditProfileView from '../views/EditProfileView.vue'
+import CreateListingView from '@/views/CreateListingView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -56,6 +57,11 @@ const router = createRouter({
       path: '/editProfile',
       name: 'editProfile',
       component: EditProfileView,
+    },
+    {
+      path: '/create',
+      name: 'create',
+      component: CreateListingView,
     }
     // {
     //   path: '/about',
