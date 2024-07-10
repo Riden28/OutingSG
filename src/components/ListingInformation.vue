@@ -27,8 +27,8 @@
 
 <script>
 
-    import ImageCarousel from './ImageCarousel.vue';
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import ImageCarousel from './ImageCarousel.vue';
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, collection, doc, setDoc, getDoc, updateDoc, deleteDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getStorage } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
@@ -46,23 +46,36 @@ const db = getFirestore(app);
 // Initialize Firebase Storage
 const storage = getStorage(app);
 
-// get listingID
-
-// const docRef = doc(db, "outings", listingID);
-// const docSnap = await getDoc(docRef);
-
-// if (docSnap.exists()) {
-//     var outing_details = docSnap.data();;
-// } else {
-//   // docSnap.data() will be undefined in this case
-//     console.log("error 404: outing not found");
-// }
-//     export default {
-//     name: 'ListingInformation',
-//     components: ImageCarousel,
-//     components: { ImageCarousel }
-    
-// }
+export default {
+    name: 'ListingInformation',
+    components: {
+        ImageCarousel
+    },
+    data() {
+        return {
+            outing_details: {
+                name: '',
+                category: '',
+                location: '',
+                description: '',
+                images: []
+            }
+        }
+    },
+    mounted() {
+        this.getOutingDetails();
+    },
+    methods: {
+        async getOutingDetails() {
+            const outingId = this.$route.params.id;
+            const outingRef = doc(db, 'outings', outingId);
+            const outingSnap = await getDoc(outingRef);
+            if (outingSnap.exists()) {
+                this.outing_details = outingSnap.data();
+            }
+        }
+    }
+}
 </script>
 
 <style scoped>
