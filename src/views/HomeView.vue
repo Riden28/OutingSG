@@ -15,7 +15,7 @@
 <script>
   import CategorySelector from '@/components/CategorySelector.vue';
   import ImageCarousel from '@/components/ImageCarousel.vue';
-  import ListingsDisplay from '@/components/ListingsDisplay.vue';
+  import ListingsDisplay from '@/components/ListingsRecommend.vue';
   import NavBar from '@/components/NavBar.vue';
   import OutingSGFooter from '@/components/Footer.vue';
 

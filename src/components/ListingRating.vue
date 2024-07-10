@@ -44,6 +44,7 @@ Donec suscipit luctus justo in placerat. Ut sodales est vel nisi maximus, nec pu
 <script>
   export default {
     name: 'ListingRating'
+    
   }
 </script>
 

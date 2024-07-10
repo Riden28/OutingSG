@@ -21,3 +21,20 @@ const db = getFirestore(app);
 
 // Initialize Firebase Storage
 const storage = getStorage(app);
+
+
+// doesnt work :(
+
+// async function preview_listings(){
+// const querySnapshot = await getDocs(collection(db, "outings"));
+// var outings = [];
+// querySnapshot.forEach((doc) => {
+//   // doc.data() is never undefined for query doc snapshots
+//     var outing_details = doc.data();
+//     outings.push({name: outing_details.name, details: outing_details.description, url: outing_details.images[0]})
+//     // console.log(doc.id, " => ", outing_details.images[0]);
+//     });
+//     return outings;
+// }
+
+// export default preview_listings;
