@@ -34,7 +34,7 @@
       <div class="bottom v-row">
         <div class="v-col-5">
           <!-- here goes the google maps selector -->
-          <GoogleMaps/>
+          <!-- <GoogleMaps/> -->
         </div>
 
         <div class="v-col-7">
@@ -115,7 +115,34 @@
   import NavBar from '@/components/NavBar.vue'; 
   import OutingSGFooter from '@/components/Footer.vue';
   import GoogleMaps from '@/components/GoogleMaps.vue';
- 
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { getFirestore, collection, doc, setDoc, getDoc, updateDoc, deleteDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  import { getStorage } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+  import firebaseConfig from '../../firebase/firebaseConfig.js';
+  
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const storage = getStorage(app);
+
+  const docData = {
+    stringExample: "Hello world!",
+    booleanExample: true,
+    numberExample: 3.14159265,
+    // dateExample: Timestamp.fromDate(new Date("December 10, 1815")),
+    arrayExample: [5, true, "hello"],
+    nullExample: null,
+    objectExample: {
+        a: 5,
+        b: {
+            nested: "foo"
+        }
+    }
+};
+ setDoc(doc(db, "outings", "one"), docData);
+
+
   export default { 
     name: 'create', 
     components: { 
@@ -128,14 +155,9 @@
       return {
         picked: '',
         sliderValue: 20,
+        
       }
     },
-
-    // methods: {
-    //   submit() {
-    //     this.$emit('submit', this.text)
-    //   }
-    // }
     
   }; 
   // const setPlace = (place) => {
@@ -150,7 +172,7 @@
 
 <style scoped>
   .cover {
-    background-color: white;
+    background-color: rgb(237, 231, 230);
   }
   input, .category {
     color: black;
