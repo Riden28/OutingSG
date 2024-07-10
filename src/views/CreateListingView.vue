@@ -120,27 +120,31 @@
   import { getFirestore, collection, doc, setDoc, getDoc, updateDoc, deleteDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
   import { getStorage } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
   import firebaseConfig from '../../firebase/firebaseConfig.js';
-  
+
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
   const storage = getStorage(app);
 
-  const docData = {
-    stringExample: "Hello world!",
-    booleanExample: true,
-    numberExample: 3.14159265,
-    // dateExample: Timestamp.fromDate(new Date("December 10, 1815")),
-    arrayExample: [5, true, "hello"],
-    nullExample: null,
-    objectExample: {
-        a: 5,
-        b: {
-            nested: "foo"
-        }
-    }
-};
- setDoc(doc(db, "outings", "one"), docData);
+//   const docData = {
+//     stringExample: "Hello world!",
+//     booleanExample: true,
+//     numberExample: 3.14159265,
+//     // dateExample: Timestamp.fromDate(new Date("December 10, 1815")),
+//     arrayExample: [5, true, "hello"],
+//     nullExample: null,
+//     objectExample: {
+//         a: 5,
+//         b: {
+//             nested: "foo"
+//         }
+//     }
+// };
+
+// await setDoc(doc(db, "outings", "one"), docData).then(() => {
+//     console.log("Document successfully written!");
+// });
+
 
 
   export default { 
