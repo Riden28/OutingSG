@@ -102,7 +102,7 @@
                     
                     <!-- <br><button type="submit" @click.stop.prevent="submit()" style="width:80%;">Register</button> -->
                     <!-- <br><router-link to='/editProfile'><button @click="nextpage()" style="width:80%;">Register</button></router-link> -->
-                    <br><button @click="toProfile()" style="width:80%;">Register</button>
+                    <br><button @click="toProfile()" style="width:80%;" class='buttonSubmit'>Register</button>
 
                     <!-- click to go to login page -->
                     <p style="margin-top: 10px;" class="greyText">
@@ -119,7 +119,7 @@
 
 <script>
     import '../assets/main.css';
-    import '../assets/bootstrap.css';
+    // import '../assets/bootstrap.css';
     import '../router/bootstrap.js';
     import '../assets/loginRegister.css';
     import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -172,6 +172,19 @@
 
 </script>
 
+<style scoped>
+.buttonSubmit{
+    background-color: var(--secondary);
+    border: solid var(--secondary);
+    color: white !important;
+}
+
+.buttonSubmit:hover {
+    background-color: var(--transparent);
+    border: solid var(--secondary);
+    color: black !important;
+}
+</style>
 <!-- const username = ref("");
 const password = ref("");
 

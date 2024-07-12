@@ -44,8 +44,63 @@
 
         </div> 
   
-        <div class="main"> 
+        <div class="main">
+
             <h2 class="title">Outings</h2>
+
+            <div class="ListingDisplay">
+                <v-container fluid class="mx-auto">
+                <v-infinite-scroll
+                    height="700"
+                    color=var(--secondary)
+                    mode="manual"
+                    @load="load"
+                    empty-text="No more recommended listings">
+                        <v-row align="start" justify="center">
+                            <v-col  v-for="listing in listings" cols="auto">
+                                <v-card
+                                    class="mx-1"
+                                    height="280"
+                                    width="417"
+                                    rounded="xl"
+                                    :href="listing.listingPage">
+                                <v-img
+                                    :src="listing.url"
+                                    height="174px"
+                                    cover></v-img>
+                                <v-btn
+                                    icon="mdi-bookmark-outline"
+                                    base-color="transparent"
+                                    variant="plain"
+                                    @click.prevent="console.log('hi');"> 
+                                    <v-icon
+                                        icon="mdi-bookmark"
+                                        size="50"
+                                        color="white"></v-icon>
+                                </v-btn>
+                                
+                                        <v-card-title>
+                                            {{ listing.name }}
+                                        </v-card-title>
+                                    
+                                        <v-card-subtitle>
+                                            {{ listing.details }}
+                                        </v-card-subtitle>
+
+                                        <v-card-title class="price">
+                                            {{ listing.price }}
+                                        </v-card-title>
+                                    
+                                    <!-- replace console.log with function to save outing -->
+                                    
+                                </v-card>
+                                
+                            </v-col>
+                        
+                        </v-row>
+                </v-infinite-scroll>
+                </v-container>
+            </div>
         </div> 
     </div> 
 
@@ -56,18 +111,81 @@
 <script>
 import NavBar from '@/components/NavBar.vue';
 import OutingSGFooter from '@/components/Footer.vue';
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, doc, setDoc, getDoc, updateDoc, deleteDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getStorage } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+import firebaseConfig from './../../firebase/firebaseConfig.js';
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+// Initialize Firebase Authentication
+const auth = getAuth(app);
+
+// Initialize Cloud Firestore and get a reference to the service
+const db = getFirestore(app);
+
+// Initialize Firebase Storage
+const storage = getStorage(app);
+
+const querySnapshot = await getDocs(collection(db, "outings"));
+var outings = [];
+querySnapshot.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+    var outing_details = doc.data();
+    outings.push({name: outing_details.name, details: outing_details.description, url: outing_details.images[0]})
+});
 
 export default {
-    name: 'home',
+    name: 'explore',
     
     components: {
         NavBar, OutingSGFooter
     },
+    data: () => ({
+        // retrieve the first 10 listings
+        listings: outings.slice(0,10),
+        currentIndex: 0,
+        sorting: true,
+        searchField: new URLSearchParams(window.location.search).get('search'),
+    }),
+    methods: {
+        // on every load retrieve another 10 listings
+        load ({ done }) {
+            setTimeout(() => {
+                this.currentIndex += 10
+                this.listings.push(
+                    outings.slice(this.currentIndex, this.listings.length + 10)
+                )
+                done('ok')
+            }, 1000)
+        },
+        searchListings(){
 
-    data() {
-        return {
-            sorting: true
+            this.listings = []; // clear the existing array to only have the searched listings
+            
+            querySnapshot.forEach((doc) => {
+                var outing_details = doc.data();
+                var outing_name = outing_details.name.toLowerCase()
+                var search_name = this.searchField.toLowerCase()
+                
+                if(outing_name.includes(search_name)){
+                    this.listings.push({name: outing_details.name, details: outing_details.description, url: outing_details.images[0]})
+                }
+            });
+            
+            console.log(this.listings);
         }
+    },
+    created() {
+
+        const navSearch = new URLSearchParams(window.location.search).get('search');
+
+        if (navSearch !== null){
+            this.searchListings();
+        }
+        
     }
 };
 
@@ -130,4 +248,17 @@ select {
     margin-left: 10px;
 }
   
+/* listings style */
+
+.v-btn {
+    position: absolute;
+    top: -6px;
+    right:  8px;
+}
+
+.price {
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+}
 </style>

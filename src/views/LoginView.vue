@@ -51,7 +51,7 @@
                         {{ errorMessage }}
                     </div>
                     <center>
-                        <br><button type="submit" style="width:80%;">Login</button>
+                        <br><button type="submit" style="width:80%;" class="buttonSubmit">Login</button>
                         <!-- click to go to register or forget pw page -->
                         <p style="margin-top: 10px;" class="greyText">
                             <router-link to='/forgetPw' id="forgetPw">Forget Password?</router-link><br>
@@ -67,7 +67,7 @@
 
 <script>
 import '../assets/main.css';
-import '../assets/bootstrap.css';
+// import '../assets/bootstrap.css';
 import '../router/bootstrap.js';
 import '../assets/loginRegister.css';
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -135,5 +135,17 @@ export default {
     color: red;
     margin: 10px 0;
     text-align: center;
+}
+
+.buttonSubmit{
+    background-color: var(--secondary);
+    border: solid var(--secondary);
+    color: white !important;
+}
+
+.buttonSubmit:hover {
+    background-color: var(--transparent);
+    border: solid var(--secondary);
+    color: black !important;
 }
 </style>
