@@ -11,6 +11,7 @@
         >
                 <v-row align="start" justify="center">
                     <v-col  v-for="listing in listings" cols="auto">
+                        <router-link :to= "{name:'listing', state: { outingId: listing.listingID } }">
                         <v-card
                         class="mx-1"
                         height="280"
@@ -40,9 +41,9 @@
                                     {{ listing.name }}
                                 </v-card-title>
                             
-                                <v-card-subtitle>
+                                <v-card-title class="location">
                                     {{ listing.details }}
-                                </v-card-subtitle>
+                                </v-card-title>
 
                                 <v-card-title class="price">
                                     {{ listing.price }}
@@ -51,7 +52,7 @@
                             <!-- replace console.log with function to save outing -->
                             
                         </v-card>
-                        
+                        </router-link>
                     </v-col>
                 
                 </v-row>
@@ -66,6 +67,7 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } f
 import { getFirestore, collection, doc, setDoc, getDoc, updateDoc, deleteDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getStorage } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 import firebaseConfig from './../../firebase/firebaseConfig.js';
+import shuffle from "./../../firebase/firebaseAuthServices.js"
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -92,11 +94,27 @@ const storage = getStorage(app);
 const querySnapshot = await getDocs(collection(db, "outings"));
 var outings = [];
 querySnapshot.forEach((doc) => {
-  // doc.data() is never undefined for query doc snapshots
     var outing_details = doc.data();
-    outings.push({name: outing_details.name, details: outing_details.description, url: outing_details.images[0]})
-    // console.log(doc.id, " => ", outing_details.images[0]);
+    
+    // Determine the price based on max_price
+    let price;
+    if (outing_details.max_price === 0) {
+        price = "Free";
+    } else {
+        price = "$" + outing_details.min_price + ' ~ $' + outing_details.max_price;
+    }
+
+    outings.push({
+        listingID: doc.id,
+        name: outing_details.name,
+        details: outing_details.location,
+        price: price,
+        url: outing_details.images.length > 0 ? outing_details.images[0] : null
     });
+});
+
+outings = shuffle(outings);
+
 
 export default {
     name: 'ListingsDisplay',
@@ -107,16 +125,6 @@ export default {
             // retrieve the first 10 listings
             listings: outings.slice(0,10),
             currentIndex: 0,
-            // listings: [
-            //     {name: 'Listing 1', details: 'Listing Details', url:'https://images.pexels.com/photos/8940309/pexels-photo-8940309.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load', price: '$$', listingPage: 'Listing1'},
-            //     {name: 'Listing 1', details: 'Listing Details', url:'https://images.pexels.com/photos/7495924/pexels-photo-7495924.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load', price: '$$', listingPage: 'Listing1'},
-            //     {name: 'Listing 1', details: 'Listing Details', url:'https://images.pexels.com/photos/23440189/pexels-photo-23440189/free-photo-of-loneliness.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load', price: '$$', listingPage: 'Listing1'},
-            //     {name: 'Listing 1', details: 'Listing Details', url:'https://images.pexels.com/photos/23408294/pexels-photo-23408294/free-photo-of-two-people-are-sitting-on-the-edge-of-a-pier.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load', price: '$$', listingPage: 'Listing1'},
-            //     {name: 'Listing 1', details: 'Listing Details', url:'https://images.pexels.com/photos/22757188/pexels-photo-22757188/free-photo-of-a-black-and-white-photo-of-a-woman-and-man.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load', price: '$$', listingPage: 'Listing1'},
-            //     {name: 'Listing 1', details: 'Listing Details', url:'https://images.pexels.com/photos/22240924/pexels-photo-22240924/free-photo-of-a-black-and-white-photo-of-a-person-on-the-balcony.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load', price: '$$', listingPage: 'Listing1'},
-            //     {name: 'Listing 1', details: 'Listing Details', url:'https://images.pexels.com/photos/22743820/pexels-photo-22743820/free-photo-of-a-black-and-white-photo-of-a-spiral.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load', price: '$$', listingPage: 'Listing1'},
-            //     {name: 'Listing 1', details: 'Listing Details', url:'https://images.pexels.com/photos/14703428/pexels-photo-14703428.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load', price: '$$', listingPage: 'Listing1'}
-            // ]
         }),
 
     methods: {
@@ -125,13 +133,6 @@ export default {
         setTimeout(() => {
             this.currentIndex += 10
             this.listings.push(...
-        //   [
-                // {name: 'Listing 1', details: 'Listing Details', url:'https://images.pexels.com/photos/23408294/pexels-photo-23408294/free-photo-of-two-people-are-sitting-on-the-edge-of-a-pier.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load', price: '$$', listingPage: 'Listing1'},
-                // {name: 'Listing 1', details: 'Listing Details', url:'https://images.pexels.com/photos/22757188/pexels-photo-22757188/free-photo-of-a-black-and-white-photo-of-a-woman-and-man.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load', price: '$$', listingPage: 'Listing1'},
-                // {name: 'Listing 1', details: 'Listing Details', url:'https://images.pexels.com/photos/22240924/pexels-photo-22240924/free-photo-of-a-black-and-white-photo-of-a-person-on-the-balcony.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load', price: '$$', listingPage: 'Listing1'},
-                // {name: 'Listing 1', details: 'Listing Details', url:'https://images.pexels.com/photos/22743820/pexels-photo-22743820/free-photo-of-a-black-and-white-photo-of-a-spiral.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load', price: '$$', listingPage: 'Listing1'},
-                // {name: 'Listing 1', details: 'Listing Details', url:'https://images.pexels.com/photos/14703428/pexels-photo-14703428.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load', price: '$$', listingPage: 'Listing1'}
-        //   ]
             outings.slice(this.currentIndex, this.listings.length + 10)
     )
         done('ok')
@@ -139,9 +140,6 @@ export default {
       },
     },
 }
-
-
-
 </script>
 
 <style scoped>
@@ -149,11 +147,20 @@ export default {
   position: absolute;
   top: -6px;
   right: 8px;
+  /* font-size: 20px; */
 }
 
 .price {
     position: absolute;
     right: 0px;
     bottom: 0px;
+    font-weight: normal;
+}
+
+.location{
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    font-weight: normal;
 }
 </style>

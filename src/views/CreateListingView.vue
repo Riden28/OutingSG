@@ -23,39 +23,18 @@
           <br>
           <div class="name">
             <h6>Outing Name</h6>
-            <v-text-field class="text-grey" placeholder="Name Here"></v-text-field>
+            <input type="text" v-model="text" placeholder="Description Here" class="text-grey">
           </div>
           <div class="outing-description">
             <h6>Outing Description</h6>
-            <v-text-field class="text-grey desc" placeholder="Description Here"></v-text-field>
+            <input type="text" v-model="text" placeholder="Description Here" class="text-grey desc">
           </div>
         </div>
       </div>
       <div class="bottom v-row">
         <div class="v-col-5">
           <!-- here goes the google maps selector -->
-          <GMapAutocomplete
-        placeholder="Search location here"
-       :options="{
-            bounds: {north: 1.4, south: 1.2, east: 104, west: 102},
-            strictBounds: true
-       }"
-    />
-          <GMapMap
-      :center="center"
-      :zoom="10"
-      map-type-id="terrain"
-      style="width: 40vw; height: 20rem"
-      :options="{
-        zoomControl: true,
-        mapTypeControl: true,
-        scaleControl: true,
-        streetViewControl: true,
-        rotateControl: true,
-        fullscreenControl: false
-      }"
-      ref="gmap"/>
-
+          <!-- <GoogleMaps/> -->
         </div>
 
         <div class="v-col-7">
@@ -98,7 +77,7 @@
               <h4>Recommended Pax</h4>
               <input type="range" v-model="sliderValue" min="1" max="20" />
               <p>Number: {{ sliderValue }}</p>
-            </div>
+            </div>  
           </div>
           <div class="row2">
             <div class="area">
@@ -118,6 +97,15 @@
           </div>
         </div>
       </div>
+      <div class="v-row bottom-buttons">
+        <router-link to="/" class="btn btn-primary">
+          Cancel
+        </router-link>
+        <button class="btn btn-primary" type = "submit">
+          Post Outing
+        </button>
+      </div>
+
     </form>
   </div>
     <OutingSGFooter/>
@@ -126,83 +114,55 @@
 <script> 
   import NavBar from '@/components/NavBar.vue'; 
   import OutingSGFooter from '@/components/Footer.vue';
-  import { GoogleMap, Marker } from 'vue3-google-map';
- 
+  import GoogleMaps from '@/components/GoogleMaps.vue';
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { getFirestore, collection, doc, setDoc, getDoc, updateDoc, deleteDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  import { getStorage } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+  import firebaseConfig from '../../firebase/firebaseConfig.js';
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const storage = getStorage(app);
+
+//   const docData = {
+//     stringExample: "Hello world!",
+//     booleanExample: true,
+//     numberExample: 3.14159265,
+//     // dateExample: Timestamp.fromDate(new Date("December 10, 1815")),
+//     arrayExample: [5, true, "hello"],
+//     nullExample: null,
+//     objectExample: {
+//         a: 5,
+//         b: {
+//             nested: "foo"
+//         }
+//     }
+// };
+
+// await setDoc(doc(db, "outings", "one"), docData).then(() => {
+//     console.log("Document successfully written!");
+// });
+
+
+
   export default { 
     name: 'create', 
     components: { 
       NavBar,
       OutingSGFooter,
-      // VueSlideBar
+      GoogleMaps,
       
     }, 
     data() {
       return {
-        apikey: import.meta.env.VITE_API_KEY,
         picked: '',
         sliderValue: 20,
-        center: { lat: 51.5072, lng: 0.1276 },
-        map: null,
-        autocomplete: null,
-        currentPlace: null,
-        markers: [],
-      places: [],
-      isDragging: false,
-      files: [],
-      url: null,
+        
       }
     },
-
-    mounted() {
-      this.geolocate();
-    },
-
-    methods: {
-    setPlace(place) {
-      if (place && place.geometry) {
-        this.currentPlace = place;
-        this.center = {
-          lat: place.geometry.location.lat(),
-          lng: place.geometry.location.lng()
-        };
-        this.reverseGeocode(this.center.lat, this.center.lng);
-      }
-    },
-    geolocate() {
-      navigator.geolocation.getCurrentPosition(position => {
-        this.center = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        };
-      });
-    },
-    reverseGeocode(lat, lng) {
-      const geocoder = new google.maps.Geocoder();
-      const latlng = { lat, lng };
-      geocoder.geocode({ location: latlng }, (results, status) => {
-        if (status === 'OK') {
-          if (results[0]) {
-            const addressComponents = results[0].address_components;
-            const postalCode = addressComponents.find(component =>
-              component.types.includes('postal_code')
-            ).long_name;
-            const fullName = results[0].formatted_address;
-
-            console.log(`Full Name: ${fullName}, Postal Code: ${postalCode}`);
-            // Save the full name and postal code as needed
-          } else {
-            console.log('No results found');
-          }
-        } else {
-          console.log('Geocoder failed due to: ' + status);
-        }
-      });
-    },
-    onFileChange(e) {
-      const file = e.target.files[0],
-      url = URL.createObjectURL(file)
-    } 
-  }
+    
   }; 
   // const setPlace = (place) => {
   //     coords.value.lat = place.geometry.location.lat()
@@ -216,7 +176,7 @@
 
 <style scoped>
   .cover {
-    background-color: white;
+    background-color: rgb(237, 231, 230);
   }
   input, .category {
     color: black;
@@ -242,9 +202,11 @@
   .location {
     margin-left: 3rem;
   }
-  .text-grey input {
-      color: lightgray !important;
-      width: 50%;
+  .text-grey {
+      color: white !important;
+      background: lightgray !important;
+      width: 100%;
+      border-radius: 25px;
     }
 
     .desc {
@@ -255,5 +217,11 @@
       display: flex;
       justify-content: center;
       align-items: center;
+    }
+
+    .bottom-buttons {
+      display: flex;
+      justify-content: space-around;
+      padding-bottom: 100px;
     }
 </style>

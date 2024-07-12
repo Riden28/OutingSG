@@ -1,12 +1,12 @@
 <template>
     <div class="names">
         <div class=" categoryname">
-            <p>Category 1, Category 2, Category 3</p>
+            <p>{{outing_details.category}}</p>
         </div>
         <!-- row for outing name & edit outing button -->
         <div class="edit">
           <div class="outingname">
-            <p class="outing-name">OUTING NAME HERE</p>
+            <p class="outing-name">{{outing_details.name}}</p>
           </div>
           <div>
             <router-link to="/edit" class="btn btn-primary" role="button">Edit Listing</router-link>
@@ -16,7 +16,7 @@
         <!-- row for location name -->
         <div class="v-row">
             <div class="v-col-10 outingname">
-                <p class="outingname">Exact Location</p>
+                <p class="outingname">{{outing_details.location}}</p>
             </div>
         </div>
     </div>
@@ -26,12 +26,23 @@
 </template>
 
 <script>
-
-    import ImageCarousel from './ImageCarousel.vue';
-    export default {
+import ImageCarousel from './ImageCarousel.vue';
+export default {
     name: 'ListingInformation',
-    components: ImageCarousel,
-    components: { ImageCarousel }
+    components: {
+        ImageCarousel
+    },
+    data() {
+        return {
+            outing_details: {
+                name: '',
+                category: '',
+                location: '',
+                description: '',
+                images: []
+            }
+        }
+    }
 }
 </script>
 
