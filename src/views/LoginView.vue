@@ -85,11 +85,20 @@ export default {
     },
     data() {
         return {
+            user: null,
             username: '',
             password: '',
             rememberme: false,
             errorMessage: '' // Add error message state
         };
+    },
+    watch: {
+        user(newUser) {
+            if (newUser) {
+                console.log("Successfully logged in");
+                this.$router.push("/");
+            }
+        }
     },
     methods: {
         async logIn() {
@@ -97,9 +106,9 @@ export default {
                 const auth = getAuth();
                 const userCredential = await signInWithEmailAndPassword(auth, this.username, this.password);
                 const user = userCredential.user;
-                console.log("Successfully logged in");
-                console.log(user.displayName);
-                this.$router.push("/");
+                this.user = user;
+                // if (user){
+                // this.$router.push("/");}
             } catch (error) {
                 console.log(error.code);
                 console.log(error.message);

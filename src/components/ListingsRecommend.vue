@@ -43,16 +43,15 @@ import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-aut
 import { getFirestore, collection, doc, getDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import firebaseConfig from './../../firebase/firebaseConfig.js';
 import shuffle from "./../../firebase/firebaseAuthServices.js";
-import { useRouter } from 'vue-router';
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+const firebaseApp = initializeApp(firebaseConfig);
 
 // Initialize Firebase Authentication
-const auth = getAuth(app);
+const auth = getAuth(firebaseApp);
 
 // Initialize Cloud Firestore
-const db = getFirestore(app);
+const db = getFirestore(firebaseApp);
 
 export default {
     name: 'ListingsDisplay',
@@ -65,16 +64,22 @@ export default {
         };
     },
     async created() {
-        const userID = 'ITw3Xl71OnW3OsoFcfyiKQC6jJG3'; // Hardcoded for now, replace with session-based userID
+        const user = auth.currentUser;
+        const userID = user ? user.uid : null;
+        //debugging line
+        if (!userID) {
+            console.log("error 401: user not authenticated");
+            return;
+        }
         const docRef = doc(db, "users", userID);
         const docSnap = await getDoc(docRef);
-
         if (docSnap.exists()) {
             const user_details = docSnap.data();
             this.user_preferences = user_details.category.slice(0, 3);
             this.loadOutings();
         } else {
             console.log("error 404: user not found");
+            return;
         }
     },
     methods: {

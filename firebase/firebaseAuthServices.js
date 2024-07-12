@@ -8,19 +8,16 @@ import firebaseConfig from './firebaseConfig.js';
 // See: https://support.google.com/firebase/answer/7015592
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+const firebaseApp = initializeApp(firebaseConfig);
 
 // Initialize Firebase Authentication
-const auth = getAuth(app);
-
-// // Initialize Firebase Realtime Database
-// const database = getDatabase(app);
+const auth = getAuth(firebaseApp);
 
 // Initialize Cloud Firestore and get a reference to the service
-const db = getFirestore(app);
+const db = getFirestore(firebaseApp);
 
 // Initialize Firebase Storage
-const storage = getStorage(app);
+const storage = getStorage(firebaseApp);
 
 
 // doesnt work :(
