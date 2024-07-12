@@ -117,7 +117,9 @@ querySnapshot.forEach((doc) => {
                 details: outing_details.location,
                 price: price,
                 url: outing_details.images.length > 0 ? outing_details.images[0] : null
-            });
+            }
+        );
+        break;
         }
     }
 });
