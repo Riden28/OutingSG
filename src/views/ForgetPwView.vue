@@ -35,7 +35,7 @@
                         </p>
                     </div>
                     <center>
-                        <br><button type="submit" style="width:80%;">Send a password reset link</button>
+                        <br><button type="submit" style="width:80%;" class='buttonSubmit'>Send a password reset link</button>
                         <!-- click to go to login page -->
                         <p style="margin-top: 10px;" class="greyText">
                             Back to <router-link to='/login' style="color: var(--secondary) !important;">login</router-link>
@@ -113,5 +113,17 @@ export default {
     color: green;
     margin: 10px 0;
     text-align: center;
+}
+
+.buttonSubmit{
+    background-color: var(--secondary);
+    border: solid var(--secondary);
+    color: white !important;
+}
+
+.buttonSubmit:hover {
+    background-color: var(--transparent);
+    border: solid var(--secondary);
+    color: black !important;
 }
 </style>
