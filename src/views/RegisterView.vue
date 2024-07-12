@@ -16,7 +16,7 @@
             <div class="column right">
                 <p class='pageTitle'>User Register</p>
                 <hr>
-                <form id="register">
+                <form @submit.prevent="submit">
                     
                     <div class="formRow">
                         <!-- Username -->
@@ -121,7 +121,8 @@
     import '../assets/bootstrap.css';
     import '../router/bootstrap.js';
     import '../assets/loginRegister.css';
-    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
     import NavBar from '@/components/NavBar.vue';
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import firebaseConfig from './../../firebase/firebaseConfig.js';
@@ -137,17 +138,30 @@
             }
         },
         methods: {
-            submit(){
-                const auth = getAuth();
-                const { email, password } = this;
-                createUserWithEmailAndPassword(auth, email, password)
-                .then(() => {
-                    console.log("Successfully registered")
-                })
-                .catch((error) => {
-                    console.log("Error: ", error.message)
-                });
-                this.$router.push("./")
+            async submit() {
+                try {
+                    const auth = getAuth();
+                    const firestore = getFirestore();
+                    const { email, password, mobileNumber, username } = this;
+
+                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                    const user = userCredential.user;
+
+                    await updateProfile(user, {
+                        displayName: username
+                    });
+
+                    await setDoc(doc(firestore, "users", user.uid), {
+                        displayName: username,
+                        phoneNumber: mobileNumber
+                    });
+
+                    console.log("Successfully registered");
+                    this.$router.push("/");
+                } catch (error) {
+                    console.error("Error: ", error.message);
+                    this.errorMessage = error.message;
+                }
             }
         },
         name: 'register',

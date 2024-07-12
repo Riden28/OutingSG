@@ -92,17 +92,19 @@ export default {
         };
     },
     methods: {
-        logIn() {
-            const auth = getAuth();
-            signInWithEmailAndPassword(auth, this.username, this.password)
-                .then(() => {
-                    console.log("Successfully logged in");
-                    this.$router.push("/");
-                })
-                .catch((error) => {
-                    console.log(error.code);
-                    this.handleError(error.code); // Handle the error
-                });
+        async logIn() {
+            try {
+                const auth = getAuth();
+                const userCredential = await signInWithEmailAndPassword(auth, this.username, this.password);
+                const user = userCredential.user;
+                console.log("Successfully logged in");
+                console.log(user.displayName);
+                this.$router.push("/");
+            } catch (error) {
+                console.log(error.code);
+                console.log(error.message);
+                this.handleError(error.code); // Handle the error
+            }
         },
         handleError(errorCode) {
             switch (errorCode) {

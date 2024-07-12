@@ -32,12 +32,18 @@ import '../assets/main.css';
     import ListingRating from '@/components/ListingRating.vue';
     import ReviewActions from '@/components/ReviewActions.vue';
     import Review from '@/components/Review.vue';
+    import { checkAuth } from "../../firebase/authCheck.js";
+
     export default {
         name: 'listing',
 
         components: {
             NavBar, OutingSGFooter, ImageCarousel, ListingInformation, ListingRating, ReviewActions, Review
         },
+
+        created() {
+            checkAuth(this.$router);
+        }
     };
 </script>
 
