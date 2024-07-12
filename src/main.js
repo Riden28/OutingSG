@@ -1,6 +1,6 @@
 // import './assets/main.css'
 // import './assets/base.css'
-import './assets/bootstrap.css'
+// import './assets/bootstrap.css'
 
 import { createApp } from 'vue'
 import App from './App.vue'

@@ -38,20 +38,11 @@
       import { checkAuth } from "../../firebase/authCheck.js";
 
     export default {
-          name: 'listing',
-          data () {
-              return {
-                  outing_id: "FLV3UPsgjfQ0dXyHusJm"
-              }
-          },
-  
-          components: {
-              NavBar, OutingSGFooter, ImageCarousel, ListingInformation, ListingRating, ReviewActions, Review
-          },
-  
-        created() {
-            checkAuth(this.$router);
-        }
+        name: 'listing',
+
+        components: {
+            NavBar, OutingSGFooter, ImageCarousel, ListingInformation, ListingRating, ReviewActions, Review
+        },
     };
   </script>
   

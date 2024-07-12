@@ -7,6 +7,7 @@ import ResetPwView from '../views/ResetPwView.vue'
 import ListingView from '../views/ListingView.vue'
 import CreateListingView from '@/views/CreateListingView.vue'
 import IndividualView from '../views/IndividualView.vue'
+import ExploreView from '@/views/ExploreView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -61,6 +62,11 @@ const router = createRouter({
       path: '/create',
       name: 'create',
       component: CreateListingView,
+    },
+    {
+      path: '/explore',
+      name: 'explore',
+      component: ExploreView,
     }
     // {
     //   path: '/about',

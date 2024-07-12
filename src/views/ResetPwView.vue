@@ -31,7 +31,7 @@
                         </div>
                     </div>
                     <center>
-                        <br><button type="submit" style="width:80%;">Send Password Reset Email</button>
+                        <br><button type="submit" style="width:80%;" class='buttonSubmit'>Send Password Reset Email</button>
                         <!-- click to go to login page -->
                         <p style="margin-top: 10px;" class="greyText">
                             Back to <router-link to='/login' style="color: var(--secondary) !important;">login</router-link>
@@ -47,13 +47,12 @@
 
 <script>
 import '../assets/main.css';
-import '../assets/bootstrap.css';
+// import '../assets/bootstrap.css';
 import '../router/bootstrap.js';
 import '../assets/loginRegister.css';
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import firebaseConfig from './../../firebase/firebaseConfig.js';
 import { getAuth, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-// import { ref } from 'vue';
 
 import NavBar from '@/components/NavBar.vue';
 
@@ -111,16 +110,29 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 /* Add styles for error and success messages */
 .error-message {
     color: red;
     margin: 10px 0;
     text-align: center;
 }
+
 .success-message {
     color: green;
     margin: 10px 0;
     text-align: center;
+}
+
+.buttonSubmit{
+    background-color: var(--secondary);
+    border: solid var(--secondary);
+    color: white !important;
+}
+
+.buttonSubmit:hover {
+    background-color: var(--transparent);
+    border: solid var(--secondary);
+    color: black !important;
 }
 </style>

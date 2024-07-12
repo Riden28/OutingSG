@@ -100,7 +100,9 @@
                     
                     <center>
                     
-                    <br><button  type="submit" @click.stop.prevent="submit()" style="width:80%;">Register</button>
+                    <!-- <br><button type="submit" @click.stop.prevent="submit()" style="width:80%;">Register</button> -->
+                    <!-- <br><router-link to='/editProfile'><button @click="nextpage()" style="width:80%;">Register</button></router-link> -->
+                    <br><button @click="toProfile()" style="width:80%;" class='buttonSubmit'>Register</button>
 
                     <!-- click to go to login page -->
                     <p style="margin-top: 10px;" class="greyText">
@@ -117,7 +119,7 @@
 
 <script>
     import '../assets/main.css';
-    import '../assets/bootstrap.css';
+    // import '../assets/bootstrap.css';
     import '../router/bootstrap.js';
     import '../assets/loginRegister.css';
     import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -126,7 +128,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import firebaseConfig from './../../firebase/firebaseConfig.js';
 
-// Initialize Firebase
+    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     
     export default {
@@ -161,6 +163,17 @@
                     console.error("Error: ", error.message);
                     this.errorMessage = error.message;
                 }
+            },
+            toProfile(){
+                this.$router.push({
+                    path: '/editProfile', 
+                    query: {
+                        username: this.username, 
+                        email: this.email,
+                        mobileNumber: this.mobileNumber,
+                        password: this.password
+                    }
+                })
             }
         },
         name: 'register',
@@ -168,8 +181,24 @@
             NavBar
         },
     };
+
+    
+
 </script>
 
+<style scoped>
+.buttonSubmit{
+    background-color: var(--secondary);
+    border: solid var(--secondary);
+    color: white !important;
+}
+
+.buttonSubmit:hover {
+    background-color: var(--transparent);
+    border: solid var(--secondary);
+    color: black !important;
+}
+</style>
 <!-- const username = ref("");
 const password = ref("");
 
