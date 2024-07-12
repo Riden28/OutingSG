@@ -11,7 +11,6 @@
         >
                 <v-row align="start" justify="center">
                     <v-col  v-for="listing in listings" cols="auto">
-                        <router-link to= "/listing">
                         <v-card
                         class="mx-1"
                         height="280"
@@ -52,7 +51,7 @@
                             <!-- replace console.log with function to save outing -->
                             
                         </v-card>
-                        </router-link>
+                        
                     </v-col>
                 
                 </v-row>
@@ -80,24 +79,50 @@ const db = getFirestore(app);
 // Initialize Firebase Storage
 const storage = getStorage(app);
 
-// const docRef = doc(db, "outings", "AekfjMatGlgj9U7XiYoP");
-// const docSnap = await getDoc(docRef);
+// get userID through sessions
+// var userID
+var userID = 'ITw3Xl71OnW3OsoFcfyiKQC6jJG3';
+const docRef = doc(db, "users", userID);
+const docSnap = await getDoc(docRef);
 
-// if (docSnap.exists()) {
-//   console.log("Document data:", docSnap.data());
-// } else {
-//   // docSnap.data() will be undefined in this case
-//   console.log("No such document!");
-// }
+if (docSnap.exists()) {
+    var user_details = docSnap.data();
+    var user_preferences = user_details.category.slice(0,5);
+    // console.log(user_preferences);
+} else {
+  // docSnap.data() will be undefined in this case
+    console.log("error 404: user not found");
+}
 
 const querySnapshot = await getDocs(collection(db, "outings"));
 var outings = [];
 querySnapshot.forEach((doc) => {
   // doc.data() is never undefined for query doc snapshots
     var outing_details = doc.data();
-    outings.push({name: outing_details.name, details: outing_details.description, price: outing_details.min_price + ' ~ ' + outing_details.max_price, url: outing_details.images[0]})
+    if (outings.categories in user_preferences){
+        console.log(outings.categories)
+    outings.push({listingID: doc.getId() ,name: outing_details.name, details: outing_details.description, price: outing_details.min_price + '-' +outing_details.max_price, url: outing_details.images[0]})
+    }
     // console.log(doc.id, " => ", outing_details.images[0]);
     });
+
+    function shuffle(array) {
+  let currentIndex = array.length;
+
+  // While there remain elements to shuffle...
+  while (currentIndex != 0) {
+
+    // Pick a remaining element...
+    let randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // And swap it with the current element.
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex], array[currentIndex]];
+  }
+}
+
+outings = shuffle(outings);
 
 export default {
     name: 'ListingsDisplay',
@@ -106,9 +131,8 @@ export default {
     // },
     data: () => ({
             // retrieve the first 10 listings
-            listings: outings.slice(0,10),
+            listings: outings[0,1],
             currentIndex: 0,
-            listingID: 'Dog1USRPL8Y9qY5mWZnY'
         }),
 
     methods: {

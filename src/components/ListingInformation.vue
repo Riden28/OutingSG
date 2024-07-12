@@ -1,12 +1,12 @@
 <template>
     <div class="names">
         <div class=" categoryname">
-            <p>Category 1, Category 2, Category 3</p>
+            <p>{{outing_details.category}}</p>
         </div>
         <!-- row for outing name & edit outing button -->
         <div class="edit">
           <div class="outingname">
-            <p class="outing-name">OUTING NAME HERE</p>
+            <p class="outing-name">{{outing_details.name}}</p>
           </div>
           <div>
             <router-link to="/edit" class="btn btn-primary" role="button">Edit Listing</router-link>
@@ -16,7 +16,7 @@
         <!-- row for location name -->
         <div class="v-row">
             <div class="v-col-10 outingname">
-                <p class="outingname">Exact Location</p>
+                <p class="outingname">{{outing_details.location}}</p>
             </div>
         </div>
     </div>
@@ -27,11 +27,54 @@
 
 <script>
 
-    import ImageCarousel from './ImageCarousel.vue';
-    export default {
+import ImageCarousel from './ImageCarousel.vue';
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, doc, setDoc, getDoc, updateDoc, deleteDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getStorage } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+import firebaseConfig from './../../firebase/firebaseConfig.js';
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+// Initialize Firebase Authentication
+const auth = getAuth(app);
+
+// Initialize Cloud Firestore and get a reference to the service
+const db = getFirestore(app);
+
+// Initialize Firebase Storage
+const storage = getStorage(app);
+
+export default {
     name: 'ListingInformation',
-    components: ImageCarousel,
-    components: { ImageCarousel }
+    components: {
+        ImageCarousel
+    },
+    data() {
+        return {
+            outing_details: {
+                name: '',
+                category: '',
+                location: '',
+                description: '',
+                images: []
+            }
+        }
+    },
+    mounted() {
+        this.getOutingDetails();
+    },
+    methods: {
+        async getOutingDetails() {
+            const outingId = this.$route.params.id;
+            const outingRef = doc(db, 'outings', outingId);
+            const outingSnap = await getDoc(outingRef);
+            if (outingSnap.exists()) {
+                this.outing_details = outingSnap.data();
+            }
+        }
+    }
 }
 </script>
 
