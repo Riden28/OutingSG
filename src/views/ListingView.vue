@@ -6,7 +6,7 @@
 
         <!-- row for price, location, pax and rating -->
         <!-- row for pic display + description -->
-        <ListingRating/>
+        <ListingRating :outingID=outing_id />
         <!-- row for reviews, filtering and adding -->
         <ReviewActions/>
 
@@ -32,8 +32,16 @@ import '../assets/main.css';
     import ListingRating from '@/components/ListingRating.vue';
     import ReviewActions from '@/components/ReviewActions.vue';
     import Review from '@/components/Review.vue';
+
+    
+
     export default {
         name: 'listing',
+        data () {
+            return {
+                outing_id: "FLV3UPsgjfQ0dXyHusJm"
+            }
+        },
 
         components: {
             NavBar, OutingSGFooter, ImageCarousel, ListingInformation, ListingRating, ReviewActions, Review

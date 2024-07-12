@@ -46,6 +46,8 @@
   
         <div class="main"> 
             <h2 class="title">Outings</h2>
+            <ListingsDisplay/>
+            
         </div> 
     </div> 
 
@@ -56,12 +58,15 @@
 <script>
 import NavBar from '@/components/NavBar.vue';
 import OutingSGFooter from '@/components/Footer.vue';
+import ListingsDisplay from '@/components/ListingsDisplay.vue';
 
 export default {
     name: 'home',
     
     components: {
-        NavBar, OutingSGFooter
+        NavBar, 
+        OutingSGFooter,
+        ListingsDisplay
     },
 
     data() {
