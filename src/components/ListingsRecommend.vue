@@ -11,6 +11,7 @@
         >
                 <v-row align="start" justify="center">
                     <v-col  v-for="listing in listings" cols="auto">
+                        <router-link :to= "{name:'listing', state: { outingId: listing.listingID } }">
                         <v-card
                         class="mx-1"
                         height="280"
@@ -40,9 +41,9 @@
                                     {{ listing.name }}
                                 </v-card-title>
                             
-                                <v-card-subtitle>
+                                <v-card-title class="location">
                                     {{ listing.details }}
-                                </v-card-subtitle>
+                                </v-card-title>
 
                                 <v-card-title class="price">
                                     {{ listing.price }}
@@ -51,7 +52,7 @@
                             <!-- replace console.log with function to save outing -->
                             
                         </v-card>
-                        
+                        </router-link>
                     </v-col>
                 
                 </v-row>
@@ -66,6 +67,7 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } f
 import { getFirestore, collection, doc, setDoc, getDoc, updateDoc, deleteDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getStorage } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 import firebaseConfig from './../../firebase/firebaseConfig.js';
+import shuffle from "./../../firebase/firebaseAuthServices.js"
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -87,8 +89,7 @@ const docSnap = await getDoc(docRef);
 
 if (docSnap.exists()) {
     var user_details = docSnap.data();
-    var user_preferences = user_details.category.slice(0,5);
-    // console.log(user_preferences);
+    var user_preferences = user_details.category.slice(0,3);
 } else {
   // docSnap.data() will be undefined in this case
     console.log("error 404: user not found");
@@ -99,28 +100,27 @@ var outings = [];
 querySnapshot.forEach((doc) => {
   // doc.data() is never undefined for query doc snapshots
     var outing_details = doc.data();
-    if (outings.categories in user_preferences){
-        console.log(outings.categories)
-    outings.push({listingID: doc.getId() ,name: outing_details.name, details: outing_details.description, price: outing_details.min_price + '-' +outing_details.max_price, url: outing_details.images[0]})
+    for (const preference of user_preferences) {
+        if (outing_details.category.includes(preference)){
+            
+            // Determine the price based on max_price
+            let price;
+            if (outing_details.max_price === 0) {
+                price = "Free";
+            } else {
+                price = "$" + outing_details.min_price + ' ~ $' + outing_details.max_price;
+            }
+
+            outings.push({
+                listingID: doc.id,
+                name: outing_details.name,
+                details: outing_details.location,
+                price: price,
+                url: outing_details.images.length > 0 ? outing_details.images[0] : null
+            });
+        }
     }
-    // console.log(doc.id, " => ", outing_details.images[0]);
-    });
-
-    function shuffle(array) {
-  let currentIndex = array.length;
-
-  // While there remain elements to shuffle...
-  while (currentIndex != 0) {
-
-    // Pick a remaining element...
-    let randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex--;
-
-    // And swap it with the current element.
-    [array[currentIndex], array[randomIndex]] = [
-      array[randomIndex], array[currentIndex]];
-  }
-}
+});
 
 outings = shuffle(outings);
 
@@ -131,7 +131,7 @@ export default {
     // },
     data: () => ({
             // retrieve the first 10 listings
-            listings: outings[0,1],
+            listings: outings.slice(0,10),
             currentIndex: 0,
         }),
 
@@ -155,11 +155,20 @@ export default {
   position: absolute;
   top: -6px;
   right: 8px;
+  /* font-size: 20px; */
 }
 
 .price {
     position: absolute;
     right: 0px;
     bottom: 0px;
+    font-weight: normal;
+}
+
+.location{
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    font-weight: normal;
 }
 </style>

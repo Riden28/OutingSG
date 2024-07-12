@@ -11,7 +11,7 @@
         >
                 <v-row align="start" justify="center">
                     <v-col  v-for="listing in listings" cols="auto">
-                        <router-link to= "/listing">
+                        <router-link :to= "{name:'listing', state: { outingId: listing.listingID } }">
                         <v-card
                         class="mx-1"
                         height="280"
@@ -41,9 +41,9 @@
                                     {{ listing.name }}
                                 </v-card-title>
                             
-                                <v-card-subtitle>
+                                <v-card-title class="location">
                                     {{ listing.details }}
-                                </v-card-subtitle>
+                                </v-card-title>
 
                                 <v-card-title class="price">
                                     {{ listing.price }}
@@ -67,6 +67,7 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } f
 import { getFirestore, collection, doc, setDoc, getDoc, updateDoc, deleteDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getStorage } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 import firebaseConfig from './../../firebase/firebaseConfig.js';
+import shuffle from "./../../firebase/firebaseAuthServices.js"
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -93,11 +94,27 @@ const storage = getStorage(app);
 const querySnapshot = await getDocs(collection(db, "outings"));
 var outings = [];
 querySnapshot.forEach((doc) => {
-  // doc.data() is never undefined for query doc snapshots
     var outing_details = doc.data();
-    outings.push({name: outing_details.name, details: outing_details.description, price: outing_details.min_price + ' ~ ' + outing_details.max_price, url: outing_details.images[0]})
-    // console.log(doc.id, " => ", outing_details.images[0]);
+    
+    // Determine the price based on max_price
+    let price;
+    if (outing_details.max_price === 0) {
+        price = "Free";
+    } else {
+        price = "$" + outing_details.min_price + ' ~ $' + outing_details.max_price;
+    }
+
+    outings.push({
+        listingID: doc.id,
+        name: outing_details.name,
+        details: outing_details.location,
+        price: price,
+        url: outing_details.images.length > 0 ? outing_details.images[0] : null
     });
+});
+
+outings = shuffle(outings);
+
 
 export default {
     name: 'ListingsDisplay',
@@ -108,7 +125,6 @@ export default {
             // retrieve the first 10 listings
             listings: outings.slice(0,10),
             currentIndex: 0,
-            listingID: 'Dog1USRPL8Y9qY5mWZnY'
         }),
 
     methods: {
@@ -131,11 +147,20 @@ export default {
   position: absolute;
   top: -6px;
   right: 8px;
+  /* font-size: 20px; */
 }
 
 .price {
     position: absolute;
     right: 0px;
     bottom: 0px;
+    font-weight: normal;
+}
+
+.location{
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    font-weight: normal;
 }
 </style>

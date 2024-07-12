@@ -34,7 +34,6 @@ import '../assets/main.css';
     import Review from '@/components/Review.vue';
     export default {
         name: 'listing',
-
         components: {
             NavBar, OutingSGFooter, ImageCarousel, ListingInformation, ListingRating, ReviewActions, Review
         },
