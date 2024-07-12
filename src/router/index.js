@@ -4,8 +4,9 @@ import LoginView from '../views/LoginView.vue'
 import RegisterView from '../views/RegisterView.vue'
 import ForgetPwView from '../views/ForgetPwView.vue'
 import ResetPwView from '../views/ResetPwView.vue'
-import ListingView from '../views/ListingView.vue'
+// import ListingView from '../views/ListingView.vue'
 import CreateListingView from '@/views/CreateListingView.vue'
+import IndividualView from '../views/IndividualView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -35,10 +36,11 @@ const router = createRouter({
       name: 'resetPw',
       component: ResetPwView,
     },
+
     {
-      path: '/listing',
-      name: 'listing',
-      component: ListingView,
+      path: '/listing/:listingID',
+      name: 'individualListing',
+      component: IndividualView,
     },
     {
       path: '/create',
