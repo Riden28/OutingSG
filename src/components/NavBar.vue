@@ -92,6 +92,7 @@ export default {
         top: 0;
         width: 100%;
         z-index: 99;
+        height: auto;
     }
 
     .navbar-search {
