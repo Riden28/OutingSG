@@ -19,15 +19,15 @@
                 <p class='pageTitle'>User Login</p>
                 <hr>
                 <form id="login" @submit.prevent="logIn">
-                    <!-- Username and Password -->
+                    <!-- Email and Password -->
                     <div class="formRow">
-                        <!-- Username -->
+                        <!-- Email -->
                         <div class="formColumn">
                             <p>
-                                <label for="username"><img src='../assets/icons/username.png' class="smallIcon">
-                                    Username</label>
-                                <br><input type="text" id='username' placeholder="Enter your username" required
-                                    v-model="username">
+                                <label for="email"><img src='../assets/icons/email.png' class="smallIcon">
+                                    Email</label>
+                                <br><input type="text" id='email' placeholder="Enter your email" required
+                                    v-model="email">
                                 <br>
                             </p>
                         </div>
@@ -85,30 +85,21 @@ export default {
     },
     data() {
         return {
-            user: null,
-            username: '',
+            email: '',
             password: '',
             rememberme: false,
             errorMessage: '' // Add error message state
         };
     },
-    watch: {
-        user(newUser) {
-            if (newUser) {
-                console.log("Successfully logged in");
-                this.$router.push("/");
-            }
-        }
-    },
     methods: {
         async logIn() {
             try {
                 const auth = getAuth();
-                const userCredential = await signInWithEmailAndPassword(auth, this.username, this.password);
+                const userCredential = await signInWithEmailAndPassword(auth, this.email, this.password);
                 const user = userCredential.user;
-                this.user = user;
-                // if (user){
-                // this.$router.push("/");}
+                console.log("Successfully logged in");
+                console.log(user.displayName);
+                this.$router.push("/");
             } catch (error) {
                 console.log(error.code);
                 console.log(error.message);

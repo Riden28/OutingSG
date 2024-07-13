@@ -1,6 +1,5 @@
 <template>
 
-
 <nav class="navbar">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -54,13 +53,29 @@ import '../assets/main.css';
 import '../assets/bootstrap.css';
 import '../router/bootstrap.js';
 
+import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
 export default {
     name: 'NavBar',
     data() {
         return {
             userIsLoggedIn: true,
         };
-    }
+    }, 
+    methods: {
+        checkUser(){
+            const auth = getAuth();
+            const user = auth.currentUser;
+            if (!user) {
+                this.userIsLoggedIn = false;
+            } else {
+                this.userIsLoggedIn = true;
+            }
+        }
+    },
+    created() {
+        this.checkUser();
+    },
 };
 
 </script>

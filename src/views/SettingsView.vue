@@ -53,6 +53,9 @@
                     <v-col>
                         <router-link to="/profile"><button>Save Changes</button></router-link>
                     </v-col>
+                    <br>
+                    <hr>
+                    <button class='logOut' @click='logOut()'>Log Out</button>
                 </v-row>
 
             </div>
@@ -80,6 +83,11 @@
                 categoryPreferences: "F&B, Education, Wellness",
                 profilePicture: "/src/assets/icons/profile.png",
             };
+        },
+        methods: {
+            logOut(){
+                
+            }
         }
     };
 </script>
@@ -176,4 +184,15 @@ input {
     width: 300px;
 }
 
+.logOut{
+    background-color: var(--secondary);
+    border: solid var(--secondary);
+    color: white !important;
+}
+
+.logOut:hover {
+    background-color: var(--transparent);
+    border: solid var(--secondary);
+    color: black !important;
+}
 </style>

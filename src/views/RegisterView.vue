@@ -100,9 +100,7 @@
                     
                     <center>
                     
-                    <!-- <br><button type="submit" @click.stop.prevent="submit()" style="width:80%;">Register</button> -->
-                    <!-- <br><router-link to='/editProfile'><button @click="nextpage()" style="width:80%;">Register</button></router-link> -->
-                    <br><button @click="toProfile()" style="width:80%;" class='buttonSubmit'>Register</button>
+                    <br><button type="submit" @click.stop.prevent="submit()" style="width:80%;" class='buttonSubmit'>Register</button>
 
                     <!-- click to go to login page -->
                     <p style="margin-top: 10px;" class="greyText">
@@ -119,7 +117,7 @@
 
 <script>
     import '../assets/main.css';
-    // import '../assets/bootstrap.css';
+    import '../assets/bootstrap.css';
     import '../router/bootstrap.js';
     import '../assets/loginRegister.css';
     import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -128,7 +126,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import firebaseConfig from './../../firebase/firebaseConfig.js';
 
-    // Initialize Firebase
+// Initialize Firebase
     const app = initializeApp(firebaseConfig);
     
     export default {
@@ -140,40 +138,36 @@
         },
         methods: {
             async submit() {
-                try {
-                    const auth = getAuth();
-                    const firestore = getFirestore();
-                    const { email, password, mobileNumber, username } = this;
 
-                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                    const user = userCredential.user;
+                if (this.confirmPassword === this.password){
+                    try {
+                        const auth = getAuth();
+                        const firestore = getFirestore();
+                        const { email, password, mobileNumber, username } = this;
 
-                    await updateProfile(user, {
-                        displayName: username
-                    });
+                        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                        const user = userCredential.user;
 
-                    await setDoc(doc(firestore, "users", user.uid), {
-                        displayName: username,
-                        phoneNumber: mobileNumber
-                    });
+                        await updateProfile(user, {
+                            displayName: username
+                        });
 
-                    console.log("Successfully registered");
-                    this.$router.push("/");
-                } catch (error) {
-                    console.error("Error: ", error.message);
-                    this.errorMessage = error.message;
-                }
-            },
-            toProfile(){
-                this.$router.push({
-                    path: '/editProfile', 
-                    query: {
-                        username: this.username, 
-                        email: this.email,
-                        mobileNumber: this.mobileNumber,
-                        password: this.password
+                        await setDoc(doc(firestore, "users", user.uid), {
+                            displayName: username,
+                            phoneNumber: mobileNumber
+                        });
+
+                        console.log("Successfully registered");
+                        this.$router.push("/editProfile");
+                    } catch (error) {
+                        console.error("Error: ", error.message);
+                        this.errorMessage = error.message;
+                        alert(error.message.replace("Firebase: ", ""));
                     }
-                })
+                }else{
+                    alert("Password and confirm password has to be the same.");
+                }
+                
             }
         },
         name: 'register',
@@ -181,9 +175,6 @@
             NavBar
         },
     };
-
-    
-
 </script>
 
 <style scoped>
