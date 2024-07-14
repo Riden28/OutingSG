@@ -1,16 +1,16 @@
-<template>
+<!-- <template>
     <NavBar/>
       <div class="cover">
-          <!-- row for categories -->
+          // row for categories
           <ListingInformation/>
   
-          <!-- row for price, location, pax and rating -->
-          <!-- row for pic display + description -->
+          // row for price, location, pax and rating
+          // row for pic display + description
           <ListingRating :outingID=outing_id />
-          <!-- row for reviews, filtering and adding -->
+          // row for reviews, filtering and adding
           <ReviewActions/>
   
-          <!-- row for reviews -->
+          // row for reviews
           <Review/>
           <Review/>
           <Review/>
@@ -55,4 +55,4 @@
       }
   
   
-  </style>
+  </style> -->

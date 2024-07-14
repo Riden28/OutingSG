@@ -2,11 +2,11 @@
         <NavBar/>
         <div class="cover">
             <!-- row for categories -->
-            <ListingInformation/>
+            <ListingInformation :outingID=listingID />
     
             <!-- row for price, location, pax and rating -->
             <!-- row for pic display + description -->
-            <ListingRating/>
+            <ListingRating :outingID=listingID />
             <!-- row for reviews, filtering and adding -->
             <ReviewActions/>
     
@@ -33,10 +33,25 @@
         import ReviewActions from '@/components/ReviewActions.vue';
         import Review from '@/components/Review.vue';
         export default {
-            name: 'listing',
+            name: 'individualListing',
             components: {
                 NavBar, OutingSGFooter, ImageCarousel, ListingInformation, ListingRating, ReviewActions, Review
             },
+            data() {
+                return {
+                listingID: null
+                };
+            },
+            methods: {
+                fetchListingDetails() {
+                const listingID = this.$route.params.listingID;
+                // Use listingID to fetch listing details from an API or other source
+                }
+            },
+            created() {
+                this.listingID = this.$route.params.listingID;
+                this.fetchListingDetails();
+            }
         };
     </script>
     
