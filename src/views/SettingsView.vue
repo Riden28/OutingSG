@@ -68,8 +68,16 @@
     import '../assets/main.css';
     import '../assets/bootstrap.css';
     import '../router/bootstrap.js';
-
+    import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import firebaseConfig from './../../firebase/firebaseConfig.js';
     import NavBar from '@/components/NavBar.vue';
+
+    // Initialize Firebase
+const firebaseApp = initializeApp(firebaseConfig);
+
+// Initialize Firebase Authentication
+const auth = getAuth(firebaseApp);
 
     export default {
         name: 'profile',
@@ -86,7 +94,11 @@
         },
         methods: {
             logOut(){
-                
+                auth.signOut()
+                .then(() => {
+                    console.log('User signed out');
+                    this.$router.push('/');
+                })
             }
         }
     };
