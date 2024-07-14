@@ -1,6 +1,4 @@
 <template>
-    <div class="text-h5 pl-16">Recommendation</div>
-
     <v-container fluid class="mx-auto">
         <v-infinite-scroll
             height="700"
@@ -141,5 +139,10 @@ export default {
     left: 0px;
     bottom: 0px;
     font-weight: normal;
+}
+
+.v-card:hover {
+    opacity: 0.8; /* Optional: Add hover effect */
+    cursor: pointer;
 }
 </style>

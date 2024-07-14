@@ -11,6 +11,7 @@
     <CategorySelector />
   </div>
   
+  <div class="text-h5 pl-16">Recommendation</div>
   <div v-if="user" class="ListingDisplay">
     <!-- <component :is="dynamicComponent" /> -->
     <ListingRecommend />

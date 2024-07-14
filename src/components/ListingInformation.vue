@@ -51,7 +51,6 @@ export default {
         font-weight: bold;
     }
 
-
     p {
         font-family: sans-serif;
         color: white;
