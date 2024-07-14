@@ -27,8 +27,17 @@
 
 <script>
 import ImageCarousel from './ImageCarousel.vue';
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import firebaseConfig from './../../firebase/firebaseConfig.js';
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
 export default {
     name: 'ListingInformation',
+    props: ['outingID'],
     components: {
         ImageCarousel
     },
@@ -42,7 +51,21 @@ export default {
                 images: []
             }
         }
+    },
+    async mounted() {
+    try {
+        const docRef = doc(db, "outings", this.outingID);
+        const docSnap = await getDoc(docRef);
+    
+        if (docSnap.exists()) {
+        this.outing_details = docSnap.data();
+        } else {
+        console.log("No such document!");
+        }
+    } catch (error) {
+        console.error("Error fetching document:", error);
     }
+    },
 }
 </script>
 
