@@ -1,39 +1,28 @@
 <template>
     <v-container fluid class="mx-auto">
-        <v-infinite-scroll
-            height="700"
-            color="var(--secondary)"
-            mode="manual"
-            @load="loadMoreListings"
-            empty-text="No more recommended listings"
-        >
-            <v-row align="start" justify="center">
-                <v-col v-for="listing in listings" :key="listing.listingID" cols="auto" @click="navigateToListing(listing.listingID)">
-                    <v-card class="mx-1" height="280" width="417" rounded="xl" :href="listing.listingPage">
-                        <v-img :src="listing.url" height="174px" cover></v-img>
-                        <v-btn
-                            icon="mdi-bookmark-outline"
-                            base-color="transparent"
-                            variant="plain"
-                            @click.stop.prevent="bookmarkListing(listing)"
-                        >
-                            <v-icon icon="mdi-bookmark" size="50" color="white"></v-icon>
-                        </v-btn>
-                        <v-card-title>
-                            {{ listing.name }}
-                        </v-card-title>
-                        <v-card-title class="location">
-                            {{ listing.details }}
-                        </v-card-title>
-                        <v-card-title class="price">
-                            {{ listing.price }}
-                        </v-card-title>
-                    </v-card>
-                </v-col>
-            </v-row>
-        </v-infinite-scroll>
+      <v-infinite-scroll
+        height="700"
+        color="var(--secondary)"
+        mode="manual"
+        @load="loadMoreListings"
+        empty-text="No more recommended listings"
+      >
+        <v-row align="start" justify="center">
+          <v-col v-for="listing in listings" :key="listing.listingID" cols="auto" @click="navigateToListing(listing.listingID)">
+            <v-card class="mx-1" height="280" width="417" rounded="xl">
+              <v-img :src="listing.url" height="174px" cover></v-img>
+              <v-btn icon="mdi-bookmark-outline" base-color="transparent" variant="plain" @click.prevent="bookmarkListing(listing)">
+                <v-icon icon="mdi-bookmark" size="50" color="white"></v-icon>
+              </v-btn>
+              <v-card-title>{{ listing.name }}</v-card-title>
+              <v-card-title class="location">{{ listing.details }}</v-card-title>
+              <v-card-title class="price">{{ listing.price }}</v-card-title>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-infinite-scroll>
     </v-container>
-</template>
+  </template>
 
 <script>
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
