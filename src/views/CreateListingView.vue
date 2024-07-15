@@ -3,7 +3,7 @@
   <div class="cover">
     <form @submit.prevent="createOuting">
       <div class="top v-row">
-        <div class="v-col-5 images">
+        <div class="v-col-5 images fileInput">
           <input
             type="file"
             multiple
@@ -19,15 +19,16 @@
           <img v-if="imageUrl" :src="imageUrl" />
         </div>
         <div class="v-col-7">
-          <h3>Create Outing</h3>
+          <h3 style='font-weight: 700;'>Create Outing</h3>
+          <hr>
           <br>
           <div class="name">
-            <h6>Outing Name</h6>
-            <input id='outingName' required type="text" v-model="outingName" placeholder="Name Here" class="text-grey">
+            <h5>Outing Name</h5>
+            <input id='outingName' required type="text" v-model="outingName" placeholder="Name Here" class="text-grey formInput">
           </div>
           <div class="outing-description">
-            <h6>Outing Description</h6>
-            <input id='outingDescription' required type="text" v-model="outingDescription" placeholder="Description Here" class="text-grey desc">
+            <h5>Outing Description</h5>
+            <input id='outingDescription' required type="text" v-model="outingDescription" placeholder="Description Here" class="text-grey desc formInput">
           </div>
         </div>
       </div>
@@ -39,7 +40,7 @@
         <div class="v-col-7">
           <div class="row1">
             <div class="category">
-              <h4>Category</h4>
+              <h5>Category</h5>
               <input id='outingCategory1' type="checkbox" v-model="outingCategory" value="food"/> F&B
               <br>
               <input id='outingCategory2' type="checkbox" v-model="outingCategory" value="nature"/> Nature
@@ -62,42 +63,41 @@
               <br>
             </div>
             <div class="price">
-              <h4>Price: </h4>
+              <h5>Price: </h5>
               <input type="text" required placeholder="min price" id="minPrice" v-model="outingMinPrice" />
               <br><br>
               <input type="text" required placeholder="max price" id="maxPrice" v-model="outingMaxPrice" />
             </div>
             <div class="recommended-pax">
-              <h4>Min Recommended Pax</h4>
-              <input type="range" v-model="minRecommendedPax" min="1" max="20" />
-              <p>Number: {{ minRecommendedPax }}</p>
-              <h4>Max Recommended Pax</h4>
-              <input type="range" v-model="maxRecommendedPax" min="1" max="20" />
-              <p>Number: {{ maxRecommendedPax }}</p>
+              <h5>Recommended Pax</h5>
+              <input type="range" v-model="minRecommendedPax" min="1" max="20" class='ranges'/>
+              <p>Minimum pax: {{ minRecommendedPax }}</p>
+              <input type="range" v-model="maxRecommendedPax" min="1" max="20" class='ranges'/>
+              <p>Maximum pax: {{ maxRecommendedPax }}</p>
             </div> 
           </div>
           <div class="row2">
             <div class="area">
-              <h4>Location</h4>
-              <label><input id="outingLocation1" type="radio" v-model="outingLocation" value="north"/> North </label>
+              <h5>Location</h5>
+              <label><input id="outingLocation1" type="radio" v-model="outingLocation" value="north" class='ranges'/> North </label>
               <br>
-              <label><input id="outingLocation2" type="radio" v-model="outingLocation" value="south"/> South </label>
+              <label><input id="outingLocation2" type="radio" v-model="outingLocation" value="south" class='ranges'/> South </label>
               <br>
-              <label><input id="outingLocation3" type="radio" v-model="outingLocation" value="east"/> East </label>
+              <label><input id="outingLocation3" type="radio" v-model="outingLocation" value="east" class='ranges'/> East </label>
               <br>
-              <label><input id="outingLocation4" type="radio" v-model="outingLocation" value="west"/> West </label>
+              <label><input id="outingLocation4" type="radio" v-model="outingLocation" value="west" class='ranges'/> West </label>
               <br>
-              <label><input id="outingLocation5" type="radio" v-model="outingLocation" value="central"/> Central </label>
+              <label><input id="outingLocation5" type="radio" v-model="outingLocation" value="central" class='ranges'/> Central </label>
             </div>
             <div class="location">
-              <h4>Exact Location: </h4>
+              <h5>Exact Location: </h5>
               <input v-model="exactLocation" placeholder="location" />
             </div>
           </div>
         </div>
       </div>
       <div class="v-row bottom-buttons">
-        <router-link to="/" class="btn btn-primary">
+        <router-link to="/" class="cancelButton btn-primary">
           Cancel
         </router-link>
         <button class="btn btn-primary" type="submit">
@@ -235,7 +235,9 @@ export default {
 
 <style scoped>
   .cover {
-    background-color: rgb(237, 231, 230);
+    background-color: var(--bg);
+    padding-top: 100px;
+    padding-left: 30px;
   }
   input, .category {
     color: black;
@@ -263,9 +265,8 @@ export default {
   }
   .text-grey {
     color: white !important;
-    background: lightgray !important;
     width: 100%;
-    border-radius: 25px;
+    border-radius: 5px;
   }
   .desc {
     height: 200px;
@@ -279,5 +280,49 @@ export default {
     display: flex;
     justify-content: space-around;
     padding-bottom: 100px;
+  }
+
+  h5 {
+    font-weight: 600;
+  }
+
+  .ranges {
+    accent-color: var(--secondary);
+  }
+
+  .btn{
+    background-color: var(--secondary);
+    border: solid var(--secondary);
+    color: white !important;
+    padding: 10px 50px 10px 50px;
+    text-align: center;
+    border-radius: 5px; 
+  }
+
+  .btn:hover {
+    background-color: var(--transparent);
+    border: solid var(--secondary);
+    color: black !important;
+  }
+
+  .cancelButton {
+    background-color: var(--transparent) !important;
+    color: black !important;
+    border: solid var(--secondary);
+    padding: 10px 50px 10px 50px;
+    text-align: center;
+    border-radius: 5px; 
+  }
+
+  .cancelButton:hover {
+    background-color: var(--secondary) !important;
+    border: solid var(--secondary);
+    border-radius: 5px; 
+    color: white !important;
+    text-decoration: none;
+  }
+
+  .fileInput {
+    border: solid #d1d1d1;
   }
 </style>
