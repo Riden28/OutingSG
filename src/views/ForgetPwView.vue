@@ -30,7 +30,7 @@
                     <div class="middleInput">
                         <p>
                             <label for="email"><img src='../assets/icons/email.png' class="smallIcon"> Email</label>
-                            <br><input type="email" id='email' placeholder="Enter your email" required v-model="email" style='width: 80%;'>
+                            <br><input type="email" id='email' placeholder="Enter your email" required v-model="email" style='width: 80%;' class='formInput'>
                             <br>
                         </p>
                     </div>

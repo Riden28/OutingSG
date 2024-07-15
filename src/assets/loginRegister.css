@@ -27,7 +27,7 @@
     width: 50%;
     height: 70vh;
     border-radius: 10px;
-    background-color:var(--light-grey);
+    background-color: white;
 }
 
 .row {
@@ -50,7 +50,7 @@
 }
 
 body {
-    /* background-image: url("../assets/background/login_bg.jpg"); */
+    background-color: var(--bg);
     background-size: cover;
 }
 
@@ -98,4 +98,7 @@ body {
     text-align:center
 }
 
-
+.formInput {
+    background-color: rgb(252, 252, 252) !important;
+    border-bottom: solid #4275b069;
+}

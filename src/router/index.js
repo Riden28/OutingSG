@@ -11,6 +11,7 @@ import EditProfileView from '../views/EditProfileView.vue'
 import CreateListingView from '@/views/CreateListingView.vue'
 import IndividualView from '../views/IndividualView.vue'
 import ExploreView from '@/views/ExploreView.vue'
+import TNCView from '@/views/TNCView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -70,6 +71,11 @@ const router = createRouter({
       path: '/explore',
       name: 'explore',
       component: ExploreView,
+    },
+    {
+      path: '/tnc',
+      name: 'tnc',
+      component: TNCView,
     }
     // {
     //   path: '/about',

@@ -18,85 +18,84 @@
                 <hr>
                 <form @submit.prevent="submit">
                     
-                    <div class="formRow">
-                        <!-- Username -->
-                        <div class="formColumn">
+                    <!-- Username -->
+                    <v-row>
+                        <v-col class='cols'>
                             <p>
                                 <label for="username"><img src='../assets/icons/username.png' class="smallIcon"> Username</label>
                                 <br><input type="text" 
                                             id='username'
                                             placeholder="Enter your username"
                                             required 
-                                            v-model="username">
+                                            v-model="username"
+                                            class='formInput'>
                                 <br>
                             </p>
-                        </div>
-                    </div>
+                        </v-col>
+                    </v-row>
 
                     <!-- Email and Number -->
-                    <div class="formRow">
-                        <!-- Email -->
-                        <div class="formColumn">
+                    <v-row>
+                        <v-col class='cols'>
                             <p>
                                 <label for="email"><img src='../assets/icons/email.png' class="smallIcon"> Email</label>
                                 <br><input type="email" 
                                             id='email'
                                             placeholder="Enter your email"
                                             required 
-                                            v-model="email">
+                                            v-model="email"
+                                            class='formInput'>
                                 <br>
                             </p>
-                        </div>
-
-                        <!-- Number -->
-                        <div class="formColumn">
+                        </v-col>
+                        <v-col class='cols'>
                             <p>
                                 <label for="mobileNumber"><img src='../assets/icons/mobileNumber.png' class="smallIcon"> Mobile Number</label>
                                 <br><input type="tel" 
                                             id='mobileNumber'
                                             placeholder="Enter your mobile no."
                                             required 
-                                            v-model="mobileNumber">
+                                            v-model="mobileNumber"
+                                            class='formInput'>
                             </p>
-                        </div>
-                    </div>
+                        </v-col>
+                    </v-row>
 
                     <!-- Password and Confirmation -->
-                    <div class="formRow">
-                        <!-- Password -->
-                        <div class="formColumn">
+                    <v-row>
+                        <v-col class='cols'>
                             <p>
                                 <label for="password"><img src='../assets/icons/password.png' class="smallIcon"> Password</label>
                                 <br><input type="password" 
                                             id='password'
                                             placeholder="Enter your password"
                                             required 
-                                            v-model="password">
+                                            v-model="password"
+                                            class='formInput'>
                                 <br>
                             </p>
-                        </div>
-
-                        <!-- Confirmation -->
-                        <div class="formColumn">
+                        </v-col>
+                        <v-col class='cols'>
                             <p>
                                 <label for="confirmPassword"><img src='../assets/icons/password.png' class="smallIcon"> Confirm Password</label>
                                 <br><input type="password" 
                                             id='confirmPassword'
                                             placeholder="Re-type password"
                                             required 
-                                            v-model="confirmPassword">
+                                            v-model="confirmPassword"
+                                            class='formInput'>
                             </p>
-                        </div>
-                    </div>
-
+                        </v-col>
+                    </v-row>
+                    
                     <!-- Remember Me -->
-                    <div class="formRow" style="margin-top: -10px;">
-                        <br><input type="checkbox" 
-                        id='rememberme'
-                        v-model="rememberme">
-                        <label for="rememberme" style="font-weight: 100;">&nbsp;Remember Me</label>
-                    </div>
-
+                    <v-row class='cols'>
+                        <br>
+                        <input type="checkbox" 
+                            id='rememberme'
+                            v-model="rememberme">
+                        <label for="rememberme" style="font-weight: 100; margin-top: 10px;">&nbsp;Remember Me</label>
+                    </v-row>
                     
                     <center>
                     

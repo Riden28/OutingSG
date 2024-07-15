@@ -3,22 +3,25 @@
     <NavBar />
   </div>
   
-  <div class="carousel">
-    <ImageCarousel :slides="home_slides"/>
-  </div>
+  <div class="content">
 
-  <div class="CategoryBar">
-    <CategorySelector />
-  </div>
-  
-  <div class="text-h5 pl-16">Recommendation</div>
-  <div v-if="user" class="ListingDisplay">
-    <!-- <component :is="dynamicComponent" /> -->
-    <ListingRecommend />
-  </div>
+    <div class="carousel">
+      <ImageCarousel :slides="home_slides"/>
+    </div>
 
-  <div v-else class="ListingDisplay">
-    <ListingsDisplay />
+    <div class="CategoryBar">
+      <CategorySelector />
+    </div>
+    
+    <div class="text-h5 pl-16"><b>Recommendation</b></div>
+    <div v-if="user" class="ListingDisplay">
+      <!-- <component :is="dynamicComponent" /> -->
+      <ListingRecommend />
+    </div>
+
+    <div v-else class="ListingDisplay">
+      <ListingsDisplay />
+    </div>
   </div>
   
   <OutingSGFooter />
@@ -78,5 +81,14 @@ const storage = getStorage(firebaseApp);
 <style>
   .carousel {
     margin-top: 55px;
+  }
+
+  .content {
+    background-color: rgb(252, 243, 231);
+  }
+
+  .CategoryBar {
+    padding-top: 20px;
+    padding-bottom: 30px;
   }
 </style>
