@@ -3,19 +3,17 @@
     <v-carousel
     show-arrows="hover" 
     cycle
-    height="520"
+    :height=carousel_height
     hide-delimiter-background>
-      <router-link
-        v-for="(slide, index) in slides"
-        :key="index"
-        :to="'/listing/' + slide.listingID"
-        class="carousel-link">
-        <v-carousel-item
-          :src="slide.url"
-          cover
-          width="100%"
-        ></v-carousel-item>
-      </router-link>
+      <!-- Use v-if to conditionally render router-link or div -->
+      <template v-for="(slide, index) in slides" :key="index">
+        <router-link v-if="isHomepage" :to="'/listing/' + slide.listingID" class="carousel-link">
+          <v-carousel-item class="clickable" :src="slide.url" cover width="100%"></v-carousel-item>
+        </router-link>
+        <div v-else class="carousel-link">
+          <v-carousel-item :src="slide.url" cover width="100%"></v-carousel-item>
+        </div>
+      </template>
       <div class="carousel_title" v-if="isHomepage">Trending Activities</div>
     </v-carousel>
   </div>
@@ -26,7 +24,8 @@
     export default {
         name: 'ImageCarousel',
         props: {
-            slides: Array
+            slides: Array,
+            carousel_height: Number
         },
         computed: {
             isHomepage() {
@@ -66,7 +65,7 @@
     width: 100%;
     height: 100%;
   }
-  .v-carousel-item:hover {
+  .clickable:hover {
     opacity: 0.8; /* Optional: Add hover effect */
     cursor: pointer;
   }

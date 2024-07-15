@@ -1,19 +1,20 @@
     <template>
         <NavBar/>
         <div class="cover">
+            <div class="main_body">
             <!-- row for categories -->
-            <ListingInformation :outingID=listingID />
-    
-            <!-- row for price, location, pax and rating -->
-            <!-- row for pic display + description -->
-            <ListingRating :outingID=listingID />
-            <!-- row for reviews, filtering and adding -->
-            <ReviewActions/>
-    
-            <!-- row for reviews -->
-            <Review/>
-            <Review/>
-            <Review/>
+                <ListingInformation :outingID=listingID />
+                <!-- row for price, location, pax and rating -->
+                <!-- row for pic display + description -->
+                <ListingRating :outingID=listingID />
+                <!-- row for reviews, filtering and adding -->
+                <ReviewActions/>
+        
+                <!-- row for reviews -->
+                <Review/>
+                <Review/>
+                <Review/>
+            </div>
         </div>
         
         <OutingSGFooter />
@@ -56,12 +57,14 @@
     </script>
     
     <style scoped>
-        
-    
         .cover {
             margin-left: 3rem;
             margin-right: 3rem;
         }
-    
+        
+        .main_body {
+            margin-top: 55px;
+            position: relative;
+        }
     
     </style>

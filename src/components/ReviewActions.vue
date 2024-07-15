@@ -30,7 +30,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        color: white;
+        color: black;
     }
     .btn-primary {
         background-color: #EAA843;

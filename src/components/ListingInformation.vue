@@ -20,8 +20,9 @@
             </div>
         </div>
     </div>
-      <ImageCarousel/>
-
+    <div>
+    <ImageCarousel :slides="carousel_images" carousel_height="415"/>
+    </div>
 
 </template>
 
@@ -49,7 +50,8 @@ export default {
                 location: '',
                 description: '',
                 images: []
-            }
+            },
+            carousel_images: []
         }
     },
     async mounted() {
@@ -58,7 +60,15 @@ export default {
         const docSnap = await getDoc(docRef);
     
         if (docSnap.exists()) {
-        this.outing_details = docSnap.data();
+            this.outing_details = docSnap.data();
+            console.log(this.outing_details.images);
+            for (let image of this.outing_details.images) {
+                console.log(image);
+                this.carousel_images.push({
+                    url: image
+                });
+            }
+            
         } else {
         console.log("No such document!");
         }
@@ -83,12 +93,9 @@ export default {
       size: 100px;
     }
 
-    .v-carousel {
-        padding: 0px 0px 0px 0px !important;
-    }
     .names{
         padding: 0px 24px 0px 24px;
-        margin-top: 150px;
+        margin-top: 100px;
     }
 
     .edit {

@@ -6,7 +6,7 @@
   <div class="content">
 
     <div class="carousel">
-      <ImageCarousel :slides="home_slides"/>
+      <ImageCarousel :slides="home_slides" carousel_height="520"/>
     </div>
 
     <div class="CategoryBar">

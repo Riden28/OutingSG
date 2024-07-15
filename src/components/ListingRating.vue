@@ -96,7 +96,7 @@ export default {
   padding-top: 20px;
 }
 
-p {
+.info p {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -111,5 +111,7 @@ img {
   display: flex;
   justify-content: center;
   align-items: center;
+  
 }
+
 </style>
