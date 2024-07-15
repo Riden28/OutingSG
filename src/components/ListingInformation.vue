@@ -76,7 +76,7 @@ export default {
 
     p {
         font-family: sans-serif;
-        color: white;
+        color: black;
     }
 
     p .outingname {
@@ -88,6 +88,7 @@ export default {
     }
     .names{
         padding: 0px 24px 0px 24px;
+        margin-top: 150px;
     }
 
     .edit {
