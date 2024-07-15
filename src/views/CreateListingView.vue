@@ -23,11 +23,11 @@
           <br>
           <div class="name">
             <h6>Outing Name</h6>
-            <input type="text" v-model="text" placeholder="Description Here" class="text-grey">
+            <input id='outingName' type="text" v-model="text" placeholder="Name Here" class="text-grey">
           </div>
           <div class="outing-description">
             <h6>Outing Description</h6>
-            <input type="text" v-model="text" placeholder="Description Here" class="text-grey desc">
+            <input id='outingDescription' type="text" v-model="text" placeholder="Description Here" class="text-grey desc">
           </div>
         </div>
       </div>
@@ -41,54 +41,53 @@
           <div class="row1">
             <div class="category">
               <h4>Category</h4>
-              <input type="checkbox" v-model="toggle" true-value="food'" false-value="no"/> F&B
+              <input id='outingCategory[]' type="checkbox" v-model="toggle" true-value="food'" false-value="no"/> F&B
               <br>
-              <input type="checkbox" v-model="toggle" true-value="nature" false-value="null"/> Nature
+              <input id='outingCategory[]' type="checkbox" v-model="toggle" true-value="nature" false-value="null"/> Nature
               <br>
-              <input type="checkbox" v-model="toggle" true-value="cultural" false-value="null"/> Cultural
+              <input id='outingCategory[]' type="checkbox" v-model="toggle" true-value="cultural" false-value="null"/> Cultural
               <br>
-              <input type="checkbox" v-model="toggle" true-value="entertainment" false-value="null"/> Entertainment
+              <input id='outingCategory[]' type="checkbox" v-model="toggle" true-value="entertainment" false-value="null"/> Entertainment
               <br>
-              <input type="checkbox" v-model="toggle" true-value="outdoor" false-value="null"/> Outdoor
+              <input id='outingCategory[]' type="checkbox" v-model="toggle" true-value="outdoor" false-value="null"/> Outdoor
               <br>
-              <input type="checkbox" v-model="toggle" true-value="educational" false-value="null"/> Educational
+              <input id='outingCategory[]' type="checkbox" v-model="toggle" true-value="educational" false-value="null"/> Educational
               <br>
-              <input type="checkbox" v-model="toggle" true-value="adventure" false-value="null"/> Adventure
+              <input id='outingCategory[]' type="checkbox" v-model="toggle" true-value="adventure" false-value="null"/> Adventure
               <br>
-              <input type="checkbox" v-model="toggle" true-value="shopping" false-value="null"/> Shopping
+              <input id='outingCategory[]' type="checkbox" v-model="toggle" true-value="shopping" false-value="null"/> Shopping
               <br>
-              <input type="checkbox" v-model="toggle" true-value="wellness" false-value="null"/> Wellness
+              <input id='outingCategory[]' type="checkbox" v-model="toggle" true-value="wellness" false-value="null"/> Wellness
               <br>
-              <input type="checkbox" v-model="toggle" true-value="events" false-value="null"/> Events
+              <input id='outingCategory[]' type="checkbox" v-model="toggle" true-value="events" false-value="null"/> Events
               <br>
             </div>
             <div class="price">
-              <h4>Price: {{ picked }}</h4>
-              <input type="radio" id="one" value="One" v-model="picked" />
-              <label for="one">One</label>
-
-              <input type="radio" id="two" value="Two" v-model="picked" />
-              <label for="two">Two</label>
-
-              <input type="radio" id="three" value="Three" v-model="picked" />
-              <label for="three">Three</label>
+              <h4>Price: </h4>
+              <input type="text" placeholder="min price" id="minPrice" v-model="picked" />
+              <br><br>
+              <input type="text" placeholder="max price" id="maxPrice" v-model="picked" />
             </div>
             <div class="recommended-pax">
-              <h4>Recommended Pax</h4>
-              <input type="range" v-model="sliderValue" min="1" max="20" />
-              <p>Number: {{ sliderValue }}</p>
-            </div>  
+              <h4>Min Recommended Pax</h4>
+              <input type="range" v-model="minRecommendedPax" min="1" max="20" />
+              <p>Number: {{ minRecommendedPax }}</p>
+              <input type="range" v-model="maxRecommendedPax" min="1" max="20" />
+              <p>Number: {{ maxRecommendedPax }}</p>
+            </div> 
           </div>
           <div class="row2">
             <div class="area">
               <h4>Location</h4>
-              <input type="checkbox" v-model="toggle" true-value="north" false-value="no"/> North
+              <label><input id="outlingLocation" type="radio" v-model="outlingLocation" value="north"/> North </label>
               <br>
-              <input type="checkbox" v-model="toggle" true-value="south" false-value="null"/> South
+              <label><input id="outlingLocation" type="radio" v-model="outlingLocation" value="south"/> South </label>
               <br>
-              <input type="checkbox" v-model="toggle" true-value="east" false-value="null"/> East
+              <label><input id="outlingLocation" type="radio" v-model="outlingLocation" value="east"/> East </label>
               <br>
-              <input type="checkbox" v-model="toggle" true-value="west" false-value="null"/> West
+              <label><input id="outlingLocation" type="radio" v-model="outlingLocation" value="west"/> West </label>
+              <br>
+              <label><input id="outlingLocation" type="radio" v-model="outlingLocation" value="central"/> Central </label>
             </div>
             <div class="location">
               <h4>Exact Location: </h4>
@@ -101,7 +100,7 @@
         <router-link to="/" class="btn btn-primary">
           Cancel
         </router-link>
-        <button class="btn btn-primary" type = "submit">
+        <button v-on:submit.prevent="createOuting" class="btn btn-primary" type = "submit">
           Post Outing
         </button>
       </div>
@@ -117,7 +116,7 @@
   import GoogleMaps from '@/components/GoogleMaps.vue';
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-  import { getFirestore, collection, doc, setDoc, getDoc, updateDoc, deleteDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  import { getFirestore, collection, doc, setDoc, addDoc, getDoc, updateDoc, deleteDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
   import { getStorage } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
   import firebaseConfig from '../../firebase/firebaseConfig.js';
 
@@ -145,8 +144,6 @@
 //     console.log("Document successfully written!");
 // });
 
-
-
   export default { 
     name: 'create', 
     components: { 
@@ -157,11 +154,35 @@
     }, 
     data() {
       return {
-        picked: '',
-        sliderValue: 20,
-        
+        outingName: '',
+        outingDescription: '',
+        outingCategory: [],
+        outingMinPrice: 0,
+        outingMaxPrice: 1000,
+        minRecommendedPax: 0,
+        maxRecommendedPax: 20,
+        outlingLocation: null
+
       }
     },
+    method: {
+      async createOuting() {
+        const docData = {
+          outingName: this.outingName,
+          outingDescription: this.outingDescription,
+          outingCategory: this.outingCategory,
+          outingMinPrice: this.outingMinPrice,
+          outingMaxPrice: this.outingMaxPrice,
+          outingMinRecommendedPax: this.minRecommendedPax,
+          outingMaxRecommendedPax: this.maxRecommendedPax,
+          outlingLocation: this.outlingLocation,
+        };
+        await addDoc(doc(db, "outings"), docData).then(() => {
+            console.log("Document successfully written!");
+            this.$router.push("/");
+        });
+      }
+    }
     
   }; 
   // const setPlace = (place) => {

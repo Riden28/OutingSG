@@ -2,7 +2,7 @@
     <div class="reviews">
         <!-- this is for name & rating, but will change from hard code to link to database in later stages -->
         <div class="v-row labels">
-            <div class="v-col-2">
+            <div class="v-col-4">
                 <h4>JOHN POPPERS</h4>
                 <div class="stars">
                     <span class="fa fa-star checked"></span>
@@ -14,7 +14,7 @@
             </div>
 
             <!-- date at end of page -->
-            <div class="v-col-10">
+            <div class="v-col-8">
                 <div class="date">
                     <p>21 May 2024</p>
                 </div>
@@ -50,12 +50,12 @@
         justify-content: space-around;
     }
 
-    .v-col-10 {
+    .v-col-8 {
         display: flex;
         justify-content: end;
     }
 
-    .v-col-2 {
+    .v-col-4 {
         display: flex;
         justify-content: space-around;
     }
@@ -67,5 +67,9 @@
 
     .description {
         padding: 30px;
+    }
+
+    .date {
+        padding-right: 30px;
     }
 </style>
