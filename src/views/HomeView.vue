@@ -12,8 +12,41 @@
     <div class="CategoryBar">
       <CategorySelector />
     </div>
+
+    <div class='benefits'>
+      <v-row>
+        <v-col class='benefitsCol'>
+          <img src="../assets/icons/gif/explore.gif">
+          <h4><b>Discover Novel Experiences</b></h4>
+          <p>
+            Explore unique hangout spots, events, festivals, and date activities in Singapore, helping users explore new experiences and enrich their social lives.          
+          </p>
+        </v-col>
+
+        <v-col class='benefitsCol'>
+          <img src="../assets/icons/gif/recommendation.gif">
+          <h4><b>Personalized Recommendations</b></h4>
+          <p>
+            Personalized suggestions aligned with user preferences, ensuring each recommendation is tailored to individual tastes and enhancing the enjoyment of outings.       
+          </p>
+        </v-col>
+
+        <v-col class='benefitsCol'>
+          <img src="../assets/icons/gif/planning.gif">
+          <h4><b>Efficient Planning</b></h4>
+          <p>
+            Simplify outing planning with a user-friendly interface and comprehensive information, saving time and allowing users to focus on enjoying Singapore's vibrant social scene.       
+          </p>
+        </v-col>
+      </v-row>
+    </div>
     
-    <div class="text-h5 pl-16"><b>Recommendation</b></div>
+    <div class="text-h5 pl-16" style='text-align:center;'>
+      <b>Recommendation</b>
+      <p style='font-size: 16px;'>
+        Tailored suggestions based on user preferences, ensuring each recommendation matches individual interests for a more satisfying outing experience.        
+      </p>
+    </div>
     <div v-if="user" class="ListingDisplay">
       <!-- <component :is="dynamicComponent" /> -->
       <ListingRecommend />
@@ -91,4 +124,21 @@ const storage = getStorage(firebaseApp);
     padding-top: 20px;
     padding-bottom: 30px;
   }
+
+  .benefits {
+    background-color: white;
+    color: black;
+    text-align: center;
+    margin-bottom: 60px;
+    margin-top: 20px;
+  }
+
+  .benefits img {
+    width: 90px;
+  }
+
+  .benefitsCol {
+    padding: 40px 70px !important;
+  }
+  
 </style>
