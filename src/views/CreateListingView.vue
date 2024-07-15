@@ -7,6 +7,7 @@
           <input
             type="file"
             multiple
+            required
             name="file"
             id="fileInput"
             class="hidden-input"
@@ -64,9 +65,9 @@
             </div>
             <div class="price">
               <h5>Price: </h5>
-              <input type="text" required placeholder="min price" id="minPrice" v-model="outingMinPrice" />
+              <input type="number" step="1" required placeholder="min price" id="minPrice" v-model="outingMinPrice" />
               <br><br>
-              <input type="text" required placeholder="max price" id="maxPrice" v-model="outingMaxPrice" />
+              <input type="number" step="1" required placeholder="max price" id="maxPrice" v-model="outingMaxPrice" />
             </div>
             <div class="recommended-pax">
               <h5>Recommended Pax</h5>
@@ -79,7 +80,7 @@
           <div class="row2">
             <div class="area">
               <h5>Location</h5>
-              <label><input id="outingLocation1" type="radio" v-model="outingLocation" value="north" class='ranges'/> North </label>
+              <label><input id="outingLocation1" type="radio" selected v-model="outingLocation" value="north" class='ranges'/> North </label>
               <br>
               <label><input id="outingLocation2" type="radio" v-model="outingLocation" value="south" class='ranges'/> South </label>
               <br>
@@ -144,8 +145,7 @@ export default {
       exactLocation: '',
       files: [],
       imageUrl: null,
-      image: null,
-      imageUrls: [],
+      images: [],
     }
   },
   methods: {
@@ -154,14 +154,18 @@ export default {
         name: this.outingName,
         description: this.outingDescription,
         category: this.outingCategory,
-        outingMinPrice: this.outingMinPrice,
-        outingMaxPrice: this.outingMaxPrice,
-        min_recommended_pax: this.minRecommendedPax,
-        max_recommended_pax: this.maxRecommendedPax,
+        min_price: parseInt(this.outingMinPrice),
+        max_price: parseInt(this.outingMaxPrice),
+        min_recommended_pax: parseInt(this.minRecommendedPax),
+        max_recommended_pax: parseInt(this.maxRecommendedPax),
         location: this.outingLocation,
         exactLocation: this.exactLocation,
-        images: []
       };
+
+      if (docData.min_price>docData.max_price || docData.min_recommended_pax>docData.max_recommended_pax) {
+        alert("Minimum value cannot be more than maximum value");
+        return;
+      }
 
       // Add a new document with a generated ID
       const docRef = await addDoc(collection(db, "outings"), docData);
@@ -169,7 +173,7 @@ export default {
 
       // File upload logic
       const uploadPromises = this.files.map(file => {
-        const storageRef = ref(storage, `./${docId}/${file.name}`);
+        const storageRef = ref(storage, `${docId}/${file.name}`);
         const uploadTask = uploadBytesResumable(storageRef, file);
 
         return new Promise((resolve, reject) => {
@@ -208,7 +212,7 @@ export default {
         console.log('All files uploaded successfully');
 
         // Update the document with the image URLs
-        await updateDoc(docRef, { imageUrls: downloadURLs });
+        await updateDoc(docRef, { images: downloadURLs });
         console.log('Document successfully updated with image URLs');
         
         this.$router.push("/");
