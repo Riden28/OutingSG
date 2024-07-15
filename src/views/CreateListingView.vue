@@ -1,34 +1,33 @@
 <template> 
-    <NavBar /> 
-    <div class="cover">
-    <form action="">
+  <NavBar /> 
+  <div class="cover">
+    <form @submit.prevent="createOuting">
       <div class="top v-row">
         <div class="v-col-5 images">
-          <button class="btn btn-info" @click="onPickFile">
-            <input 
-              type="file"
-              multiple
-              name="file"
-              ref="fileInput"
-              class="hidden-input"
-              @change="onFilePicked"
-              accept=".pdf,.jpg,.jpeg,.png"
-            />
-          </button>
+          <input
+            type="file"
+            multiple
+            name="file"
+            id="fileInput"
+            class="hidden-input"
+            @change="onFilePicked"
+            ref="file"
+            accept=".pdf,.jpg,.jpeg,.png"
+          />
         </div>
         <div id="preview">
-          <img v-if="url" :src="url" />
+          <img v-if="imageUrl" :src="imageUrl" />
         </div>
         <div class="v-col-7">
           <h3>Create Outing</h3>
           <br>
           <div class="name">
             <h6>Outing Name</h6>
-            <input id='outingName' type="text" v-model="text" placeholder="Name Here" class="text-grey">
+            <input id='outingName' required type="text" v-model="outingName" placeholder="Name Here" class="text-grey">
           </div>
           <div class="outing-description">
             <h6>Outing Description</h6>
-            <input id='outingDescription' type="text" v-model="text" placeholder="Description Here" class="text-grey desc">
+            <input id='outingDescription' required type="text" v-model="outingDescription" placeholder="Description Here" class="text-grey desc">
           </div>
         </div>
       </div>
@@ -37,42 +36,42 @@
           <!-- here goes the google maps selector -->
           <!-- <GoogleMaps/> -->
         </div>
-
         <div class="v-col-7">
           <div class="row1">
             <div class="category">
               <h4>Category</h4>
-              <input id='outingCategory[]' type="checkbox" v-model="toggle" true-value="food'" false-value="no"/> F&B
+              <input id='outingCategory1' type="checkbox" v-model="outingCategory" value="food"/> F&B
               <br>
-              <input id='outingCategory[]' type="checkbox" v-model="toggle" true-value="nature" false-value="null"/> Nature
+              <input id='outingCategory2' type="checkbox" v-model="outingCategory" value="nature"/> Nature
               <br>
-              <input id='outingCategory[]' type="checkbox" v-model="toggle" true-value="cultural" false-value="null"/> Cultural
+              <input id='outingCategory3' type="checkbox" v-model="outingCategory" value="cultural"/> Cultural
               <br>
-              <input id='outingCategory[]' type="checkbox" v-model="toggle" true-value="entertainment" false-value="null"/> Entertainment
+              <input id='outingCategory4' type="checkbox" v-model="outingCategory" value="entertainment"/> Entertainment
               <br>
-              <input id='outingCategory[]' type="checkbox" v-model="toggle" true-value="outdoor" false-value="null"/> Outdoor
+              <input id='outingCategory5' type="checkbox" v-model="outingCategory" value="outdoor"/> Outdoor
               <br>
-              <input id='outingCategory[]' type="checkbox" v-model="toggle" true-value="educational" false-value="null"/> Educational
+              <input id='outingCategory6' type="checkbox" v-model="outingCategory" value="educational"/> Educational
               <br>
-              <input id='outingCategory[]' type="checkbox" v-model="toggle" true-value="adventure" false-value="null"/> Adventure
+              <input id='outingCategory7' type="checkbox" v-model="outingCategory" value="adventure"/> Adventure
               <br>
-              <input id='outingCategory[]' type="checkbox" v-model="toggle" true-value="shopping" false-value="null"/> Shopping
+              <input id='outingCategory8' type="checkbox" v-model="outingCategory" value="shopping"/> Shopping
               <br>
-              <input id='outingCategory[]' type="checkbox" v-model="toggle" true-value="wellness" false-value="null"/> Wellness
+              <input id='outingCategory9' type="checkbox" v-model="outingCategory" value="wellness"/> Wellness
               <br>
-              <input id='outingCategory[]' type="checkbox" v-model="toggle" true-value="events" false-value="null"/> Events
+              <input id='outingCategory10' type="checkbox" v-model="outingCategory" value="events"/> Events
               <br>
             </div>
             <div class="price">
               <h4>Price: </h4>
-              <input type="text" placeholder="min price" id="minPrice" v-model="picked" />
+              <input type="text" required placeholder="min price" id="minPrice" v-model="outingMinPrice" />
               <br><br>
-              <input type="text" placeholder="max price" id="maxPrice" v-model="picked" />
+              <input type="text" required placeholder="max price" id="maxPrice" v-model="outingMaxPrice" />
             </div>
             <div class="recommended-pax">
               <h4>Min Recommended Pax</h4>
               <input type="range" v-model="minRecommendedPax" min="1" max="20" />
               <p>Number: {{ minRecommendedPax }}</p>
+              <h4>Max Recommended Pax</h4>
               <input type="range" v-model="maxRecommendedPax" min="1" max="20" />
               <p>Number: {{ maxRecommendedPax }}</p>
             </div> 
@@ -80,19 +79,19 @@
           <div class="row2">
             <div class="area">
               <h4>Location</h4>
-              <label><input id="outlingLocation" type="radio" v-model="outlingLocation" value="north"/> North </label>
+              <label><input id="outingLocation1" type="radio" v-model="outingLocation" value="north"/> North </label>
               <br>
-              <label><input id="outlingLocation" type="radio" v-model="outlingLocation" value="south"/> South </label>
+              <label><input id="outingLocation2" type="radio" v-model="outingLocation" value="south"/> South </label>
               <br>
-              <label><input id="outlingLocation" type="radio" v-model="outlingLocation" value="east"/> East </label>
+              <label><input id="outingLocation3" type="radio" v-model="outingLocation" value="east"/> East </label>
               <br>
-              <label><input id="outlingLocation" type="radio" v-model="outlingLocation" value="west"/> West </label>
+              <label><input id="outingLocation4" type="radio" v-model="outingLocation" value="west"/> West </label>
               <br>
-              <label><input id="outlingLocation" type="radio" v-model="outlingLocation" value="central"/> Central </label>
+              <label><input id="outingLocation5" type="radio" v-model="outingLocation" value="central"/> Central </label>
             </div>
             <div class="location">
               <h4>Exact Location: </h4>
-              <input v-model="message" value = [] placeholder="location" />
+              <input v-model="exactLocation" placeholder="location" />
             </div>
           </div>
         </div>
@@ -101,112 +100,137 @@
         <router-link to="/" class="btn btn-primary">
           Cancel
         </router-link>
-        <button v-on:submit.prevent="createOuting" class="btn btn-primary" type = "submit">
+        <button class="btn btn-primary" type="submit">
           Post Outing
         </button>
       </div>
-
     </form>
   </div>
-    <OutingSGFooter/>
+  <OutingSGFooter/>
 </template> 
  
 <script> 
-  import NavBar from '@/components/NavBar.vue'; 
-  import OutingSGFooter from '@/components/Footer.vue';
-  import GoogleMaps from '@/components/GoogleMaps.vue';
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-  import { getFirestore, collection, doc, setDoc, addDoc, getDoc, updateDoc, deleteDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-  import { getStorage } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
-  import firebaseConfig from '../../firebase/firebaseConfig.js';
+import NavBar from '@/components/NavBar.vue'; 
+import OutingSGFooter from '@/components/Footer.vue';
+import GoogleMaps from '@/components/GoogleMaps.vue';
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, addDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+import firebaseConfig from '../../firebase/firebaseConfig.js';
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-  const storage = getStorage(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const storage = getStorage(app);
 
-//   const docData = {
-//     stringExample: "Hello world!",
-//     booleanExample: true,
-//     numberExample: 3.14159265,
-//     // dateExample: Timestamp.fromDate(new Date("December 10, 1815")),
-//     arrayExample: [5, true, "hello"],
-//     nullExample: null,
-//     objectExample: {
-//         a: 5,
-//         b: {
-//             nested: "foo"
-//         }
-//     }
-// };
+export default { 
+  name: 'create', 
+  components: { 
+    NavBar,
+    OutingSGFooter,
+    GoogleMaps,
+  }, 
+  data() {
+    return {
+      outingName: '',
+      outingDescription: '',
+      outingCategory: [],
+      outingMinPrice: 0,
+      outingMaxPrice: 1000,
+      minRecommendedPax: 0,
+      maxRecommendedPax: 20,
+      outingLocation: null,
+      exactLocation: '',
+      files: [],
+      imageUrl: null,
+      image: null,
+      imageUrls: [],
+    }
+  },
+  methods: {
+    async createOuting() {
+      const docData = {
+        name: this.outingName,
+        description: this.outingDescription,
+        category: this.outingCategory,
+        outingMinPrice: this.outingMinPrice,
+        outingMaxPrice: this.outingMaxPrice,
+        min_recommended_pax: this.minRecommendedPax,
+        max_recommended_pax: this.maxRecommendedPax,
+        location: this.outingLocation,
+        exactLocation: this.exactLocation,
+        images: []
+      };
 
-// await setDoc(doc(db, "outings", "one"), docData).then(() => {
-//     console.log("Document successfully written!");
-// });
+      // Add a new document with a generated ID
+      const docRef = await addDoc(collection(db, "outings"), docData);
+      const docId = docRef.id;
 
-  export default { 
-    name: 'create', 
-    components: { 
-      NavBar,
-      OutingSGFooter,
-      GoogleMaps,
-      
-    }, 
-    data() {
-      return {
-        outingName: '',
-        outingDescription: '',
-        outingCategory: [],
-        outingMinPrice: 0,
-        outingMaxPrice: 1000,
-        minRecommendedPax: 0,
-        maxRecommendedPax: 20,
-        outlingLocation: null
+      // File upload logic
+      const uploadPromises = this.files.map(file => {
+        const storageRef = ref(storage, `./${docId}/${file.name}`);
+        const uploadTask = uploadBytesResumable(storageRef, file);
 
+        return new Promise((resolve, reject) => {
+          uploadTask.on('state_changed', 
+            (snapshot) => {
+              // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+              const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+              console.log('Upload is ' + progress + '% done');
+              switch (snapshot.state) {
+                case 'paused':
+                  console.log('Upload is paused');
+                  break;
+                case 'running':
+                  console.log('Upload is running');
+                  break;
+              }
+            }, 
+            (error) => {
+              // Handle unsuccessful uploads
+              console.error('Upload failed:', error);
+              reject(error);
+            }, 
+            () => {
+              // Handle successful uploads on complete
+              getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                console.log('File available at', downloadURL);
+                resolve(downloadURL);
+              });
+            }
+          );
+        });
+      });
+
+      try {
+        const downloadURLs = await Promise.all(uploadPromises);
+        console.log('All files uploaded successfully');
+
+        // Update the document with the image URLs
+        await updateDoc(docRef, { imageUrls: downloadURLs });
+        console.log('Document successfully updated with image URLs');
+        
+        this.$router.push("/");
+      } catch (error) {
+        console.error('Error uploading files:', error);
       }
     },
-    method: {
-      async createOuting() {
-        const docData = {
-          outingName: this.outingName,
-          outingDescription: this.outingDescription,
-          outingCategory: this.outingCategory,
-          outingMinPrice: this.outingMinPrice,
-          outingMaxPrice: this.outingMaxPrice,
-          outingMinRecommendedPax: this.minRecommendedPax,
-          outingMaxRecommendedPax: this.maxRecommendedPax,
-          outlingLocation: this.outlingLocation,
+    onPickFile() {
+      this.$refs.fileInput.click();
+    },
+    onFilePicked(event) {
+      this.files = Array.from(event.target.files);
+      if (this.files.length > 0) {
+        const fileReader = new FileReader();
+        fileReader.onload = () => {
+          this.imageUrl = fileReader.result;
         };
-        await addDoc(doc(db, "outings"), docData).then(() => {
-            console.log("Document successfully written!");
-            this.$router.push("/");
-        });
-      },
-      onPickFile () {
-        this.$refs.fileInput.click()
-      },
-      onFilePicked (event) {
-        const files = event.target.files
-        let filename = files[0].name
-        const fileReader = new FileReader()
-        fileReader.addEventListener('load', () => {
-          this.imageUrl = fileReader.result
-        })
-        fileReader.readAsDataURL(files[0])
-        this.image = files[0]
+        fileReader.readAsDataURL(this.files[0]);
       }
     }
-    
-  }; 
-  // const setPlace = (place) => {
-  //     coords.value.lat = place.geometry.location.lat()
-  //     coords.value.lng = place.geometry.location.lng()
-  //     // Update the location details
-  //     locationDetails.value.address = place.formatted_address
-  //     locationDetails.value.url = place.url
-  //   }
-    
+  }
+}; 
 </script>
 
 <style scoped>
@@ -238,25 +262,22 @@
     margin-left: 3rem;
   }
   .text-grey {
-      color: white !important;
-      background: lightgray !important;
-      width: 100%;
-      border-radius: 25px;
-    }
-
-    .desc {
-      height: 200px;
-    }
-
-    .images {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .bottom-buttons {
-      display: flex;
-      justify-content: space-around;
-      padding-bottom: 100px;
-    }
+    color: white !important;
+    background: lightgray !important;
+    width: 100%;
+    border-radius: 25px;
+  }
+  .desc {
+    height: 200px;
+  }
+  .images {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .bottom-buttons {
+    display: flex;
+    justify-content: space-around;
+    padding-bottom: 100px;
+  }
 </style>
