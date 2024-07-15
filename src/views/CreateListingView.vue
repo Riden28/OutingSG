@@ -4,16 +4,17 @@
     <form action="">
       <div class="top v-row">
         <div class="v-col-5 images">
-          <input
-            type="file"
-            multiple
-            name="file"
-            id="fileInput"
-            class="hidden-input"
-            @change="onFileChange"
-            ref="file"
-            accept=".pdf,.jpg,.jpeg,.png"
-          />
+          <button class="btn btn-info" @click="onPickFile">
+            <input 
+              type="file"
+              multiple
+              name="file"
+              ref="fileInput"
+              class="hidden-input"
+              @change="onFilePicked"
+              accept=".pdf,.jpg,.jpeg,.png"
+            />
+          </button>
         </div>
         <div id="preview">
           <img v-if="url" :src="url" />
@@ -181,6 +182,19 @@
             console.log("Document successfully written!");
             this.$router.push("/");
         });
+      },
+      onPickFile () {
+        this.$refs.fileInput.click()
+      },
+      onFilePicked (event) {
+        const files = event.target.files
+        let filename = files[0].name
+        const fileReader = new FileReader()
+        fileReader.addEventListener('load', () => {
+          this.imageUrl = fileReader.result
+        })
+        fileReader.readAsDataURL(files[0])
+        this.image = files[0]
       }
     }
     
