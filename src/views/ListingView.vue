@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
     <NavBar/>
       <div class="cover">
           // row for categories
@@ -55,4 +55,4 @@
       }
   
   
-  </style> -->
+  </style>

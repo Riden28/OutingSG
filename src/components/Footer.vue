@@ -34,4 +34,8 @@
         bottom: 0;
         padding: 20px;
     }
+
+    a {
+        color:black;
+    }
 </style>

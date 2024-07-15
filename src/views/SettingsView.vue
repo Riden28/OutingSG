@@ -54,9 +54,9 @@
                         <router-link to="/profile"><button>Save Changes</button></router-link>
                     </v-col>
                     <br>
-                    <hr>
-                    <button class='logOut' @click='logOut()'>Log Out</button>
+                    
                 </v-row>
+                <hr><button class='logOut' @click='logOut()'>Log Out</button>
 
             </div>
         </center>
@@ -66,7 +66,6 @@
 
 <script>
     import '../assets/main.css';
-    import '../assets/bootstrap.css';
     import '../router/bootstrap.js';
     import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -191,7 +190,7 @@ label {
 }
 
 input {
-    background: #f5f5f5;
+    background: #f4f4f4 !important;
     margin: 5px;
     width: 300px;
 }

@@ -2,7 +2,7 @@
 
 /* colour palette */
 :root {
-  --primary: #EAA843;
+  --primary: #ffc062;
   --primary-dark: #8a6226;
   --secondary: #4275B0;
   --secondary-light: #c0ddfe;
@@ -10,6 +10,7 @@
   --transparent: #ffffff00;
   --text-grey: rgb(151, 151, 151);
   --light-green: #DFF2D8;
+  --bg: rgb(252, 243, 231);
 }
 
 /* form aesthetics */
@@ -49,3 +50,8 @@ button:hover {
 .smallIcon {
   width: 20px;
 }
+
+.cols {
+  padding-left: 100px !important;
+}
+

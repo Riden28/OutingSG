@@ -20,18 +20,34 @@
                 <hr>
                 <form id="resetPw" @submit.prevent="resetPassword">
                     <!-- Password and New Password -->
-                    <div class="formRow">
-                        <!-- Email -->
-                        <div class="formColumn">
+                    <v-row>
+                        <v-col class='cols'>
                             <p>
-                                <label for="email"><img src='../assets/icons/email.png' class="smallIcon"> Email</label>
-                                <br><input type="email" id='email' placeholder="Enter your email" required v-model="email">
+                                <label for="password"><img src='../assets/icons/password.png' class="smallIcon"> Password</label>
+                                <br><input type="password" 
+                                            id='password'
+                                            placeholder="Enter your password"
+                                            required 
+                                            v-model="password"
+                                            class='formInput'>
                                 <br>
                             </p>
-                        </div>
-                    </div>
+                        </v-col>
+                        <v-col class='cols'>
+                            <p>
+                                <label for="confirmPassword"><img src='../assets/icons/password.png' class="smallIcon"> Confirm Password</label>
+                                <br><input type="password" 
+                                            id='confirmPassword'
+                                            placeholder="Re-type password"
+                                            required 
+                                            v-model="confirmPassword"
+                                            class='formInput'>
+                            </p>
+                        </v-col>
+                    </v-row>
+
                     <center>
-                        <br><button type="submit" style="width:80%;" class='buttonSubmit'>Send Password Reset Email</button>
+                        <br><button type="submit" style="width:80%;" class='buttonSubmit'>Change Password</button>
                         <!-- click to go to login page -->
                         <p style="margin-top: 10px;" class="greyText">
                             Back to <router-link to='/login' style="color: var(--secondary) !important;">login</router-link>

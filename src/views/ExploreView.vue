@@ -30,11 +30,11 @@
             <input type="checkbox" id="price3"><label for="price3">$$$</label><br> -->
 
             <h4 class="title">Location</h4> 
-            <input type="checkbox" id="north"><label for="north">North</label><br>
-            <input type="checkbox" id="south"><label for="south">South</label><br>
-            <input type="checkbox" id="east"><label for="east">East</label><br>
-            <input type="checkbox" id="west"><label for="west">West</label><br>
-            <input type="checkbox" id="central"><label for="central">Central</label><br>
+            <input type="checkbox" v-model="location" id="north" value="north"><label for="north">North</label><br>
+            <input type="checkbox" v-model="location" id="south" value="south"><label for="south">South</label><br>
+            <input type="checkbox" v-model="location" id="east" value="east"><label for="east">East</label><br>
+            <input type="checkbox" v-model="location" id="west" value="west"><label for="west">West</label><br>
+            <input type="checkbox" v-model="location" id="central" value="central"><label for="central">Central</label><br>
 
             
             <h4 class="title">Recommended Pax</h4> 
@@ -48,7 +48,7 @@
 
             <h3 class="title">Sort</h3>
             <select name="sort" id="sort" class='sort' v-model="selectedSort">
-                <option value="category" selected>Category</option>
+                <option value="name">Listing Name</option>
                 <option value="price">Price</option>
             </select>
             <img src="../assets/icons/up.png" v-on:click="sorting = false" v-if="sorting" class="sortIcon">
@@ -62,48 +62,21 @@
 
             <h2 class="title">Outings</h2>
 
-            <v-container fluid class="mx-auto overflow-auto">
+            <v-container fluid class="mx-auto overflow-auto hideScroll">
                 <v-row align="start" justify="center">
-                <v-col  v-for="listing in listings" cols="auto">
-                    <v-card
-                        class="mx-1"
-                        height="280"
-                        width="417"
-                        rounded="xl"
-                        :href="listing.listingPage">
-                    <v-img
-                        :src="listing.url"
-                        height="174px"
-                        cover></v-img>
-                    <v-btn
-                        icon="mdi-bookmark-outline"
-                        base-color="transparent"
-                        variant="plain"
-                        @click.prevent="console.log('hi');"> 
-                    <v-icon
-                        icon="mdi-bookmark"
-                        size="50"
-                        color="white"></v-icon>
-                    </v-btn>
-                        <v-card-title>
-                            {{ listing.name }}
-                        </v-card-title>
-                    
-                        <v-card-subtitle>
-                            {{ listing.details }}
-                        </v-card-subtitle>
-
-                        <v-card-title class="price">
-                            {{ listing.price }}
-                        </v-card-title>
-                        
-                        <!-- replace console.log with function to save outing -->
-                        
-                    </v-card>
-                        
-                </v-col>
+                    <v-col v-for="listing in listings" :key="listing.listingID" cols="auto" @click="navigateToListing(listing.listingID)">
+                        <v-card class="mx-1" height="280" width="417" rounded="xl">
+                        <v-img :src="listing.url" height="174px" cover></v-img>
+                        <v-btn icon="mdi-bookmark-outline" base-color="transparent" variant="plain" @click.prevent="bookmarkListing(listing)">
+                            <v-icon icon="mdi-bookmark" size="50" color="white"></v-icon>
+                        </v-btn>
+                        <v-card-title>{{ listing.name }}</v-card-title>
+                        <v-card-title class="location">{{ listing.details }}</v-card-title>
+                        <v-card-title class="price">{{ listing.price }}</v-card-title>
+                        </v-card>
+                    </v-col>
                 </v-row>
-        </v-container>
+            </v-container>
         </div> 
     </div> 
 
@@ -138,20 +111,13 @@ const querySnapshot = await getDocs(collection(db, "outings"));
 var outings = [];
 querySnapshot.forEach((doc) => {
     var outing_details = doc.data();
-    
-    // Determine the price based on max_price
-    let price;
-    if (outing_details.max_price === 0) {
-        price = "Free";
-    } else {
-        price = "$" + outing_details.min_price + ' ~ $' + outing_details.max_price;
-    }
-
+    const price = outing_details.max_price === 0 ? 'Free' : `$${outing_details.min_price} ~ $${outing_details.max_price}`;
     outings.push({
         listingID: doc.id,
         name: outing_details.name,
         details: outing_details.location,
         price: price,
+        minimumPrice: outing_details.min_price,
         url: outing_details.images.length > 0 ? outing_details.images[0] : null,
         
     });
@@ -168,16 +134,17 @@ export default {
     },
     data: () => ({
         // retrieve the first 10 listings
-        listings: outings.slice(0,10),
+        listings: outings,
         currentIndex: 0,
         sorting: true,
         searchField: new URLSearchParams(window.location.search).get('search'),
         sliderValue: 2,
         minPrice: 0,
-        maxPrice: 25,
+        maxPrice: 50,
         minPax: 1,
-        maxPax: 2,
+        maxPax: 10,
         category: [],
+        location: [],
     }),
     methods: {
         // on every load retrieve another 10 listings
@@ -197,21 +164,7 @@ export default {
             this.category = [];
             querySnapshot.forEach((doc) => {
                 var outing_details = doc.data();
-            
-                let price;
-                if (outing_details.max_price === 0) {
-                    price = "Free";
-                } else {
-                    price = "$" + outing_details.min_price + ' ~ $' + outing_details.max_price;
-                }
-                
-                this.listings.push({
-                    listingID: doc.id,
-                    name: outing_details.name,
-                    details: outing_details.location,
-                    price: price,
-                    url: outing_details.images.length > 0 ? outing_details.images[0] : null
-                }); 
+                this.pushListings(outing_details);
             });
             window.history.pushState({}, document.title, window.location.pathname); //remove the search query in the url
 
@@ -225,22 +178,9 @@ export default {
                 
                 var outing_name = outing_details.name.toLowerCase()
                 var search_name = this.searchField.toLowerCase()
-
-                let price;
-                if (outing_details.max_price === 0) {
-                    price = "Free";
-                } else {
-                    price = "$" + outing_details.min_price + ' ~ $' + outing_details.max_price;
-                }
                 
                 if(outing_name.includes(search_name)){
-                    this.listings.push({
-                        listingID: doc.id,
-                        name: outing_details.name,
-                        details: outing_details.location,
-                        price: price,
-                        url: outing_details.images.length > 0 ? outing_details.images[0] : null
-                    });                
+                    this.pushListings(outing_details);               
                 }
             });
             
@@ -248,8 +188,6 @@ export default {
         filter(){
             this.listings = []; // clear the existing array
 
-            const selectedCategories = this.category;
-            console.log(selectedCategories);
             querySnapshot.forEach((doc) => {
                 var outing_details = doc.data();
                 var category;
@@ -257,7 +195,9 @@ export default {
                 var checkCat = false;
                 var checkPrice = false;
                 var checkPax = false;
+                var checkLocation = false;
 
+                const selectedCategories = this.category;
                 if (selectedCategories.length == 0){
                     checkCat = true;
                 }else{
@@ -265,6 +205,20 @@ export default {
                         var currCat = category.toLowerCase();
                         if (selectedCategories.includes(currCat)){
                             checkCat = true;
+                            break;
+                        }
+                    }
+                }
+
+                // to be updated with the correct variable once finalised
+                const selectedLocations = this.location;
+                if (selectedLocations.length == 0){
+                    checkLocation = true;
+                }else{
+                    for (location of outing_details.location) {
+                        var currLocation = location.toLowerCase();
+                        if (selectedLocations.includes(currLocation)){
+                            checkLocation = true;
                             break;
                         }
                     }
@@ -279,14 +233,7 @@ export default {
                 }
 
                 if (checkCat && checkPrice && checkPax){
-                    let price = outing_details.max_price === 0 ? "Free" : `$${outing_details.min_price} ~ $${outing_details.max_price}`;
-                    this.listings.push({
-                        listingID: doc.id,
-                        name: outing_details.name,
-                        details: outing_details.location,
-                        price: price,
-                        url: outing_details.images.length > 0 ? outing_details.images[0] : null
-                    });
+                    this.pushListings(outing_details);
                 }
 
             });
@@ -297,13 +244,71 @@ export default {
 
             if(selectedSort == "price"){
                 if(ascDesc == true){
-
+                    this.listings.sort((a, b) => {
+                    if (a.minimumPrice < b.minimumPrice) {
+                        return -1;
+                    }
+                    if (a.minimumPrice > b.minimumPrice) {
+                        return 1;
+                    }
+                    return 0;
+                    });
+                    
                 }else{
-
+                    this.listings.sort((a, b) => {
+                    if (a.minimumPrice > b.minimumPrice) {
+                        return -1;
+                    }
+                    if (a.minimumPrice < b.minimumPrice) {
+                        return 1;
+                    }
+                    return 0;
+                    });
                 }
-            }else if(selectedSort == "price"){
+                
 
+            }else if(selectedSort == "name"){
+                if(ascDesc == true){
+                    this.listings.sort((a, b) => {
+                    if (a.name < b.name) {
+                        return -1;
+                    }
+                    if (a.name > b.name) {
+                        return 1;
+                    }
+                    return 0;
+                    });
+                    
+                }else{
+                    this.listings.sort((a, b) => {
+                    if (a.name > b.name) {
+                        return -1;
+                    }
+                    if (a.name < b.name) {
+                        return 1;
+                    }
+                    return 0;
+                    });
+                }
             }
+        },
+        navigateToListing(listingID) {
+            this.$router.push({ name: 'individualListing', params: { listingID } });
+        },
+        bookmarkListing(listing) {
+            console.log('Bookmark clicked for:', listing);
+            // Implement bookmark functionality here
+        },
+        pushListings(outing_details){
+            let price = outing_details.max_price === 0 ? "Free" : `$${outing_details.min_price} ~ $${outing_details.max_price}`;
+            this.listings.push({
+                listingID: doc.id,
+                name: outing_details.name,
+                details: outing_details.location,
+                price: price,
+                minimumPrice: outing_details.min_price,
+                url: outing_details.images.length > 0 ? outing_details.images[0] : null
+            });
         }
     },
     created() {
@@ -346,7 +351,7 @@ label {
 }
 
 .wrapper { 
-    display: flex; 
+    display: flex;
 } 
 
 .main { 
@@ -359,6 +364,7 @@ label {
     padding-left: 10px; 
     margin-top: 55px;
     padding: 30px;
+    background-color: var(--bg) !important; 
 } 
 
 .sidebar { 
@@ -432,4 +438,35 @@ select {
 .ranges{
     accent-color: var(--secondary);
 }
+
+/* listing card css */
+.v-btn {
+    position: absolute;
+    top: -6px;
+    right: 8px;
+}
+
+.price {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    font-weight: normal;
+}
+
+.location {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    font-weight: normal;
+}
+
+.v-card:hover {
+    opacity: 0.8; /* Optional: Add hover effect */
+    cursor: pointer;
+}
+
+.hideScroll {
+    scrollbar-width: none;
+}
+
 </style>

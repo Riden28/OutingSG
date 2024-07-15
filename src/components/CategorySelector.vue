@@ -7,8 +7,7 @@
             :icon="category.icon"
             :height="buttonHeight"
             :width="buttonWidth"
-            :color="buttonColor"
-          >
+            :color="buttonColor">
             <v-icon :icon="category.icon" size="x-large"></v-icon>
           </v-btn>
           <div class="text-center category-name">{{ category.name }}</div>
@@ -71,6 +70,7 @@ export default {
   flex-direction: column;
   align-items: center;
   height: 120px; /* Adjust based on content */
+  margin-left: 10px;
 }
 
 .category-name {
@@ -80,6 +80,12 @@ export default {
 
 .v-btn {
   color: black !important;
+  background-color: var(--light-grey) !important;
+}
+
+.v-btn:hover {
+  color: black !important;
+  background-color: white !important;
 }
 
 .label {

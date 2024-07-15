@@ -19,33 +19,34 @@
                 <p class='pageTitle'>User Login</p>
                 <hr>
                 <form id="login" @submit.prevent="logIn">
+
                     <!-- Email and Password -->
-                    <div class="formRow">
-                        <!-- Email -->
-                        <div class="formColumn">
+                    <v-row>
+                        <v-col class='cols'>
                             <p>
                                 <label for="email"><img src='../assets/icons/email.png' class="smallIcon">
                                     Email</label>
                                 <br><input type="text" id='email' placeholder="Enter your email" required
-                                    v-model="email">
+                                    v-model="email" class='formInput'>
                                 <br>
                             </p>
-                        </div>
-                        <!-- Password -->
-                        <div class="formColumn">
+                        </v-col>
+                        <v-col class='cols'>
                             <p>
                                 <label for="password"><img src='../assets/icons/password.png' class="smallIcon">
                                     Password</label>
                                 <br><input type="password" id='password' placeholder="Enter your password" required
-                                    v-model="password">
+                                    v-model="password" class='formInput'>
                             </p>
-                        </div>
-                    </div>
-                    <!-- Remember Me -->
-                    <div class="formRow" style="margin-top: -10px;">
-                        <br><input type="checkbox" id='rememberme' v-model="rememberme">
-                        <label for="rememberme" style="font-weight: 100;">&nbsp;Remember Me</label>
-                    </div>
+                        </v-col>
+                    </v-row>
+                    <v-row class='cols'>
+                        <!-- Remember Me -->
+                        <br>
+                        <input type="checkbox" id='rememberme' v-model="rememberme">
+                        <label for="rememberme" style="font-weight: 100; margin-top: 10px;">&nbsp;Remember Me</label>
+                    </v-row>
+                    
                     <!-- Error Message -->
                     <div v-if="errorMessage" class="error-message">
                         {{ errorMessage }}
@@ -150,4 +151,5 @@ export default {
     border: solid var(--secondary);
     color: black !important;
 }
+
 </style>

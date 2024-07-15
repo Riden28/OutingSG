@@ -3,14 +3,13 @@
     <v-carousel
     show-arrows="hover" 
     cycle
-    height="373"
+    height="520"
     hide-delimiter-background>
       <router-link
         v-for="(slide, index) in slides"
         :key="index"
         :to="'/listing/' + slide.listingID"
-        class="carousel-link"
-      >
+        class="carousel-link">
         <v-carousel-item
           :src="slide.url"
           cover
