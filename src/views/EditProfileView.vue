@@ -103,20 +103,27 @@
                 username: "",
                 bio: "yadyaydgwygwkgnlwrkngkaerngjkrejk",
                 profilePicture: "/src/assets/icons/profile.png",
+                categoryPreferences: [],
             };
         },
         methods: {
             submit(){
-                const auth = getAuth();
-                const { email, password } = this;
-                createUserWithEmailAndPassword(auth, email, password)
-                .then(() => {
-                    console.log("Successfully registered")
-                })
-                .catch((error) => {
-                    console.log("Error: ", error.message)
-                });
-                this.$router.push("./")
+
+                if (this.categoryPreferences.length < 3){
+                    alert("You will need to select a minimum of 3 categories")
+                }else{
+                    const auth = getAuth();
+                    const { email, password } = this;
+                    createUserWithEmailAndPassword(auth, email, password)
+                    .then(() => {
+                        console.log("Successfully registered")
+                    })
+                    .catch((error) => {
+                        console.log("Error: ", error.message)
+                    });
+                    this.$router.push("./")
+                }
+                
             }
         },
     };
