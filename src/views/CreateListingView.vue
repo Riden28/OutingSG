@@ -177,6 +177,10 @@ export default {
       const docId = docRef.id;
 
       // add to user database that this listing is created by them (append to created array)
+      const userRef = doc(db, "users", auth.currentUser.uid);
+      await updateDoc(userRef, {
+        created: arrayUnion(docId),
+      });
 
       // File upload logic
       const uploadPromises = this.files.map(file => {

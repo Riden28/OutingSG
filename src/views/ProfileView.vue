@@ -18,7 +18,12 @@
             <p>{{ bio }}</p>
             <br>
             <h5>Category Preferences</h5>
-            <p>{{ categoryPreferences }}</p>
+            <p>
+            <span v-for="(category, index) in categoryPreferences" :key="index">
+                {{ category }}
+                <span v-if="index != categoryPreferences.length - 1">, </span>
+            </span>
+            </p>
             <br>
             <v-row>
                 <v-col>
@@ -75,7 +80,7 @@ export default {
             username: "Username here",
             bio: "yadyaydgwygwkgnlwrkngkaerngjkrejk",
             categoryPreferences: "F&B, Education, Wellness",
-            profilePicture: "/src/assets/icons/profile.png",
+            profilePicture: "",
         };
     },
     methods: {
@@ -88,10 +93,9 @@ export default {
                     const docSnap = await getDoc(docRef);
                     if (docSnap.exists()) {
                         const userDetails = docSnap.data();
-                        console.log(userDetails);
                         this.username = userDetails.displayName;
                         this.bio = userDetails.bio;
-                        this.categoryPreferences = userDetails.categoryPreferences;
+                        this.categoryPreferences = userDetails.category;
                         this.profilePicture = userDetails.profilePicture;
                     } else {
                         console.log("No such document!");

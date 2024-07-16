@@ -7,8 +7,8 @@
             <br>
             <label for="username"><img src='../assets/icons/username.png' class="smallIcon"> Username</label>
             <br><input type="text" 
-                        id='username'
-                        placeholder={{displayName}}
+                        id='displayName'
+                        :placeholder="displayName"
                         required 
                         v-model="displayName">
         </center>
@@ -26,35 +26,35 @@
 
             <h5>Category Preferences</h5>
             <div>
-                <input type="checkbox" id="Culture and History" value="Food and Beverages" v-model="category" />
-                <label for="fnb">Food and Beverages</label>
+                <input type="checkbox" id="Food and Beverages:" value="Food and Beverages:" v-model="category" />
+                <label for="Food and Beverages:">Food and Beverages:</label>
                 <br>
                 <input type="checkbox" id="Nature" value="Nature" v-model="category" />
                 <label for="Nature">Nature</label>
                 <br>
                 <input type="checkbox" id="Culture and History" value="Culture and History" v-model="category" />
-                <label for="cultural">Culture and History</label>
+                <label for="Culture and History">Culture and History</label>
                 <br>
                 <input type="checkbox" id="Entertainment" value="Entertainment" v-model="category" />
-                <label for="entertainment">Entertainment</label>
+                <label for="Entertainment">Entertainment</label>
                 <br>
                 <input type="checkbox" id="Outdoor Activities" value="Outdoor Activities" v-model="category" />
-                <label for="outdoor">Outdoor Activities</label>
+                <label for="Outdoor Activities">Outdoor Activities</label>
                 <br>
                 <input type="checkbox" id="Educational" value="Educational" v-model="category" />
-                <label for="educational">Educational</label>
+                <label for="Educational">Educational</label>
                 <br>
                 <input type="checkbox" id="Adventure" value="Adventure" v-model="category" />
-                <label for="adventure">Adventure</label>
+                <label for="Adventure">Adventure</label>
                 <br>
                 <input type="checkbox" id="Shopping" value="Shopping" v-model="category" />
-                <label for="shopping">Shopping</label>
+                <label for="Shopping">Shopping</label>
                 <br>
                 <input type="checkbox" id="Wellness" value="Wellness" v-model="category" />
-                <label for="wellness">Wellness</label>
+                <label for="Wellness">Wellness</label>
                 <br>
                 <input type="checkbox" id="Events and Festivals" value="Events and Festivals" v-model="category" />
-                <label for="events">Events and Festivals</label>
+                <label for="Events and Festivals">Events and Festivals</label>
             </div>
 
             <br>
@@ -65,7 +65,7 @@
                         <router-link to="/profile"><button class="cancelButton">Cancel</button></router-link>
                     </v-col>
                     <v-col>
-                        <router-link to="/profile"><button @click.stop.prevent="updateDetails()">Save Changes</button></router-link>
+                        <router-link to="/profile"><button @click.stop.prevent="updateDetails">Save Changes</button></router-link>
                     </v-col>
                 </v-row>
             </center>
@@ -77,65 +77,83 @@
 </template>
 
 <script>
-    import '../assets/main.css';
-    import '../assets/bootstrap.css';
-    import '../router/bootstrap.js';
-    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import firebaseConfig from './../../firebase/firebaseConfig.js';
-    import NavBar from '@/components/NavBar.vue';
+import '../assets/main.css';
+import '../assets/bootstrap.css';
+import '../router/bootstrap.js';
+import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, doc, getDoc, updateDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import firebaseConfig from './../../firebase/firebaseConfig.js';
+import NavBar from '@/components/NavBar.vue';
+import Footer from '@/components/Footer.vue';
 
-    const firebaseApp = initializeApp(firebaseConfig);
-    const auth = getAuth(firebaseApp);
-    // const userId = auth.currentUser.uid;
-    // const docRef = doc(db, "users", userId);
-    // const docSnap = await getDoc(docRef);
-    // const user_details = docSnap.data();
-    // console.log(user_details);
+const firebaseApp = initializeApp(firebaseConfig);
+const auth = getAuth(firebaseApp);
+const db = getFirestore(firebaseApp);
 
-    export default {
-        name: 'profile',
-        components: {
-            NavBar
-        },
-        data() {
-            return {
-                username: '',
-                bio: '',
-                categoryPreferences: [],
-                profilePicture: "/src/assets/icons/profile.png",
-            };
-        },
-        methods: {
-            async getUserDetails(){
-                const user = auth.currentUser;
-                if (user) {
-                    const userId = user.uid;
-                    const docRef = doc(db, "users", userId);
-                    const docSnap = await getDoc(docRef);
-                    if (docSnap.exists()) {
-                        const userDetails = docSnap.data();
-                        console.log(userDetails);
-                        this.displayName = userDetails.displayName;
-                        this.bio = userDetails.bio;
-                        this.categoryPreferences = userDetails.categoryPreferences;
-                        this.profilePicture = userDetails.profilePicture;
-                    } else {
-                        console.log("error 404: user not found");
-                        return;
-                    }
+export default {
+    name: 'profile',
+    components: {
+        NavBar,
+        Footer
+    },
+    data() {
+        return {
+            bio: '',
+            category: [],
+            profilePicture: "/src/assets/icons/profile.png",
+            displayName: ''
+        };
+    },
+    async mounted() {
+        await this.getUserDetails();
+    },
+    methods: {
+        async getUserDetails() {
+            const user = auth.currentUser;
+            if (user) {
+                const userId = user.uid;
+                const docRef = doc(db, "users", userId);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    const userDetails = docSnap.data();
+                    this.displayName = userDetails.displayName || '';
+                    this.bio = userDetails.bio || '';
+                    this.category = userDetails.category || [];
+                    this.profilePicture = userDetails.profilePicture || "/src/assets/icons/profile.png";
+                } else {
+                    console.log("Error 404: user not found");
                 }
-            },
-            updateDetails(){
-                const { email, password } = this;
-                createUserWithEmailAndPassword(auth, email, password)
-                .then(() => {
-                    console.log("Successfully registered")
-                })
-                .catch((error) => {
-                    console.log("Error: ", error.message)
+            }
+        },
+        async updateDetails() {
+            if (this.category.length < 3) {
+                alert("You will need to select a minimum of 3 categories");
+                return;
+            }
+
+            const user = auth.currentUser;
+            if (user) {
+                const q = query(collection(db, "users"), where("displayName", "==", this.displayName));
+                const querySnapshot = await getDocs(q);
+
+                if (!querySnapshot.empty && querySnapshot.docs[0].id !== user.uid) {
+                    alert("Username already taken. Please choose another one.");
+                    return;
+                }
+
+                const userId = user.uid;
+                const docRef = doc(db, "users", userId);
+
+                await updateDoc(docRef, {
+                    displayName: this.displayName,
+                    bio: this.bio,
+                    category: this.category,
+                    profilePicture: this.profilePicture
                 });
-                this.$router.push("./")
+
+                console.log("Profile updated successfully");
+                this.$router.push("/profile");
             }
         }
     }
