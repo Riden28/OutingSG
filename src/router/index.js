@@ -11,7 +11,8 @@ import EditProfileView from '../views/EditProfileView.vue'
 import CreateListingView from '@/views/CreateListingView.vue'
 import IndividualView from '../views/IndividualView.vue'
 import ExploreView from '@/views/ExploreView.vue'
-import TNCView from '@/views/TNCView.vue'
+import TNCView from '@/views/TNCView.vue' 
+import SavedOutingsView from '@/views/SavedOutingsView.vue' 
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -76,6 +77,11 @@ const router = createRouter({
       path: '/tnc',
       name: 'tnc',
       component: TNCView,
+    },
+    {
+      path: '/saved',
+      name: 'saved',
+      component: SavedOutingsView,
     }
     // {
     //   path: '/about',
