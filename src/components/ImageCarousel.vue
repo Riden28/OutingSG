@@ -1,10 +1,10 @@
 <template>
   <div class="v-carousel">
     <v-carousel
-    show-arrows="hover" 
-    cycle
-    :height=carousel_height
-    hide-delimiter-background>
+      show-arrows="hover" 
+      cycle
+      :height=carousel_height
+      hide-delimiter-background>
       <!-- Use v-if to conditionally render router-link or div -->
       <template v-for="(slide, index) in slides" :key="index">
         <router-link v-if="isHomepage" :to="'/listing/' + slide.listingID" class="carousel-link">

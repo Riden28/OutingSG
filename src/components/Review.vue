@@ -8,7 +8,7 @@
                     <span class="fa fa-star checked"></span>
                     <span class="fa fa-star checked"></span>
                     <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star checked"></span>
                     <span class="fa fa-star"></span>
                 </div>
             </div>
@@ -21,11 +21,9 @@
             </div>
         </div>
         
-
         <!-- content of review, will link to database -->
         <div class="description">
-            <p> This place is good! Component: review.vue
-</p>
+            <p> This place is good!</p>
         </div>
     </div>
 </template>
@@ -38,7 +36,7 @@
 
 <style scoped>
     .reviews {
-        background-color: grey;
+        background-color: white;
         margin-bottom: 20px;
     }
     .checked {
@@ -66,10 +64,17 @@
     }
 
     .description {
-        padding: 30px;
+        padding: 10px 30px;
     }
 
     .date {
         padding-right: 30px;
+        font-size: 13px;
+        color:rgb(166, 166, 166);
+    }
+
+    h4 {
+        font-weight: 700;
+        margin-left: -40px;
     }
 </style>

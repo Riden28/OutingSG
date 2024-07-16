@@ -1,32 +1,39 @@
 <template>
-  <div class="v-row information">
-    <div class="info">
-      <img src="../assets/icons/price-icon.png" class='image info' alt="">
-      <p>Price</p>
+  <v-row class='information'>
+    <v-col>
+      <img src="../assets/icons/gif/price.gif" class='image info' alt="">
+      <h5>Price</h5>
       <p>{{ price }}</p>
-    </div>
-    <div class="info">
-      <img src="../assets/icons/maps-icon.png" class='image info' alt="">
-      <p>Location</p>
+    </v-col>
+    <v-col>
+      <img src="../assets/icons/gif/location.gif" class='image info' alt="">
+      <h5>Location</h5>
       <p>{{ outing_details.location }}</p>
-    </div>
-    <div class="info">
-      <img src="../assets/icons/recommended-pax.png" class='image info' alt="">
-      <p>Recommended Pax</p>
-      <p>{{ rec_pax }}</p>
-    </div>
-    <div class="info">
-      <img src="../assets/icons/rating-icon.png" class='image info' alt="">
-      <p>Rating</p>
+    </v-col>
+    <v-col>
+      <img src="../assets/icons/gif/pax.gif" class='image info' alt="">
+      <h5>Recommended Pax</h5>
+      <p>{{ rec_pax }} pax</p>
+    </v-col>
+    <v-col>
+      <img src="../assets/icons/gif/rating.gif" class='image info' alt="">
+      <h5>Rating</h5>
       <p>4.2 / 5 (92)</p>
-    </div>
-  </div>
+    </v-col>
+  </v-row>
 
-  <div class="v-row description">
-    <div class="v-col-7">
-      <p>{{ outing_details.description }}</p>
-    </div>
-  </div>
+  <v-row>
+    <v-col>
+      <p style='padding: 100px; line-height: 25px;'>
+        <h3>About {{ outing_details.name }}</h3>
+        {{ outing_details.description }}
+      </p>
+    </v-col>
+    <v-col>
+      <img src='../assets/icons/description.png' style='width: 70%; text-align:right !important;'>
+    </v-col>
+  </v-row>
+
 </template>
 
 <script>
@@ -82,10 +89,13 @@ export default {
 }
 
 .information {
-  background-color: #EAA843;
+  background-color: white;
   display: flex;
   justify-content: space-evenly;
   margin-top: 2rem;
+  text-align: center;
+  padding: 0px !important;
+  margin: 0px !important;
 }
 
 .info {
@@ -114,4 +124,11 @@ img {
   
 }
 
+.v-col img {
+  width: 90px;
+}
+
+h5, h3 {
+  font-weight: 700;
+}
 </style>

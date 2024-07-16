@@ -1,22 +1,31 @@
 <template>
-    <div class="names">
+    <div class="names" style="padding-bottom: 30px;">
         <div class=" categoryname">
-            <p>{{outing_details.category}}</p>
+            <span v-for="(category, index) in outing_details.category">
+                {{category}}
+                <span v-if="index != Object.keys(outing_details.category).length - 1">, </span>
+            </span>
         </div>
         <!-- row for outing name & edit outing button -->
         <div class="edit">
           <div class="outingname">
-            <p class="outing-name">{{outing_details.name}}</p>
+            <h2 class="outing-name"><b>{{outing_details.name}}</b></h2>
           </div>
           <div>
-            <router-link to="/edit" class="btn btn-primary" role="button">Edit Listing</router-link>
+            <router-link to="/edit" class="btn btn-primary listingBtns" role="button" style='margin-right: 1px;'>
+                <img src='../assets/icons/gif/edit.gif' style='width: 30px;'><span style='color:black;'> Edit Listing</span>
+            </router-link>
+        
+            <p class="btn btn-primary listingBtns" role="button" @click="share()">
+                <img src='../assets/icons/gif/share.gif' style='width: 30px;'>
+            </p>
           </div>
         </div>
 
         <!-- row for location name -->
         <div class="v-row">
             <div class="v-col-10 outingname">
-                <p class="outingname">{{outing_details.location}}</p>
+                <p class="outingname">Location: {{outing_details.location}}</p>
             </div>
         </div>
     </div>
@@ -46,12 +55,25 @@ export default {
         return {
             outing_details: {
                 name: '',
-                category: '',
+                category: [],
                 location: '',
                 description: '',
-                images: []
+                images: [],
+                showWords: false,
             },
             carousel_images: []
+        }
+    },
+    methods: {
+        share(){
+            var shareUrl = document.createElement('input'),
+            text = window.location.href;
+
+            document.body.appendChild(shareUrl);
+            shareUrl.value = text;
+            shareUrl.select();
+            document.execCommand('copy');
+            document.body.removeChild(shareUrl);
         }
     },
     async mounted() {
@@ -101,5 +123,28 @@ export default {
     .edit {
         display: flex;
         justify-content: space-between;
+    }
+
+    .btn{
+        background-color: var(--secondary);
+        border: solid var(--secondary);
+        color: white !important;
+    }
+
+    .btn:hover {
+        background-color: var(--transparent);
+        border: solid var(--secondary);
+        color: black !important;
+    }
+
+    .listingBtns {
+        background-color: white;
+        margin-right: -20px;
+        margin-left: 20px;
+    }
+    
+    .listingBtns:hover {
+        background-color: white;
+        border: solid black;
     }
 </style>
