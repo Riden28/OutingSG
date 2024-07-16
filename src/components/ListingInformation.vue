@@ -37,17 +37,8 @@
 
 <script>
 import ImageCarousel from './ImageCarousel.vue';
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import firebaseConfig from './../../firebase/firebaseConfig.js';
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
 export default {
     name: 'ListingInformation',
-    props: ['outingID'],
     components: {
         ImageCarousel
     },
@@ -97,7 +88,6 @@ export default {
     } catch (error) {
         console.error("Error fetching document:", error);
     }
-    },
 }
 </script>
 
@@ -105,6 +95,7 @@ export default {
     .outing-name {
         font-weight: bold;
     }
+
 
     p {
         font-family: sans-serif;

@@ -19,6 +19,7 @@
     "vue-meta": "^2.4.0",
     "vue-router": "^4.3.0",
     "vue-slide-bar": "^1.2.0",
+    "vue-star-rating": "^2.1.0",
     "vue3-google-map": "^0.20.0",
     "vuetify": "^3.6.9"
   },
