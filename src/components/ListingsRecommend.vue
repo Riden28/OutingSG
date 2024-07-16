@@ -8,9 +8,9 @@
         empty-text="No more recommended listings"
       >
         <v-row align="start" justify="center">
-          <v-col v-for="listing in listings" :key="listing.listingID" cols="auto" @click="navigateToListing(listing.listingID)">
+          <v-col v-for="listing in listings" :key="listing.listingID" cols="auto">
             <v-card class="mx-1" height="280" width="417" rounded="xl">
-              <v-img :src="listing.url" height="174px" cover></v-img>
+              <v-img :src="listing.url" height="174px" cover @click="navigateToListing(listing.listingID)"></v-img>
               <v-btn icon="mdi-bookmark-outline" base-color="transparent" variant="plain" @click.prevent="bookmarkListing(listing)">
                 <v-icon icon="mdi-bookmark" size="50" color="white"></v-icon>
               </v-btn>

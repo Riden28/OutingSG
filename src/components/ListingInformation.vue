@@ -29,7 +29,7 @@
         </div>
     </div>
     <div>
-        <ImageCarousel :slides="carousel_images" carousel_height="415"/>
+        <ImageCarousel :slides="carousel_images" carousel_height="415" />
     </div>
 </template>
 

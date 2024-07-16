@@ -64,15 +64,15 @@
 
             <v-container fluid class="mx-auto overflow-auto hideScroll">
                 <v-row align="start" justify="center">
-                    <v-col v-for="listing in listings" :key="listing.listingID" cols="auto" @click="navigateToListing(listing.listingID)">
+                    <v-col v-for="listing in listings" :key="listing.listingID" cols="auto">
                         <v-card class="mx-1" height="280" width="417" rounded="xl">
-                        <v-img :src="listing.url" height="174px" cover></v-img>
-                        <v-btn icon="mdi-bookmark-outline" base-color="transparent" variant="plain" @click.prevent="bookmarkListing(listing)">
-                            <v-icon icon="mdi-bookmark" size="50" color="white"></v-icon>
-                        </v-btn>
-                        <v-card-title>{{ listing.name }}</v-card-title>
-                        <v-card-title class="location">{{ listing.details }}</v-card-title>
-                        <v-card-title class="price">{{ listing.price }}</v-card-title>
+                            <v-img :src="listing.url" height="174px" cover @click="navigateToListing(listing.listingID)"></v-img>
+                            <v-btn icon="mdi-bookmark-outline" base-color="transparent" variant="plain" @click.prevent="bookmarkListing(listing)">
+                                <v-icon icon="mdi-bookmark" size="50" color="white"></v-icon>
+                            </v-btn>
+                            <v-card-title>{{ listing.name }}</v-card-title>
+                            <v-card-title class="location">{{ listing.details }}</v-card-title>
+                            <v-card-title class="price">{{ listing.price }}</v-card-title>
                         </v-card>
                     </v-col>
                 </v-row>
@@ -187,6 +187,7 @@ export default {
         },
         filter(){
             this.listings = []; // clear the existing array
+            console.log(this.category);
 
             querySnapshot.forEach((doc) => {
                 var outing_details = doc.data();
@@ -198,6 +199,7 @@ export default {
                 var checkLocation = false;
 
                 const selectedCategories = this.category;
+                console.log(selectedCategories);
                 if (selectedCategories.length == 0){
                     checkCat = true;
                 }else{
@@ -205,8 +207,10 @@ export default {
                         var currCat = category.toLowerCase();
                         if (selectedCategories.includes(currCat)){
                             checkCat = true;
+                            console.log('break');
                             break;
                         }
+                        console.log('no break');
                     }
                 }
 
@@ -309,16 +313,29 @@ export default {
                 minimumPrice: outing_details.min_price,
                 url: outing_details.images.length > 0 ? outing_details.images[0] : null
             });
+        },
+        fetchCategoryFilter() { // for navigation from homepage category buttons
+            this.category = this.$route.query.category;
+            console.log(this.category);
+            if (this.category != null){
+                this.filter();
+            }
         }
     },
     created() {
-
         const navSearch = new URLSearchParams(window.location.search).get('search');
 
         if (navSearch !== null){
             this.searchListings();
         }
+
+        
+    },
+    mounted() {
+        this.category.push(this.$route.params.categoryName);
+        this.fetchCategoryFilter();
     }
+
 };
 
 </script>

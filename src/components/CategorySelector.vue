@@ -7,7 +7,8 @@
             :icon="category.icon"
             :height="buttonHeight"
             :width="buttonWidth"
-            :color="buttonColor">
+            :color="buttonColor"
+            @click="exploreAddFilter(category.name)">
             <v-icon :icon="category.icon" size="x-large"></v-icon>
           </v-btn>
           <div class="text-center category-name">{{ category.name }}</div>
@@ -27,6 +28,11 @@ export default {
   name: 'CategorySelector',
   components: {
     SvgIcon,
+  },
+  methods: {
+    exploreAddFilter(categoryName) {
+      this.$router.push({name: 'explore', query: { category: categoryName }});
+    },
   },
   data() {
     return {
@@ -74,7 +80,7 @@ export default {
 }
 
 .category-name {
-  max-width: 100px;
+  max-width: 90px;
   word-wrap: break-word; /* Allow text to wrap */
 }
 
