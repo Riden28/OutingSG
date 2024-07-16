@@ -109,7 +109,7 @@
   </div>
   <OutingSGFooter/>
 </template> 
- 
+
 <script> 
 import NavBar from '@/components/NavBar.vue'; 
 import OutingSGFooter from '@/components/Footer.vue';
@@ -120,10 +120,10 @@ import { getFirestore, collection, addDoc, updateDoc } from "https://www.gstatic
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 import firebaseConfig from '../../firebase/firebaseConfig.js';
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const storage = getStorage(app);
+const firebaseApp = initializeApp(firebaseConfig);
+const auth = getAuth(firebaseApp);
+const db = getFirestore(firebaseApp);
+const storage = getStorage(firebaseApp);
 
 export default { 
   name: 'create', 
@@ -148,6 +148,11 @@ export default {
       images: [],
     }
   },
+  created() {
+    if (!auth.currentUser) {
+      this.$router.push("/login");
+    }
+  },
   methods: {
     async createOuting() {
       const docData = {
@@ -170,6 +175,8 @@ export default {
       // Add a new document with a generated ID
       const docRef = await addDoc(collection(db, "outings"), docData);
       const docId = docRef.id;
+
+      // add to user database that this listing is created by them (append to created array)
 
       // File upload logic
       const uploadPromises = this.files.map(file => {
