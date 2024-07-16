@@ -8,16 +8,16 @@
             <hr>
 
             <h4 class="title">Category</h4> 
-            <input type="checkbox" v-model="category" value='fnb' id="fnb"><label for="fnb">F&B</label><br>
-            <input type="checkbox" v-model="category" value='nature' id="nature"><label for="nature">Nature</label><br>
-            <input type="checkbox" v-model="category" value='cultural' id="cultural"><label for="cultural">Cultural</label><br>
-            <input type="checkbox" v-model="category" value='entertainment' id="entertainment"><label for="entertainment">Entertainment</label><br>
-            <input type="checkbox" v-model="category" value='outdoor' id="outdoor"><label for="outdoor">Outdoor</label><br>
-            <input type="checkbox" v-model="category" value='educational' id="educational"><label for="educational">Educational</label><br>
-            <input type="checkbox" v-model="category" value='adventure' id="adventure"><label for="adventure">Adventure</label><br>
-            <input type="checkbox" v-model="category" value='shopping' id="shopping"><label for="shopping">Shopping</label><br>
-            <input type="checkbox" v-model="category" value='wellness' id="wellness"><label for="wellness">Wellness</label><br>
-            <input type="checkbox" v-model="category" value='events' id="events"><label for="events">Events</label><br>
+            <input type="checkbox" v-model="category" value='Food and Beverages' id="Food and Beverages"><label for="Food and Beverages">Food and Beverages</label><br>
+            <input type="checkbox" v-model="category" value='Nature' id="Nature"><label for="Nature">Nature</label><br>
+            <input type="checkbox" v-model="category" value='Culture and History' id="Culture and History"><label for="Culture and History">Culture and History</label><br>
+            <input type="checkbox" v-model="category" value='Entertainment' id="Entertainment"><label for="Entertainment">Entertainment</label><br>
+            <input type="checkbox" v-model="category" value='Outdoor Activities' id="Outdoor Activities"><label for="Outdoor Activities">Outdoor Activities</label><br>
+            <input type="checkbox" v-model="category" value='Educational' id="Educational"><label for="Educational">Educational</label><br>
+            <input type="checkbox" v-model="category" value='Adventure' id="Adventure"><label for="Adventure">Adventure</label><br>
+            <input type="checkbox" v-model="category" value='Shopping' id="Shopping"><label for="Shopping">Shopping</label><br>
+            <input type="checkbox" v-model="category" value='Wellness' id="Wellness"><label for="Wellness">Wellness</label><br>
+            <input type="checkbox" v-model="category" value='Events and Festivals' id="Events and Festivals"><label for="Events and Festivals">Events and Festivals</label><br>
 
             <h4 class="title">Price</h4> 
             <p>Minimum Price: <input type='number' v-model='minPrice' class='userValues' min="0"></p>

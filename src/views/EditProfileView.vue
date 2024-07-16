@@ -26,8 +26,8 @@
 
             <h5>Category Preferences</h5>
             <div>
-                <input type="checkbox" id="Food and Beverages:" value="Food and Beverages:" v-model="category" />
-                <label for="Food and Beverages:">Food and Beverages:</label>
+                <input type="checkbox" id="Food and Beverages" value="Food and Beverages" v-model="category" />
+                <label for="Food and Beverages:">Food and Beverages</label>
                 <br>
                 <input type="checkbox" id="Nature" value="Nature" v-model="category" />
                 <label for="Nature">Nature</label>

@@ -22,7 +22,7 @@
         </v-row>
       </v-infinite-scroll>
     </v-container>
-  </template>
+</template>
 
 <script>
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -62,8 +62,8 @@ export default {
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
             const user_details = docSnap.data();
-            this.user_preferences = user_details.category.slice(0, 3);
-            this.loadOutings();
+            this.user_preferences = user_details.category.slice(0, 3); // Get top 3 preferences
+            await this.loadOutings();
         } else {
             console.log("error 404: user not found");
             return;

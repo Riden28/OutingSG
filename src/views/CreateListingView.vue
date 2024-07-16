@@ -42,25 +42,25 @@
           <div class="row1">
             <div class="category">
               <h5>Category</h5>
-              <input id='outingCategory1' type="checkbox" v-model="outingCategory" value="food"/> F&B
+              <input id='outingCategory1' type="checkbox" v-model="outingCategory" value="Food and Beverages"/> Food and Beverages
               <br>
-              <input id='outingCategory2' type="checkbox" v-model="outingCategory" value="nature"/> Nature
+              <input id='outingCategory2' type="checkbox" v-model="outingCategory" value="Nature"/> Nature
               <br>
-              <input id='outingCategory3' type="checkbox" v-model="outingCategory" value="cultural"/> Cultural
+              <input id='outingCategory3' type="checkbox" v-model="outingCategory" value="Culture and History"/> Culture and History
               <br>
-              <input id='outingCategory4' type="checkbox" v-model="outingCategory" value="entertainment"/> Entertainment
+              <input id='outingCategory4' type="checkbox" v-model="outingCategory" value="Entertainment"/> Entertainment
               <br>
-              <input id='outingCategory5' type="checkbox" v-model="outingCategory" value="outdoor"/> Outdoor
+              <input id='outingCategory5' type="checkbox" v-model="outingCategory" value="Outdoor Activities"/> Outdoor Activities
               <br>
-              <input id='outingCategory6' type="checkbox" v-model="outingCategory" value="educational"/> Educational
+              <input id='outingCategory6' type="checkbox" v-model="outingCategory" value="Educational"/> Educational
               <br>
-              <input id='outingCategory7' type="checkbox" v-model="outingCategory" value="adventure"/> Adventure
+              <input id='outingCategory7' type="checkbox" v-model="outingCategory" value="Adventure"/> Adventure
               <br>
-              <input id='outingCategory8' type="checkbox" v-model="outingCategory" value="shopping"/> Shopping
+              <input id='outingCategory8' type="checkbox" v-model="outingCategory" value="Shopping"/> Shopping
               <br>
-              <input id='outingCategory9' type="checkbox" v-model="outingCategory" value="wellness"/> Wellness
+              <input id='outingCategory9' type="checkbox" v-model="outingCategory" value="Wellness"/> Wellness
               <br>
-              <input id='outingCategory10' type="checkbox" v-model="outingCategory" value="events"/> Events
+              <input id='outingCategory10' type="checkbox" v-model="outingCategory" value="Events and Festivals"/> Events and Festivals
               <br>
             </div>
             <div class="price">
