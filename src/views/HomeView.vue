@@ -49,11 +49,11 @@
     </div>
     <div v-if="user" class="ListingDisplay">
       <!-- <component :is="dynamicComponent" /> -->
-      <ListingRecommend />
+      <ListingRecommend :user="user"/>
     </div>
 
     <div v-else class="ListingDisplay">
-      <ListingsDisplay />
+      <ListingsDisplay :user="user"/>
     </div>
   </div>
   
@@ -85,7 +85,6 @@ const db = getFirestore(firebaseApp);
 
 // Initialize Firebase Storage
 const storage = getStorage(firebaseApp);
-
   
   export default {
     data() {
@@ -109,6 +108,13 @@ const storage = getStorage(firebaseApp);
       OutingSGFooter
     },
   };
+
+  console.log(auth.currentUser);
+  if (auth.currentUser) {
+    console.log('logged in');
+  } else {
+    console.log('not logged in');
+  }
 </script>
 
 <style>

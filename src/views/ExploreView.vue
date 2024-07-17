@@ -145,6 +145,7 @@ export default {
         maxPax: 10,
         category: [],
         location: [],
+        user: auth.currentUser
     }),
     methods: {
         // on every load retrieve another 10 listings
@@ -302,6 +303,13 @@ export default {
         bookmarkListing(listing) {
             console.log('Bookmark clicked for:', listing);
             // Implement bookmark functionality here
+            if (this.user) {
+                // Bookmark the listing
+                console.log('bookmarked');
+            } else {
+                // Show login dialog
+                alert('Please login to save outings');
+            }
         },
         pushListings(outing_details){
             let price = outing_details.max_price === 0 ? "Free" : `$${outing_details.min_price} ~ $${outing_details.max_price}`;

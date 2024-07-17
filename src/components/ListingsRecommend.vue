@@ -41,7 +41,7 @@ const auth = getAuth(firebaseApp);
 const db = getFirestore(firebaseApp);
 
 export default {
-    name: 'ListingsDisplay',
+    name: 'ListingsRecommend',
     data() {
         return {
             listings: [],
@@ -50,6 +50,7 @@ export default {
             user_preferences: [],
         };
     },
+    props: ['user'],
     async created() {
         const user = auth.currentUser;
         const userID = user ? user.uid : null;
@@ -104,6 +105,13 @@ export default {
         bookmarkListing(listing) {
             console.log('Bookmark clicked for:', listing);
             // Implement bookmark functionality here
+            if (this.user) {
+            // Bookmark the listing
+                console.log('bookmarked');
+            } else {
+            // Show login dialog
+                alert('Please login to outings');
+            }
         }
     }
 };

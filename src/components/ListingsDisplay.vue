@@ -33,7 +33,8 @@ import { getFirestore, collection, doc, getDoc, getDocs } from "https://www.gsta
 import firebaseConfig from './../../firebase/firebaseConfig.js';
 import shuffle from "./../../firebase/firebaseAuthServices.js";
 
-  
+// console.log(this.$user);
+
   export default {
     name: 'ListingsDisplay',
     data: () => ({
@@ -41,6 +42,7 @@ import shuffle from "./../../firebase/firebaseAuthServices.js";
       currentIndex: 0,
       outings: [],
     }),
+    props: ['user'],
     async created() {
       const app = initializeApp(firebaseConfig);
       const db = getFirestore(app);
@@ -75,6 +77,15 @@ import shuffle from "./../../firebase/firebaseAuthServices.js";
       bookmarkListing(listing) {
         console.log('Bookmark clicked for:', listing);
         // Implement bookmark functionality here
+        console.log(this.user);
+        
+        if (this.user) {
+          // Bookmark the listing
+          console.log('bookmarked');
+        } else {
+          // Show login dialog
+          alert('Please login to save outings');
+        }
       }
     }
   };
