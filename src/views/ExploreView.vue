@@ -8,25 +8,26 @@
             <hr>
 
             <h4 class="title">Category</h4>
-            <input type="checkbox" v-model="category" value='Food and Beverages' id="Food and Beverages"><label
-                for="Food and Beverages">Food and Beverages</label><br>
-            <input type="checkbox" v-model="category" value='Nature' id="Nature"><label for="Nature">Nature</label><br>
-            <input type="checkbox" v-model="category" value='Culture and History' id="Culture and History"><label
-                for="Culture and History">Culture and History</label><br>
-            <input type="checkbox" v-model="category" value='Entertainment' id="Entertainment"><label
-                for="Entertainment">Entertainment</label><br>
-            <input type="checkbox" v-model="category" value='Outdoor Activities' id="Outdoor Activities"><label
-                for="Outdoor Activities">Outdoor Activities</label><br>
-            <input type="checkbox" v-model="category" value='Educational' id="Educational"><label
-                for="Educational">Educational</label><br>
-            <input type="checkbox" v-model="category" value='Adventure' id="Adventure"><label
-                for="Adventure">Adventure</label><br>
-            <input type="checkbox" v-model="category" value='Shopping' id="Shopping"><label
-                for="Shopping">Shopping</label><br>
-            <input type="checkbox" v-model="category" value='Wellness' id="Wellness"><label
-                for="Wellness">Wellness</label><br>
-            <input type="checkbox" v-model="category" value='Events and Festivals' id="Events and Festivals"><label
-                for="Events and Festivals">Events and Festivals</label><br>
+            <input type="checkbox" v-model="category" value='Food and Beverages' id="Food and Beverages">
+            <label for="Food and Beverages">Food and Beverages</label><br>
+            <input type="checkbox" v-model="category" value='Nature' id="Nature">
+            <label for="Nature">Nature</label><br>
+            <input type="checkbox" v-model="category" value='Culture and History' id="Culture and History">
+            <label for="Culture and History">Culture and History</label><br>
+            <input type="checkbox" v-model="category" value='Entertainment' id="Entertainment">
+            <label for="Entertainment">Entertainment</label><br>
+            <input type="checkbox" v-model="category" value='Outdoor Activities' id="Outdoor Activities">
+            <label for="Outdoor Activities">Outdoor Activities</label><br>
+            <input type="checkbox" v-model="category" value='Educational' id="Educational">
+            <label for="Educational">Educational</label><br>
+            <input type="checkbox" v-model="category" value='Adventure' id="Adventure">
+            <label for="Adventure">Adventure</label><br>
+            <input type="checkbox" v-model="category" value='Shopping' id="Shopping">
+            <label for="Shopping">Shopping</label><br>
+            <input type="checkbox" v-model="category" value='Wellness' id="Wellness">
+            <label for="Wellness">Wellness</label><br>
+            <input type="checkbox" v-model="category" value='Events and Festivals' id="Events and Festivals">
+            <label for="Events and Festivals">Events and Festivals</label><br>
 
             <h4 class="title">Price</h4>
             <p>Minimum Price: <input type='number' v-model='minPrice' class='userValues' min="0"></p>
@@ -161,6 +162,7 @@ export default {
         maxPax: 10,
         category: [],
         location: [],
+        selectedSort: "",
         // user: user,
         userID: auth.currentUser ? auth.currentUser.uid : null
     }),
@@ -205,7 +207,6 @@ export default {
         },
         filter() {
             this.listings = []; // clear the existing array
-            console.log(this.category);
 
             querySnapshot.forEach((doc) => {
                 var outing_details = doc.data();
@@ -217,18 +218,18 @@ export default {
                 var checkLocation = false;
 
                 const selectedCategories = this.category;
-                console.log(selectedCategories);
+
                 if (selectedCategories.length == 0) {
                     checkCat = true;
                 } else {
                     for (category of outing_details.category) {
-                        var currCat = category.toLowerCase();
-                        if (selectedCategories.includes(currCat)) {
+                        
+                        if (selectedCategories.includes(category)) {
                             checkCat = true;
-                            console.log('break');
+                            // console.log('break');
                             break;
                         }
-                        console.log('no break');
+                        // console.log('no break');
                     }
                 }
 
@@ -340,11 +341,12 @@ export default {
             });
         },
         fetchCategoryFilter() { // for navigation from homepage category buttons
-            this.category = this.$route.query.category;
-            console.log(this.category);
-            if (this.category != null) {
+
+            if (this.$route.query.category != undefined){
+                this.category = [this.$route.query.category];
                 this.filter();
             }
+            
         },
         async checkBookmarkedListings() {
             const user = auth.currentUser;
