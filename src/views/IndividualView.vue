@@ -8,7 +8,7 @@
                 <!-- row for pic display + description -->
                 <ListingRating :outingID=listingID />
                 <!-- row for reviews, filtering and adding -->
-                <ReviewActions/>
+                <ReviewActions :outingID=listingID />
         
                 <!-- row for reviews -->
                 <Review/>

@@ -1,5 +1,6 @@
 <template>
-  <div class="text-h5 pl-16">Saved</div>
+  <hr><hr><hr>
+  <div class="title"><h2 class="title">Saved Outings</h2></div>
   <v-container fluid class="mx-auto">
     <v-infinite-scroll
       height="700"
@@ -184,5 +185,11 @@ export default {
 
 .text-center {
   margin-top: 20px;
+}
+
+.title {
+  padding-left: 35px;
+  display: flex;
+  font-weight: 800;
 }
 </style>

@@ -1,23 +1,26 @@
 <template>
-    <form>
-    <div class="v-row reviews">
+    <div>
+        <!-- Section for showing reviews heading and add review button -->
+        <div class="v-row reviews">
             <div class="filterbutton">
                 <input class="btn btn-primary" type="button" value="Filter">
             </div>
-            <div class="text-h5 pl-16" style='text-align:center;'>
-            <b>Reviews</b>
-                <p style='font-size: 16px;'>
-                    Hear what visitors say about this outing!                
+            <div class="text-h5 pl-16" style="text-align:center;">
+                <b>Reviews</b>
+                <p style="font-size: 16px;">
+                    Hear what visitors say about this outing!
                 </p>
             </div>
             <div class="addreview">
-                <button @click="toggleForm" class="btn btn-primary listingBtns" role="button" style='margin-right: 1px;'>
-                    <img src='../assets/icons/gif/add.gif' style='width: 30px;'><span style='color:black;'> Add Review</span>
+                <button @click.prevent="toggleForm" class="btn btn-primary listingBtns" role="button" style="margin-right: 1px;">
+                    <img src="../assets/icons/gif/add.gif" style="width: 30px;">
+                    <span style="color:black;"> Add Review</span>
                 </button>
             </div>
         </div>
-        <!-- form for adding review -->
-        <form v-show="formVisible" class = "reviewform">
+
+        <!-- Form for adding review -->
+        <form v-show="formVisible" @submit.prevent="submitReview" class="reviewform">
             <div class="cover v-container">
                 <div class="title v-row">
                     <h3>Add a Review</h3>
@@ -25,108 +28,191 @@
                 <div class="v-row rating">
                     <h4>Rating</h4>
                     <div class="stars">
-                        <star-rating :star-size="20" v-model:rating="rating"/>
+                        <star-rating :star-size="20" v-model="rating"></star-rating>
                     </div>
                 </div>
                 <div class="v-row desc">
                     <h4>Review</h4>
-                    <input type="text" class="description" placeholder="Review here...">
+                    <textarea id="review" v-model="review" class="description" placeholder="Review here..."></textarea>
                 </div>
                 <div class="submitReview">
-                    <input type="submit" class="btn btn-primary" value="submit">
+                    <input type="submit" class="btn btn-primary" value="Submit">
                 </div>
-                
             </div>
-            <button @click="toggleForm" class="closeform">&#10006;</button>
+            <button @click.prevent="toggleForm" class="closeform">&#10006;</button>
         </form>
-    </form>
+
+        <!-- Notification -->
+        <div v-if="notification.visible" :class="['notification', notification.type]">
+            {{ notification.message }}
+        </div>
+    </div>
 </template>
 
 <script>
-import StarRating from 'vue-star-rating'
-    export default {
-        name: 'ReviewActions',
-        components: {
-            StarRating,
-        },
-        data () {
-            return {
-                formVisible: false,
-                rating: 0,
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, setDoc ,addDoc, doc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import firebaseConfig from './../../firebase/firebaseConfig.js';
+import StarRating from 'vue-star-rating';
+
+const firebaseApp = initializeApp(firebaseConfig);
+const db = getFirestore(firebaseApp);
+const auth = getAuth(firebaseApp);
+
+export default {
+    name: 'ReviewActions',
+    components: {
+        StarRating,
+    },
+    props: {
+        outingID: {
+            type: String,
+            required: true
+        }
+    },
+    data() {
+        return {
+            formVisible: false,
+            rating: 5,
+            review: '',
+            notification: {
+                visible: false,
+                message: '',
+                type: ''
             }
+        };
+    },
+    methods: {
+        toggleForm() {
+            this.formVisible = !this.formVisible;
         },
-        methods: {
-            toggleForm () {
-                this.formVisible = !this.formVisible;
+        showNotification(message, type) {
+            this.notification.message = message;
+            this.notification.type = type;
+            this.notification.visible = true;
+            setTimeout(() => {
+                this.notification.visible = false;
+                if (type === 'success') {
+                    window.location.reload();
+                }
+            }, 2000);
+        },
+        async submitReview() {
+            try {
+                const user = auth.currentUser;
+                if (!user) {
+                    console.error("User not authenticated");
+                    this.showNotification('Please log in to submit a review', 'error');
+                    return;
+                }
+                const userId = user.uid;
+
+                const reviewData = {
+                    rating: this.rating,
+                    review: this.review,
+                    date: new Date()
+                };
+
+                const reviewRef = doc(collection(doc(db, "outings", this.outingID), "reviews"), userId);
+                await setDoc(reviewRef, reviewData);
+                console.log("Review added successfully");
+
+                // Add to user database that this review is created by them (append to reviews array)
+                const userRef = doc(db, "users", userId);
+                await updateDoc(userRef, {
+                    reviews: arrayUnion(this.outingID),
+                });
+
+                // Notify the user and reset form
+                this.showNotification('Review added successfully', 'success');
+                this.toggleForm();
+                this.rating = 5;
+                this.review = '';
+            } catch (error) {
+                console.error("Error adding review: ", error);
+                this.showNotification('Error adding review', 'error');
             }
         }
     }
-    
+};
 </script>
 
 <style scoped>
-    .reviewform {
-        z-index: 1000;
-        background: white;
-        height: 70vh;
-        width: 80vw;
-        display: flex;
-        justify-content: center;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
-
-    .reviews {
-        display: flex;
-        justify-content: space-around;
-        margin-top: 100px !important;
-        margin-bottom: 30px;
-    }
-    p {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: black;
-    }
-    .btn-primary {
-        background-color: #EAA843;
-        color: black;
-    }
-    .title {
-        display: flex;
-        justify-content: center;
-    }
-    .addreviewbutton {
-        background-color: white;
-        border: 1px solid black;
-    }
-
-    h3, h4 {
-        font-weight: bolder;
-    }
-
-    .stars {
-        margin-left: 6vh;
-    }
-    .description {
-        background-color: lightgray !important;
-        margin-left: 5vh;
-        height: 40vh;
-        width: 60vw;
-    }
-    .closeform {
-        display: flex;
-        align-items:start;
-        height: 8vh;
-    }
-    .submitReview {
-        display: flex;
-        justify-content: center;
-        margin-top: 2rem;
-    }
-    button, .btn {
-        background-color: #EAA843 !important;
-    }
+.reviewform {
+    z-index: 1000;
+    background: white;
+    height: 70vh;
+    width: 80vw;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.reviews {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 100px !important;
+    margin-bottom: 30px;
+}
+p {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+}
+.btn-primary {
+    background-color: #EAA843;
+    color: black;
+}
+.title {
+    display: flex;
+    justify-content: center;
+}
+.addreviewbutton {
+    background-color: white;
+    border: 1px solid black;
+}
+h3, h4 {
+    font-weight: bolder;
+}
+.stars {
+    margin-left: 6vh;
+}
+.description {
+    background-color: lightgray !important;
+    margin-left: 5vh;
+    height: 40vh;
+    width: 60vw;
+}
+.closeform {
+    display: flex;
+    align-items: start;
+    height: 8vh;
+}
+.submitReview {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}
+button, .btn {
+    background-color: #EAA843 !important;
+}
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 1000;
+    color: white;
+}
+.notification.success {
+    background-color: green;
+}
+.notification.error {
+    background-color: red;
+}
 </style>
