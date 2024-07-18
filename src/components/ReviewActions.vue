@@ -11,10 +11,16 @@
                     Hear what visitors say about this outing!
                 </p>
             </div>
-            <div class="addreview">
+            <div v-if="notReviewed" class="addreview">
                 <button @click.prevent="toggleForm" class="btn btn-primary listingBtns" role="button" style="margin-right: 1px;">
                     <img src="../assets/icons/gif/add.gif" style="width: 30px;">
                     <span class='btn'> Add Review</span>
+                </button>
+            </div>
+            <div v-else class="editreview">
+                <button @click.prevent="toggleForm" class="btn btn-primary listingBtns" role="button" style="margin-right: 1px;">
+                    <img src="../assets/icons/gif/edit.gif" style="width: 30px;">
+                    <span class='btn'> Edit Review</span>
                 </button>
             </div>
         </div>
@@ -23,7 +29,8 @@
         <form v-show="formVisible" @submit.prevent="submitReview" class="reviewform">
             <div class="cover v-container">
                 <div class="title v-row">
-                    <h3>Add a Review</h3>
+                    <h3 v-if="notReviewed" >Add a Review</h3>
+                    <h3 v-else>Edit Review</h3>
                 </div>
                 <div class="v-row rating">
                     <h4>Rating</h4>
@@ -52,7 +59,7 @@
 <script>
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, collection, setDoc ,addDoc, doc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, collection, setDoc , getDoc, doc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import firebaseConfig from './../../firebase/firebaseConfig.js';
 import StarRating from 'vue-star-rating';
 
@@ -76,12 +83,36 @@ export default {
             formVisible: false,
             rating: 5,
             review: '',
+            notReviewed: true,
             notification: {
                 visible: false,
                 message: '',
                 type: ''
             }
         };
+    },
+    async mounted(){
+        // check if user is logged in, if user is logged in, check if user has already reviewed this outing, if yes, show edit review button
+        const user = auth.currentUser;
+        if (user) {
+            const userId = user.uid;
+            const userRef = doc(db, "users", userId);
+            const userDoc = await getDoc(userRef);
+            if (userDoc.exists()) {
+                const userData = userDoc.data();
+                if (userData.reviews.includes(this.outingID)) {
+                    this.notReviewed = false;
+                    //retrieve review details
+                    const reviewRef = doc(collection(doc(db, "outings", this.outingID), "reviews"), userId);
+                    const reviewDoc = await getDoc(reviewRef);
+                    if (reviewDoc.exists()) {
+                        const reviewData = reviewDoc.data();
+                        this.rating = reviewData.rating;
+                        this.review = reviewData.review;
+                    }
+                }
+            }
+        }
     },
     methods: {
         toggleForm() {
