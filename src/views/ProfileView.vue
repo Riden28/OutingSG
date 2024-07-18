@@ -57,6 +57,7 @@
 
     import NavBar from '@/components/NavBar.vue';
     import Footer from '@/components/Footer.vue';
+    import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
     export default {
         name: 'profile',
@@ -64,8 +65,11 @@
             NavBar, Footer
         },
         data() {
+            const auth = getAuth();
+            const user = auth.currentUser;
+            const displayName = user.displayName;
             return {
-                username: "Username here",
+                username: displayName,
                 bio: "yadyaydgwygwkgnlwrkngkaerngjkrejk",
                 categoryPreferences: "F&B, Education, Wellness",
                 profilePicture: "/src/assets/icons/profile.png",

@@ -1,4 +1,5 @@
 <template>
+    <form>
     <div class="v-row reviews">
             <div class="filterbutton">
                 <input class="btn btn-primary" type="button" value="Filter">

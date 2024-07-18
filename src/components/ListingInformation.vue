@@ -88,6 +88,7 @@ export default {
     } catch (error) {
         console.error("Error fetching document:", error);
     }
+    }
 }
 </script>
 

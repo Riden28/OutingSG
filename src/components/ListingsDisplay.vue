@@ -1,108 +1,162 @@
 <template>
-  
-    <v-container fluid class="mx-auto">
-      <v-infinite-scroll
-        height="700"
-        color="var(--secondary)"
-        mode="manual"
-        @load="loadMoreListings"
-        empty-text="No more recommended listings"
-      >
-        <v-row align="start" justify="center">
-          <v-col v-for="listing in listings" :key="listing.listingID" cols="auto" @click="navigateToListing(listing.listingID)">
-            <v-card class="mx-1" height="280" width="417" rounded="xl">
-              <v-img :src="listing.url" height="174px" cover></v-img>
-              <v-btn icon="mdi-bookmark-outline" base-color="transparent" variant="plain" @click.prevent="bookmarkListing(listing)">
-                <v-icon icon="mdi-bookmark" size="50" color="white"></v-icon>
-              </v-btn>
-              <v-card-title>{{ listing.name }}</v-card-title>
-              <v-card-title class="location">{{ listing.details }}</v-card-title>
-              <v-card-title class="price">{{ listing.price }}</v-card-title>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-infinite-scroll>
-    </v-container>
-  </template>
+  <v-container fluid class="mx-auto">
+    <v-infinite-scroll
+      height="700"
+      color="var(--secondary)"
+      mode="manual"
+      @load="loadMoreListings"
+      empty-text="No more recommended listings"
+    >
+      <v-row align="start" justify="center">
+        <v-col v-for="listing in listings" :key="listing.listingID" cols="auto">
+          <v-card class="mx-1" height="280" width="417" rounded="xl">
+            <v-img :src="listing.url" height="174px" cover></v-img>
+            <v-btn
+              :icon="listing.bookmarked ? 'mdi-bookmark' : 'mdi-bookmark-outline'"
+              base-color="transparent"
+              variant="plain"
+              @click.prevent="bookmarkListing(listing)"
+            >
+              <v-icon :icon="listing.bookmarked ? 'mdi-bookmark' : 'mdi-bookmark-outline'" size="50" color="white"></v-icon>
+            </v-btn>
+            <v-card-title>{{ listing.name }}</v-card-title>
+            <v-card-title class="location">{{ listing.details }}</v-card-title>
+            <v-card-title class="price">{{ listing.price }}</v-card-title>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-infinite-scroll>
+  </v-container>
+</template>
 
-  <script>
+<script>
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, collection, doc, getDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, doc, getDoc, getDocs, updateDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import firebaseConfig from './../../firebase/firebaseConfig.js';
 import shuffle from "./../../firebase/firebaseAuthServices.js";
 
-  
-  export default {
-    name: 'ListingsDisplay',
-    data: () => ({
-      listings: [],
-      currentIndex: 0,
-      outings: [],
-    }),
-    async created() {
-      const app = initializeApp(firebaseConfig);
-      const db = getFirestore(app);
-      const querySnapshot = await getDocs(collection(db, 'outings'));
-      
-      const outings = [];
-      querySnapshot.forEach((doc) => {
-        const outing_details = doc.data();
-        const price = outing_details.max_price === 0 ? 'Free' : `$${outing_details.min_price} ~ $${outing_details.max_price}`;
-        outings.push({
-          listingID: doc.id,
-          name: outing_details.name,
-          details: outing_details.location,
-          price: price,
-          url: outing_details.images.length > 0 ? outing_details.images[0] : null,
-        });
+export default {
+  name: 'ListingsDisplay',
+  data: () => ({
+    listings: [],
+    currentIndex: 0,
+    outings: [],
+    user: null,
+    userID: null,
+  }),
+  async created() {
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const querySnapshot = await getDocs(collection(db, 'outings'));
+    
+    const outings = [];
+    querySnapshot.forEach((doc) => {
+      const outing_details = doc.data();
+      const price = outing_details.max_price === 0 ? 'Free' : `$${outing_details.min_price} ~ $${outing_details.max_price}`;
+      outings.push({
+        listingID: doc.id,
+        name: outing_details.name,
+        details: outing_details.location,
+        price: price,
+        url: outing_details.images.length > 0 ? outing_details.images[0] : null,
+        bookmarked: false, // New field to track if the listing is bookmarked
       });
-  
-      this.outings = shuffle(outings);
-      this.loadMoreListings();
+    });
+
+    this.outings = shuffle(outings);
+    this.loadMoreListings();
+
+    const auth = getAuth(app);
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        this.user = user;
+        this.userID = user.uid;
+        await this.checkBookmarkedListings();
+      }
+    });
+  },
+  methods: {
+    async checkBookmarkedListings() {
+      const db = getFirestore();
+      const userDocRef = doc(db, "users", this.userID);
+      const userDocSnap = await getDoc(userDocRef);
+      if (userDocSnap.exists()) {
+        const userData = userDocSnap.data();
+        const savedOutings = userData.savedOutings || [];
+        this.listings.forEach(listing => {
+          listing.bookmarked = savedOutings.includes(listing.listingID);
+        });
+      }
     },
-    methods: {
-      loadMoreListings({ done } = {}) {
-        const newIndex = this.currentIndex + 10;
-        this.listings.push(...this.outings.slice(this.currentIndex, newIndex));
-        this.currentIndex = newIndex;
-        if (done) done('ok');
-      },
-      navigateToListing(listingID) {
-        this.$router.push({ name: 'individualListing', params: { listingID } });
-      },
-      bookmarkListing(listing) {
-        console.log('Bookmark clicked for:', listing);
-        // Implement bookmark functionality here
+    loadMoreListings({ done } = {}) {
+      const newIndex = this.currentIndex + 10;
+      this.listings.push(...this.outings.slice(this.currentIndex, newIndex));
+      this.currentIndex = newIndex;
+      if (done) done('ok');
+    },
+    navigateToListing(listingID) {
+      this.$router.push({ name: 'individualListing', params: { listingID } });
+    },
+    async bookmarkListing(listing) {
+      if (!this.user) {
+        this.$router.push("/login");
+        return;
+      }
+      const db = getFirestore();
+      const userDocRef = doc(db, "users", this.userID);
+      const userDocSnap = await getDoc(userDocRef);
+      if (userDocSnap.exists()) {
+        const userData = userDocSnap.data();
+        const savedOutings = userData.savedOutings || [];
+        if (listing.bookmarked) {
+          // Remove from savedOutings
+          await updateDoc(userDocRef, {
+            savedOutings: arrayRemove(listing.listingID)
+          });
+          listing.bookmarked = false;
+        } else {
+          // Add to savedOutings
+          await updateDoc(userDocRef, {
+            savedOutings: arrayUnion(listing.listingID)
+          });
+          listing.bookmarked = true;
+        }
+      } else {
+        // Create the user document if it doesn't exist and add the listing
+        await setDoc(userDocRef, {
+          savedOutings: [listing.listingID]
+        });
+        listing.bookmarked = true;
       }
     }
-  };
-  </script>
-  
-  <style scoped>
-  .v-btn {
-    position: absolute;
-    top: -6px;
-    right: 8px;
   }
-  
-  .price {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    font-weight: normal;
-  }
-  
-  .location {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    font-weight: normal;
-  }
+};
+</script>
 
-  .v-card:hover {
-    opacity: 0.8; /* Optional: Add hover effect */
-    cursor: pointer;
-  }
-  </style>
-  
+<style scoped>
+.v-btn {
+  position: absolute;
+  top: -6px;
+  right: 8px;
+}
+
+.price {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  font-weight: normal;
+}
+
+.location {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  font-weight: normal;
+}
+
+.v-card:hover {
+  opacity: 0.8; /* Optional: Add hover effect */
+  cursor: pointer;
+}
+</style>

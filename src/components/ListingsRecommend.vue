@@ -11,7 +11,7 @@
           <v-col v-for="listing in listings" :key="listing.listingID" cols="auto" @click="navigateToListing(listing.listingID)">
             <v-card class="mx-1" height="280" width="417" rounded="xl">
               <v-img :src="listing.url" height="174px" cover></v-img>
-              <v-btn icon="mdi-bookmark-outline" base-color="transparent" variant="plain" @click.prevent="bookmarkListing(listing)">
+              <v-btn icon="mdi-bookmark-outline" base-color="transparent" variant="plain" @click="bookmarkListing(listing)">
                 <v-icon icon="mdi-bookmark" size="50" color="white"></v-icon>
               </v-btn>
               <v-card-title>{{ listing.name }}</v-card-title>
@@ -100,6 +100,7 @@ export default {
         },
         navigateToListing(listingID) {
             this.$router.push({ name: 'individualListing', params: { listingID } });
+            console.log("navigating to listing"); //Debug
         },
         bookmarkListing(listing) {
             console.log('Bookmark clicked for:', listing);
