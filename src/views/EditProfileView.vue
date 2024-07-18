@@ -7,10 +7,10 @@
             <br>
             <label for="username"><img src='../assets/icons/username.png' class="smallIcon"> Username</label>
             <br><input type="text" 
-                        id='username'
-                        placeholder="Enter your username"
+                        id='displayName'
+                        :placeholder="displayName"
                         required 
-                        v-model="username">
+                        v-model="displayName">
         </center>
 
         <div class="aboutYou">
@@ -21,40 +21,40 @@
             <br><textarea id='bio'
                         placeholder="Enter your bio"
                         required 
-                        v-model="bio"/>
+                        v-model="bio"></textarea>
             <br>
 
             <h5>Category Preferences</h5>
             <div>
-                <input type="checkbox" id="fnb" value="fnb" v-model="categoryPreferences" />
-                <label for="fnb">F&B</label>
+                <input type="checkbox" id="Food and Beverages" value="Food and Beverages" v-model="category" />
+                <label for="Food and Beverages:">Food and Beverages</label>
                 <br>
-                <input type="checkbox" id="Nature" value="nature" v-model="categoryPreferences" />
-                <label for="nature">Nature</label>
+                <input type="checkbox" id="Nature" value="Nature" v-model="category" />
+                <label for="Nature">Nature</label>
                 <br>
-                <input type="checkbox" id="cultural" value="cultural" v-model="categoryPreferences" />
-                <label for="cultural">Cultural</label>
+                <input type="checkbox" id="Culture and History" value="Culture and History" v-model="category" />
+                <label for="Culture and History">Culture and History</label>
                 <br>
-                <input type="checkbox" id="entertainment" value="entertainment" v-model="categoryPreferences" />
-                <label for="entertainment">Entertainment</label>
+                <input type="checkbox" id="Entertainment" value="Entertainment" v-model="category" />
+                <label for="Entertainment">Entertainment</label>
                 <br>
-                <input type="checkbox" id="outdoor" value="outdoor" v-model="categoryPreferences" />
-                <label for="outdoor">Outdoor</label>
+                <input type="checkbox" id="Outdoor Activities" value="Outdoor Activities" v-model="category" />
+                <label for="Outdoor Activities">Outdoor Activities</label>
                 <br>
-                <input type="checkbox" id="educational" value="educational" v-model="categoryPreferences" />
-                <label for="educational">Educational</label>
+                <input type="checkbox" id="Educational" value="Educational" v-model="category" />
+                <label for="Educational">Educational</label>
                 <br>
-                <input type="checkbox" id="adventure" value="adventure" v-model="categoryPreferences" />
-                <label for="adventure">Adventure</label>
+                <input type="checkbox" id="Adventure" value="Adventure" v-model="category" />
+                <label for="Adventure">Adventure</label>
                 <br>
-                <input type="checkbox" id="shopping" value="shopping" v-model="categoryPreferences" />
-                <label for="shopping">Shopping</label>
+                <input type="checkbox" id="Shopping" value="Shopping" v-model="category" />
+                <label for="Shopping">Shopping</label>
                 <br>
-                <input type="checkbox" id="wellness" value="wellness" v-model="categoryPreferences" />
-                <label for="wellness">Wellness</label>
+                <input type="checkbox" id="Wellness" value="Wellness" v-model="category" />
+                <label for="Wellness">Wellness</label>
                 <br>
-                <input type="checkbox" id="events" value="events" v-model="categoryPreferences" />
-                <label for="events">Events</label>
+                <input type="checkbox" id="Events and Festivals" value="Events and Festivals" v-model="category" />
+                <label for="Events and Festivals">Events and Festivals</label>
             </div>
 
             <br>
@@ -65,7 +65,7 @@
                         <router-link to="/profile"><button class="cancelButton">Cancel</button></router-link>
                     </v-col>
                     <v-col>
-                        <router-link to="/profile"><button @click.stop.prevent="submit()">Save Changes</button></router-link>
+                        <router-link to="/profile"><button @click.stop.prevent="updateDetails">Save Changes</button></router-link>
                     </v-col>
                 </v-row>
             </center>
@@ -74,59 +74,90 @@
     </div>
 
     <Footer />
-   
 </template>
 
 <script>
-    import '../assets/main.css';
-    import '../assets/bootstrap.css';
-    import '../router/bootstrap.js';
-    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import firebaseConfig from './../../firebase/firebaseConfig.js';
+import '../assets/main.css';
+import '../assets/bootstrap.css';
+import '../router/bootstrap.js';
+import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, doc, getDoc, updateDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import firebaseConfig from './../../firebase/firebaseConfig.js';
+import NavBar from '@/components/NavBar.vue';
+import Footer from '@/components/Footer.vue';
 
-    import NavBar from '@/components/NavBar.vue';
+const firebaseApp = initializeApp(firebaseConfig);
+const auth = getAuth(firebaseApp);
+const db = getFirestore(firebaseApp);
 
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-
-    export default {
-        name: 'profile',
-        components: {
-            NavBar
-        },
-        created() {
-            this.username = this.$route.query.username
-        },
-        data() {
-            return {
-                username: "",
-                bio: "yadyaydgwygwkgnlwrkngkaerngjkrejk",
-                profilePicture: "/src/assets/icons/profile.png",
-                categoryPreferences: [],
-            };
-        },
-        methods: {
-            submit(){
-
-                if (this.categoryPreferences.length < 3){
-                    alert("You will need to select a minimum of 3 categories")
-                }else{
-                    const auth = getAuth();
-                    const { email, password } = this;
-                    createUserWithEmailAndPassword(auth, email, password)
-                    .then(() => {
-                        console.log("Successfully registered")
-                    })
-                    .catch((error) => {
-                        console.log("Error: ", error.message)
-                    });
-                    this.$router.push("./")
+export default {
+    name: 'profile',
+    components: {
+        NavBar,
+        Footer
+    },
+    data() {
+        return {
+            bio: '',
+            category: [],
+            profilePicture: "/src/assets/icons/profile.png",
+            displayName: ''
+        };
+    },
+    async mounted() {
+        await this.getUserDetails();
+    },
+    methods: {
+        async getUserDetails() {
+            const user = auth.currentUser;
+            if (user) {
+                const userId = user.uid;
+                const docRef = doc(db, "users", userId);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    const userDetails = docSnap.data();
+                    this.displayName = userDetails.displayName || '';
+                    this.bio = userDetails.bio || '';
+                    this.category = userDetails.category || [];
+                    this.profilePicture = userDetails.profilePicture || "/src/assets/icons/profile.png";
+                } else {
+                    console.log("Error 404: user not found");
                 }
-                
             }
         },
-    };
+        async updateDetails() {
+            if (this.category.length < 3) {
+                alert("You will need to select a minimum of 3 categories");
+                return;
+            }
+
+            const user = auth.currentUser;
+            if (user) {
+                const q = query(collection(db, "users"), where("displayName", "==", this.displayName));
+                const querySnapshot = await getDocs(q);
+
+                if (!querySnapshot.empty && querySnapshot.docs[0].id !== user.uid) {
+                    alert("Username already taken. Please choose another one.");
+                    return;
+                }
+
+                const userId = user.uid;
+                const docRef = doc(db, "users", userId);
+
+                await updateDoc(docRef, {
+                    displayName: this.displayName,
+                    bio: this.bio,
+                    category: this.category,
+                    profilePicture: this.profilePicture
+                });
+
+                console.log("Profile updated successfully");
+                this.$router.push("/profile");
+            }
+        }
+    }
+};
 </script>
 
 <style scoped>
@@ -141,7 +172,7 @@
     margin-top: -50px;
 }
 
-.titles{
+.titles {
     font-weight: 800;
     font-size: 30px;
     text-align: center;
@@ -151,7 +182,7 @@
     padding: 30px;
 }
 
-.aboutYou h4,h5 {
+.aboutYou h4, h5 {
     font-weight: 800;
 }
 
@@ -207,5 +238,4 @@ textarea {
 label {
     padding-left: 5px;
 }
-
 </style>

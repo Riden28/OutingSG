@@ -8,10 +8,10 @@
         empty-text="No more recommended listings"
       >
         <v-row align="start" justify="center">
-          <v-col v-for="listing in listings" :key="listing.listingID" cols="auto" @click="navigateToListing(listing.listingID)">
+          <v-col v-for="listing in listings" :key="listing.listingID" cols="auto">
             <v-card class="mx-1" height="280" width="417" rounded="xl">
-              <v-img :src="listing.url" height="174px" cover></v-img>
-              <v-btn icon="mdi-bookmark-outline" base-color="transparent" variant="plain" @click="bookmarkListing(listing)">
+              <v-img :src="listing.url" height="174px" cover @click="navigateToListing(listing.listingID)"></v-img>
+              <v-btn icon="mdi-bookmark-outline" base-color="transparent" variant="plain" @click.prevent="bookmarkListing(listing)">
                 <v-icon icon="mdi-bookmark" size="50" color="white"></v-icon>
               </v-btn>
               <v-card-title>{{ listing.name }}</v-card-title>
@@ -22,7 +22,7 @@
         </v-row>
       </v-infinite-scroll>
     </v-container>
-  </template>
+</template>
 
 <script>
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -41,7 +41,7 @@ const auth = getAuth(firebaseApp);
 const db = getFirestore(firebaseApp);
 
 export default {
-    name: 'ListingsDisplay',
+    name: 'ListingsRecommend',
     data() {
         return {
             listings: [],
@@ -50,6 +50,7 @@ export default {
             user_preferences: [],
         };
     },
+    props: ['user'],
     async created() {
         const user = auth.currentUser;
         const userID = user ? user.uid : null;
@@ -62,8 +63,8 @@ export default {
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
             const user_details = docSnap.data();
-            this.user_preferences = user_details.category.slice(0, 3);
-            this.loadOutings();
+            this.user_preferences = user_details.category.slice(0, 3); // Get top 3 preferences
+            await this.loadOutings();
         } else {
             console.log("error 404: user not found");
             return;
@@ -105,6 +106,13 @@ export default {
         bookmarkListing(listing) {
             console.log('Bookmark clicked for:', listing);
             // Implement bookmark functionality here
+            if (this.user) {
+            // Bookmark the listing
+                console.log('bookmarked');
+            } else {
+            // Show login dialog
+                alert('Please login to outings');
+            }
         }
     }
 };

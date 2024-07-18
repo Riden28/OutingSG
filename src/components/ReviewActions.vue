@@ -11,13 +11,34 @@
                 </p>
             </div>
             <div class="addreview">
-                <router-link to="/edit" class="btn btn-primary listingBtns" role="button" style='margin-right: 1px;'>
+                <button @click="toggleForm" class="btn btn-primary listingBtns" role="button" style='margin-right: 1px;'>
                     <img src='../assets/icons/gif/add.gif' style='width: 30px;'><span style='color:black;'> Add Review</span>
-                </router-link>
+                </button>
             </div>
         </div>
-        
-    </form>
+        <!-- form for adding review -->
+        <form v-show="formVisible" class = "reviewform">
+            <div class="cover v-container">
+                <div class="title v-row">
+                    <h3>Add a Review</h3>
+                </div>
+                <div class="v-row rating">
+                    <h4>Rating</h4>
+                    <div class="stars">
+                        <star-rating :star-size="20" v-model:rating="rating"/>
+                    </div>
+                </div>
+                <div class="v-row desc">
+                    <h4>Review</h4>
+                    <input type="text" class="description" placeholder="Review here...">
+                </div>
+                <div class="submitReview">
+                    <input type="submit" class="btn btn-primary" value="submit">
+                </div>
+                
+            </div>
+            <button @click="toggleForm" class="closeform">&#10006;</button>
+        </form>
 
 </template>
 
@@ -47,7 +68,7 @@ import StarRating from 'vue-star-rating'
     .reviewform {
         z-index: 1000;
         background: white;
-        height: 60vh;
+        height: 70vh;
         width: 80vw;
         display: flex;
         justify-content: center;
@@ -94,5 +115,18 @@ import StarRating from 'vue-star-rating'
         margin-left: 5vh;
         height: 40vh;
         width: 60vw;
+    }
+    .closeform {
+        display: flex;
+        align-items:start;
+        height: 8vh;
+    }
+    .submitReview {
+        display: flex;
+        justify-content: center;
+        margin-top: 2rem;
+    }
+    button, .btn {
+        background-color: #EAA843 !important;
     }
 </style>

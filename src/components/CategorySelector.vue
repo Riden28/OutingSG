@@ -7,7 +7,8 @@
             :icon="category.icon"
             :height="buttonHeight"
             :width="buttonWidth"
-            :color="buttonColor">
+            :color="buttonColor"
+            @click="exploreAddFilter(category.name)">
             <v-icon :icon="category.icon" size="x-large"></v-icon>
           </v-btn>
           <div class="text-center category-name">{{ category.name }}</div>
@@ -28,6 +29,11 @@ export default {
   components: {
     SvgIcon,
   },
+  methods: {
+    exploreAddFilter(categoryName) {
+      this.$router.push({name: 'explore', query: { category: categoryName }});
+    },
+  },
   data() {
     return {
       path: mdiAccount,
@@ -35,16 +41,16 @@ export default {
       buttonWidth: 80,
       buttonColor: 'var(--secondary)',
       outingCategories: [
-        { id: 'F&B', name: 'F&B', icon: 'mdi-food-outline' },
+        { id: 'Food and Beverages', name: 'Food and Beverages', icon: 'mdi-food-outline' },
         { id: 'Nature', name: 'Nature', icon: 'mdi-forest-outline' },
-        { id: 'Cultural', name: 'Cultural', icon: 'mdi-bank-outline' },
+        { id: 'Culture and History', name: 'Culture and History', icon: 'mdi-bank-outline' },
         { id: 'Entertainment', name: 'Entertainment', icon: 'mdi-drama-masks' },
-        { id: 'Outdoor', name: 'Outdoor Activities', icon: 'mdi-bike' },
+        { id: 'Outdoor Activities', name: 'Outdoor Activities', icon: 'mdi-bike' },
         { id: 'Educational', name: 'Educational', icon: 'mdi-human-male-board' },
         { id: 'Adventure', name: 'Adventure', icon: 'mdi-airballoon-outline' },
         { id: 'Shopping', name: 'Shopping', icon: 'mdi-shopping-outline' },
         { id: 'Wellness', name: 'Wellness', icon: 'mdi-spa-outline' },
-        { id: 'Events', name: 'Events & Festivals', icon: 'mdi-calendar' },
+        { id: 'Events and Festivals', name: 'Events & Festivals', icon: 'mdi-calendar' },
       ],
     };
   },
@@ -74,7 +80,7 @@ export default {
 }
 
 .category-name {
-  max-width: 100px;
+  max-width: 90px;
   word-wrap: break-word; /* Allow text to wrap */
 }
 

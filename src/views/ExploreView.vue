@@ -8,16 +8,16 @@
             <hr>
 
             <h4 class="title">Category</h4> 
-            <input type="checkbox" v-model="category" value='fnb' id="fnb"><label for="fnb">F&B</label><br>
-            <input type="checkbox" v-model="category" value='nature' id="nature"><label for="nature">Nature</label><br>
-            <input type="checkbox" v-model="category" value='cultural' id="cultural"><label for="cultural">Cultural</label><br>
-            <input type="checkbox" v-model="category" value='entertainment' id="entertainment"><label for="entertainment">Entertainment</label><br>
-            <input type="checkbox" v-model="category" value='outdoor' id="outdoor"><label for="outdoor">Outdoor</label><br>
-            <input type="checkbox" v-model="category" value='educational' id="educational"><label for="educational">Educational</label><br>
-            <input type="checkbox" v-model="category" value='adventure' id="adventure"><label for="adventure">Adventure</label><br>
-            <input type="checkbox" v-model="category" value='shopping' id="shopping"><label for="shopping">Shopping</label><br>
-            <input type="checkbox" v-model="category" value='wellness' id="wellness"><label for="wellness">Wellness</label><br>
-            <input type="checkbox" v-model="category" value='events' id="events"><label for="events">Events</label><br>
+            <input type="checkbox" v-model="category" value='Food and Beverages' id="Food and Beverages"><label for="Food and Beverages">Food and Beverages</label><br>
+            <input type="checkbox" v-model="category" value='Nature' id="Nature"><label for="Nature">Nature</label><br>
+            <input type="checkbox" v-model="category" value='Culture and History' id="Culture and History"><label for="Culture and History">Culture and History</label><br>
+            <input type="checkbox" v-model="category" value='Entertainment' id="Entertainment"><label for="Entertainment">Entertainment</label><br>
+            <input type="checkbox" v-model="category" value='Outdoor Activities' id="Outdoor Activities"><label for="Outdoor Activities">Outdoor Activities</label><br>
+            <input type="checkbox" v-model="category" value='Educational' id="Educational"><label for="Educational">Educational</label><br>
+            <input type="checkbox" v-model="category" value='Adventure' id="Adventure"><label for="Adventure">Adventure</label><br>
+            <input type="checkbox" v-model="category" value='Shopping' id="Shopping"><label for="Shopping">Shopping</label><br>
+            <input type="checkbox" v-model="category" value='Wellness' id="Wellness"><label for="Wellness">Wellness</label><br>
+            <input type="checkbox" v-model="category" value='Events and Festivals' id="Events and Festivals"><label for="Events and Festivals">Events and Festivals</label><br>
 
             <h4 class="title">Price</h4> 
             <p>Minimum Price: <input type='number' v-model='minPrice' class='userValues' min="0"></p>
@@ -64,15 +64,15 @@
 
             <v-container fluid class="mx-auto overflow-auto hideScroll">
                 <v-row align="start" justify="center">
-                    <v-col v-for="listing in listings" :key="listing.listingID" cols="auto" @click="navigateToListing(listing.listingID)">
+                    <v-col v-for="listing in listings" :key="listing.listingID" cols="auto">
                         <v-card class="mx-1" height="280" width="417" rounded="xl">
-                        <v-img :src="listing.url" height="174px" cover></v-img>
-                        <v-btn icon="mdi-bookmark-outline" base-color="transparent" variant="plain" @click.prevent="bookmarkListing(listing)">
-                            <v-icon icon="mdi-bookmark" size="50" color="white"></v-icon>
-                        </v-btn>
-                        <v-card-title>{{ listing.name }}</v-card-title>
-                        <v-card-title class="location">{{ listing.details }}</v-card-title>
-                        <v-card-title class="price">{{ listing.price }}</v-card-title>
+                            <v-img :src="listing.url" height="174px" cover @click="navigateToListing(listing.listingID)"></v-img>
+                            <v-btn icon="mdi-bookmark-outline" base-color="transparent" variant="plain" @click.prevent="bookmarkListing(listing)">
+                                <v-icon icon="mdi-bookmark" size="50" color="white"></v-icon>
+                            </v-btn>
+                            <v-card-title>{{ listing.name }}</v-card-title>
+                            <v-card-title class="location">{{ listing.details }}</v-card-title>
+                            <v-card-title class="price">{{ listing.price }}</v-card-title>
                         </v-card>
                     </v-col>
                 </v-row>
@@ -145,6 +145,7 @@ export default {
         maxPax: 10,
         category: [],
         location: [],
+        user: auth.currentUser
     }),
     methods: {
         // on every load retrieve another 10 listings
@@ -187,6 +188,7 @@ export default {
         },
         filter(){
             this.listings = []; // clear the existing array
+            console.log(this.category);
 
             querySnapshot.forEach((doc) => {
                 var outing_details = doc.data();
@@ -198,6 +200,7 @@ export default {
                 var checkLocation = false;
 
                 const selectedCategories = this.category;
+                console.log(selectedCategories);
                 if (selectedCategories.length == 0){
                     checkCat = true;
                 }else{
@@ -205,8 +208,10 @@ export default {
                         var currCat = category.toLowerCase();
                         if (selectedCategories.includes(currCat)){
                             checkCat = true;
+                            console.log('break');
                             break;
                         }
+                        console.log('no break');
                     }
                 }
 
@@ -298,6 +303,13 @@ export default {
         bookmarkListing(listing) {
             console.log('Bookmark clicked for:', listing);
             // Implement bookmark functionality here
+            if (this.user) {
+                // Bookmark the listing
+                console.log('bookmarked');
+            } else {
+                // Show login dialog
+                alert('Please login to save outings');
+            }
         },
         pushListings(outing_details){
             let price = outing_details.max_price === 0 ? "Free" : `$${outing_details.min_price} ~ $${outing_details.max_price}`;
@@ -309,16 +321,29 @@ export default {
                 minimumPrice: outing_details.min_price,
                 url: outing_details.images.length > 0 ? outing_details.images[0] : null
             });
+        },
+        fetchCategoryFilter() { // for navigation from homepage category buttons
+            this.category = this.$route.query.category;
+            console.log(this.category);
+            if (this.category != null){
+                this.filter();
+            }
         }
     },
     created() {
-
         const navSearch = new URLSearchParams(window.location.search).get('search');
 
         if (navSearch !== null){
             this.searchListings();
         }
+
+        
+    },
+    mounted() {
+        this.category.push(this.$route.params.categoryName);
+        this.fetchCategoryFilter();
     }
+
 };
 
 </script>

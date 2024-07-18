@@ -42,25 +42,25 @@
           <div class="row1">
             <div class="category">
               <h5>Category</h5>
-              <input id='outingCategory1' type="checkbox" v-model="outingCategory" value="food"/> F&B
+              <input id='outingCategory1' type="checkbox" v-model="outingCategory" value="Food and Beverages"/> Food and Beverages
               <br>
-              <input id='outingCategory2' type="checkbox" v-model="outingCategory" value="nature"/> Nature
+              <input id='outingCategory2' type="checkbox" v-model="outingCategory" value="Nature"/> Nature
               <br>
-              <input id='outingCategory3' type="checkbox" v-model="outingCategory" value="cultural"/> Cultural
+              <input id='outingCategory3' type="checkbox" v-model="outingCategory" value="Culture and History"/> Culture and History
               <br>
-              <input id='outingCategory4' type="checkbox" v-model="outingCategory" value="entertainment"/> Entertainment
+              <input id='outingCategory4' type="checkbox" v-model="outingCategory" value="Entertainment"/> Entertainment
               <br>
-              <input id='outingCategory5' type="checkbox" v-model="outingCategory" value="outdoor"/> Outdoor
+              <input id='outingCategory5' type="checkbox" v-model="outingCategory" value="Outdoor Activities"/> Outdoor Activities
               <br>
-              <input id='outingCategory6' type="checkbox" v-model="outingCategory" value="educational"/> Educational
+              <input id='outingCategory6' type="checkbox" v-model="outingCategory" value="Educational"/> Educational
               <br>
-              <input id='outingCategory7' type="checkbox" v-model="outingCategory" value="adventure"/> Adventure
+              <input id='outingCategory7' type="checkbox" v-model="outingCategory" value="Adventure"/> Adventure
               <br>
-              <input id='outingCategory8' type="checkbox" v-model="outingCategory" value="shopping"/> Shopping
+              <input id='outingCategory8' type="checkbox" v-model="outingCategory" value="Shopping"/> Shopping
               <br>
-              <input id='outingCategory9' type="checkbox" v-model="outingCategory" value="wellness"/> Wellness
+              <input id='outingCategory9' type="checkbox" v-model="outingCategory" value="Wellness"/> Wellness
               <br>
-              <input id='outingCategory10' type="checkbox" v-model="outingCategory" value="events"/> Events
+              <input id='outingCategory10' type="checkbox" v-model="outingCategory" value="Events and Festivals"/> Events and Festivals
               <br>
             </div>
             <div class="price">
@@ -109,7 +109,7 @@
   </div>
   <OutingSGFooter/>
 </template> 
- 
+
 <script> 
 import NavBar from '@/components/NavBar.vue'; 
 import OutingSGFooter from '@/components/Footer.vue';
@@ -120,10 +120,10 @@ import { getFirestore, collection, addDoc, updateDoc } from "https://www.gstatic
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 import firebaseConfig from '../../firebase/firebaseConfig.js';
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const storage = getStorage(app);
+const firebaseApp = initializeApp(firebaseConfig);
+const auth = getAuth(firebaseApp);
+const db = getFirestore(firebaseApp);
+const storage = getStorage(firebaseApp);
 
 export default { 
   name: 'create', 
@@ -148,6 +148,11 @@ export default {
       images: [],
     }
   },
+  created() {
+    if (!auth.currentUser) {
+      this.$router.push("/login");
+    }
+  },
   methods: {
     async createOuting() {
       const docData = {
@@ -170,6 +175,12 @@ export default {
       // Add a new document with a generated ID
       const docRef = await addDoc(collection(db, "outings"), docData);
       const docId = docRef.id;
+
+      // add to user database that this listing is created by them (append to created array)
+      const userRef = doc(db, "users", auth.currentUser.uid);
+      await updateDoc(userRef, {
+        created: arrayUnion(docId),
+      });
 
       // File upload logic
       const uploadPromises = this.files.map(file => {

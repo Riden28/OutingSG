@@ -153,7 +153,12 @@
 
                         await setDoc(doc(firestore, "users", user.uid), {
                             displayName: username,
-                            phoneNumber: mobileNumber
+                            phoneNumber: mobileNumber,
+                            bio: '',
+                            category: [],
+                            profilePicture: "https://firebasestorage.googleapis.com/v0/b/outingsg.appspot.com/o/profile-picture-default-png.png?alt=media&token=62cd1ae6-d260-4aa4-93d1-7538b8bd93f1",
+                            created: [],
+                            saved: []
                         });
 
                         console.log("Successfully registered");

@@ -25,7 +25,7 @@
         name: 'ImageCarousel',
         props: {
             slides: Array,
-            carousel_height: Number
+            carousel_height: String
         },
         computed: {
             isHomepage() {
