@@ -37,7 +37,7 @@
                 <v-col>
                     <center>
                         <img src="../assets/icons/created.png" class="icons"><br>
-                        <router-link to="/createdOutings">
+                        <router-link to="/created">
                             <button>Created Outings</button>
                         </router-link>
                     </center>

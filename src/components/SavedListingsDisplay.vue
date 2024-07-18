@@ -14,13 +14,8 @@
         <v-row align="start" justify="center">
           <v-col v-for="listing in listings" :key="listing.listingID" cols="auto">
             <v-card class="mx-1" height="280" width="417" rounded="xl">
-              <v-img :src="listing.url" height="174px" cover></v-img>
-              <v-btn
-                icon
-                base-color="transparent"
-                variant="plain"
-                @click.stop.prevent="bookmarkListing(listing)"
-              >
+              <v-img :src="listing.url" height="174px" cover @click="navigateToListing(listing.listingID)"></v-img>
+              <v-btn :icon="listing.bookmarked ? 'mdi-bookmark' : 'mdi-bookmark-outline'" base-color="transparent" variant="plain" @click.prevent="bookmarkListing(listing)">
                 <v-icon :icon="listing.bookmarked ? 'mdi-bookmark' : 'mdi-bookmark-outline'" size="50" color="white"></v-icon>
               </v-btn>
               <v-card-title>{{ listing.name }}</v-card-title>
@@ -72,6 +67,9 @@ export default {
     });
   },
   methods: {
+    navigateToListing(listingID) {
+        this.$router.push({ name: 'individualListing', params: { listingID } });
+      },
     async getSavedOutings() {
       const userDocRef = doc(db, "users", this.userID);
       const userDocSnap = await getDoc(userDocRef);
