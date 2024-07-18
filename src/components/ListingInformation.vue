@@ -37,7 +37,7 @@
 import ImageCarousel from './ImageCarousel.vue';
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, collection, doc, getDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import firebaseConfig from './../../firebase/firebaseConfig.js';
 
 const firebaseApp = initializeApp(firebaseConfig);
@@ -78,15 +78,47 @@ export default {
             shareUrl.select();
             document.execCommand('copy');
             document.body.removeChild(shareUrl);
+        },
+        preloadImages(imageUrls) {
+            return Promise.all(
+                imageUrls.map(url => {
+                    return new Promise((resolve, reject) => {
+                        const img = new Image();
+                        img.src = url;
+                        img.onload = resolve;
+                        img.onerror = reject;
+                    });
+                })
+            );
+        },
+        preloadImage(url) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.src = url;
+                img.onload = () => resolve();
+                img.onerror = () => reject();
+            });
         }
     },
     async mounted() {
+        console.log("Mounted hook called");
+        const start = performance.now();
+
         try {
             const docRef = doc(db, "outings", this.outingID);
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
+                console.log(`Document fetched: ${performance.now() - start} ms`);
                 this.outing_details = docSnap.data();
+                console.log(`Outing details set: ${performance.now() - start} ms`);
+
+                console.log(this.outing_details.images);
+                const imagePromises = this.outing_details.images.map(image => this.preloadImage(image));
+                await Promise.all(imagePromises);
+                console.log(`Images preloaded: ${performance.now() - start} ms`);
+
                 this.carousel_images = this.outing_details.images.map(image => ({ url: image }));
+                console.log(`Carousel images set: ${performance.now() - start} ms`);
             } else {
                 console.log("No such document!");
             }

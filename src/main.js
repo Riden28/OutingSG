@@ -15,6 +15,9 @@ import '@mdi/font/css/materialdesignicons.css' // this made the icons appear
 import './router/bootstrap.js'
 import VueGoogleMaps from '@fawmi/vue-google-maps';
 
+import VueLazyload from 'vue-lazyload';
+
+
 const app = createApp(App)
 
 const vuetify = createVuetify({
@@ -25,6 +28,12 @@ const vuetify = createVuetify({
 
 app.use(router)
 app.use(vuetify)
+app.use(VueLazyload, {
+    preLoad: 1.3,
+    error: 'path/to/error.png',
+    loading: 'path/to/loading.gif',
+    attempt: 1
+})
 // app.mount('#app')
 app.use(VueGoogleMaps, {
   load: {

@@ -1,21 +1,23 @@
 <template>
-    <v-container fluid class="mx-auto">
+    <v-container fluid class="mx-auto overflow-auto">
       <v-infinite-scroll
         height="700"
         color="var(--secondary)"
         mode="manual"
         @load="loadMoreListings"
         empty-text="No more recommended listings"
+        load-more-text="RECOMMEND MORE"
+        class="hideScroll"
       >
         <v-row align="start" justify="center">
           <v-col v-for="listing in listings" :key="listing.listingID" cols="auto">
-            <v-card class="mx-1" height="280" width="417" rounded="xl">
-              <v-img :src="listing.url" height="174px" cover @click="navigateToListing(listing.listingID)"></v-img>
-              <v-btn :icon="listing.bookmarked ? 'mdi-bookmark' : 'mdi-bookmark-outline'" base-color="transparent" variant="plain" @click.prevent="bookmarkListing(listing)">
-                <v-icon :icon="listing.bookmarked ? 'mdi-bookmark' : 'mdi-bookmark-outline'" size="50" color="white"></v-icon>
+            <v-card class="mx-1" height="280" width="417" rounded="xl" @click="navigateToListing(listing.listingID)">
+              <v-img :src="listing.url" height="174px" cover></v-img>
+              <v-btn flat :icon="listing.bookmarked ? 'mdi-bookmark' : 'mdi-bookmark-outline'" base-color="transparent" @click.stop.prevent="bookmarkListing(listing)">
+                <v-icon :icon="listing.bookmarked ? 'mdi-bookmark' : 'mdi-bookmark-outline'" size="50" color="var(--primary)" class="bookmark-icon"></v-icon>
               </v-btn>
               <v-card-title>{{ listing.name }}</v-card-title>
-              <v-card-title class="location">{{ listing.details }}</v-card-title>
+              <v-card-text class="location">{{ listing.details }}</v-card-text>
               <v-card-title class="price">{{ listing.price }}</v-card-title>
             </v-card>
           </v-col>
@@ -182,4 +184,9 @@ export default {
     opacity: 0.8; /* Optional: Add hover effect */
     cursor: pointer;
 }
+
+.hideScroll {
+    scrollbar-width: none;
+}
+
 </style>

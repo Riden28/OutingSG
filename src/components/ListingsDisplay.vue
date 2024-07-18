@@ -1,6 +1,6 @@
 <template>
   
-    <v-container fluid class="mx-auto hideScroll">
+    <v-container fluid class="mx-auto overflow-auto">
       <v-infinite-scroll
         height="700"
         color="var(--secondary)"
@@ -8,13 +8,14 @@
         @load="loadMoreListings"
         empty-text="No more recommended listings"
         load-more-text="RECOMMEND MORE"
+        class="hideScroll"
       >
         <v-row align="start" justify="center">
           <v-col v-for="listing in listings" :key="listing.listingID" cols="auto">
-            <v-card class="mx-1" height="280" width="417" rounded="xl">
-              <v-img :src="listing.url" height="174px" cover @click="navigateToListing(listing.listingID)"></v-img>
-              <v-btn icon="mdi-bookmark-outline" base-color="transparent" variant="plain" @click.prevent="bookmarkListing(listing)">
-                <v-icon icon="mdi-bookmark" size="50" color="white"></v-icon>
+            <v-card class="mx-1" height="280" width="417" rounded="xl"  @click="navigateToListing(listing.listingID)">
+              <v-img :src="listing.url" height="174px" cover></v-img>
+              <v-btn flat icon="mdi-bookmark" base-color="transparent" size="50" class="bookmark-icon" @click.stop.prevent="bookmarkListing(listing)">
+                <v-icon icon="mdi-bookmark-outline" size="50" color="var(--primary)"></v-icon>
               </v-btn>
               <v-card-title>{{ listing.name }}</v-card-title>
               <v-card-title class="location">{{ listing.details }}</v-card-title>
@@ -120,5 +121,6 @@ import shuffle from "./../../firebase/firebaseAuthServices.js";
 .hideScroll {
     scrollbar-width: none;
 }
+
   </style>
   
