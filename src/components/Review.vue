@@ -11,7 +11,7 @@
                 <div class="v-col-8">
                     <div class="date">
                         <p>{{ new Date(review.date.seconds * 1000).toLocaleDateString() }}</p>
-                    </div>
+                    </div>  
                 </div>
             </div>
             <div class="description">
@@ -130,7 +130,7 @@ export default {
     padding-top: 7px;
 }
 .description {
-    padding: 10px 30px;
+    padding: 10px 30px 10px 50px;
 }
 .date {
     padding-right: 30px;
@@ -144,6 +144,7 @@ h4 {
 .no-reviews{
     text-align: center;
     margin: 20px 0;
+    background: var(--bg);
 }
 .load-more {
     text-align: center;
@@ -153,5 +154,8 @@ h4 {
     text-align: center;
     margin: 20px 0;
     color: rgb(166, 166, 166);
+    margin-top: 20px;
+    background: var(--light-grey);
 }
+
 </style>

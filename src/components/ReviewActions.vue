@@ -14,7 +14,7 @@
             <div class="addreview">
                 <button @click.prevent="toggleForm" class="btn btn-primary listingBtns" role="button" style="margin-right: 1px;">
                     <img src="../assets/icons/gif/add.gif" style="width: 30px;">
-                    <span style="color:black;"> Add Review</span>
+                    <span class='btn'> Add Review</span>
                 </button>
             </div>
         </div>
@@ -36,7 +36,7 @@
                     <textarea id="review" v-model="review" class="description" placeholder="Review here..."></textarea>
                 </div>
                 <div class="submitReview">
-                    <input type="submit" class="btn btn-primary" value="Submit">
+                    <input type="submit" class="btn btn-primary submitReviewBtn" value="Submit">
                 </div>
             </div>
             <button @click.prevent="toggleForm" class="closeform">&#10006;</button>
@@ -150,6 +150,8 @@ export default {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    padding-left: 100px;
+    padding-top: 20px;
 }
 .reviews {
     display: flex;
@@ -190,15 +192,22 @@ h3, h4 {
 .closeform {
     display: flex;
     align-items: start;
-    height: 8vh;
+    height: 45px;
+    margin-right: 10px;
+    border: solid white;
 }
+
+.closeform:hover {
+    border: solid black;
+}
+
 .submitReview {
     display: flex;
     justify-content: center;
     margin-top: 2rem;
 }
 button, .btn {
-    background-color: #EAA843 !important;
+    background-color: white !important;
 }
 .notification {
     position: fixed;
@@ -214,5 +223,33 @@ button, .btn {
 }
 .notification.error {
     background-color: red;
+}
+
+.listingBtns {
+    background-color: white !important;
+    margin-right: -20px;
+    margin-left: 20px;
+    border: solid var(--secondary);
+}
+.listingBtns:hover {
+    background-color: white !important;
+    border: solid black;
+}
+
+.submitReviewBtn {
+    background-color: var(--secondary) !important;
+    border: solid var(--secondary);
+    color:white;
+    padding: 10px 20px;
+}
+.submitReviewBtn:hover {
+    background-color: white !important;
+    border: solid var(--secondary);
+    color:black;
+}
+
+#review {
+    background: #f6f6f6 !important;
+    padding: 20px;
 }
 </style>
