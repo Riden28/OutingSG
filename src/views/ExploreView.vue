@@ -1,48 +1,58 @@
 <template>
-    <NavBar/>
+    <NavBar />
 
-    <div class="wrapper"> 
-        <div class="sidebar"> 
+    <div class="wrapper">
+        <div class="sidebar">
             <h3 class="title">Filters</h3>
             <button class='btn' @click.prevent="loadListings()">Reset Filters</button>
             <hr>
 
-            <h4 class="title">Category</h4> 
-            <input type="checkbox" v-model="category" value='Food and Beverages' id="Food and Beverages"><label for="Food and Beverages">Food and Beverages</label><br>
+            <h4 class="title">Category</h4>
+            <input type="checkbox" v-model="category" value='Food and Beverages' id="Food and Beverages"><label
+                for="Food and Beverages">Food and Beverages</label><br>
             <input type="checkbox" v-model="category" value='Nature' id="Nature"><label for="Nature">Nature</label><br>
-            <input type="checkbox" v-model="category" value='Culture and History' id="Culture and History"><label for="Culture and History">Culture and History</label><br>
-            <input type="checkbox" v-model="category" value='Entertainment' id="Entertainment"><label for="Entertainment">Entertainment</label><br>
-            <input type="checkbox" v-model="category" value='Outdoor Activities' id="Outdoor Activities"><label for="Outdoor Activities">Outdoor Activities</label><br>
-            <input type="checkbox" v-model="category" value='Educational' id="Educational"><label for="Educational">Educational</label><br>
-            <input type="checkbox" v-model="category" value='Adventure' id="Adventure"><label for="Adventure">Adventure</label><br>
-            <input type="checkbox" v-model="category" value='Shopping' id="Shopping"><label for="Shopping">Shopping</label><br>
-            <input type="checkbox" v-model="category" value='Wellness' id="Wellness"><label for="Wellness">Wellness</label><br>
-            <input type="checkbox" v-model="category" value='Events and Festivals' id="Events and Festivals"><label for="Events and Festivals">Events and Festivals</label><br>
+            <input type="checkbox" v-model="category" value='Culture and History' id="Culture and History"><label
+                for="Culture and History">Culture and History</label><br>
+            <input type="checkbox" v-model="category" value='Entertainment' id="Entertainment"><label
+                for="Entertainment">Entertainment</label><br>
+            <input type="checkbox" v-model="category" value='Outdoor Activities' id="Outdoor Activities"><label
+                for="Outdoor Activities">Outdoor Activities</label><br>
+            <input type="checkbox" v-model="category" value='Educational' id="Educational"><label
+                for="Educational">Educational</label><br>
+            <input type="checkbox" v-model="category" value='Adventure' id="Adventure"><label
+                for="Adventure">Adventure</label><br>
+            <input type="checkbox" v-model="category" value='Shopping' id="Shopping"><label
+                for="Shopping">Shopping</label><br>
+            <input type="checkbox" v-model="category" value='Wellness' id="Wellness"><label
+                for="Wellness">Wellness</label><br>
+            <input type="checkbox" v-model="category" value='Events and Festivals' id="Events and Festivals"><label
+                for="Events and Festivals">Events and Festivals</label><br>
 
-            <h4 class="title">Price</h4> 
+            <h4 class="title">Price</h4>
             <p>Minimum Price: <input type='number' v-model='minPrice' class='userValues' min="0"></p>
-            <input type="range" v-model="minPrice" min="0" class='ranges'/>
+            <input type="range" v-model="minPrice" min="0" class='ranges' />
             <p>Maximum Price: <input type='number' v-model='maxPrice' class='userValues' min="0"></p>
-            <input type="range" v-model="maxPrice" min="0" class='ranges'/>
+            <input type="range" v-model="maxPrice" min="0" class='ranges' />
 
             <!-- <input type="checkbox" id="price1"><label for="price1">$</label><br>
             <input type="checkbox" id="price2"><label for="price2">$$</label><br>
             <input type="checkbox" id="price3"><label for="price3">$$$</label><br> -->
 
-            <h4 class="title">Location</h4> 
+            <h4 class="title">Location</h4>
             <input type="checkbox" v-model="location" id="north" value="north"><label for="north">North</label><br>
             <input type="checkbox" v-model="location" id="south" value="south"><label for="south">South</label><br>
             <input type="checkbox" v-model="location" id="east" value="east"><label for="east">East</label><br>
             <input type="checkbox" v-model="location" id="west" value="west"><label for="west">West</label><br>
-            <input type="checkbox" v-model="location" id="central" value="central"><label for="central">Central</label><br>
+            <input type="checkbox" v-model="location" id="central" value="central"><label
+                for="central">Central</label><br>
 
-            
-            <h4 class="title">Recommended Pax</h4> 
+
+            <h4 class="title">Recommended Pax</h4>
             <p>Minimum Pax: <input type='number' v-model='minPax' class='userValues' min="1"></p>
-            <input type="range" v-model="minPax" min="1" class='ranges'/>
+            <input type="range" v-model="minPax" min="1" class='ranges' />
             <p>Maximum Pax: <input type='number' v-model='maxPax' class='userValues' min="1"></p>
-            <input type="range" v-model="maxPax" min="1" class='ranges'/>
-            
+            <input type="range" v-model="maxPax" min="1" class='ranges' />
+
 
             <br><button class='btn' @click.prevent='filter()'>Filter</button><br><br>
 
@@ -54,21 +64,23 @@
             <img src="../assets/icons/up.png" v-on:click="sorting = false" v-if="sorting" class="sortIcon">
             <img src="../assets/icons/down.png" v-on:click="sorting = true" v-else class="sortIcon">
             <br><br><button class='btn' @click.prevent="sortListings()">Sort</button>
- 
 
-        </div> 
-  
+
+        </div>
+
         <div class="main">
-
             <h2 class="title">Outings</h2>
 
             <v-container fluid class="mx-auto overflow-auto hideScroll">
                 <v-row align="start" justify="center">
                     <v-col v-for="listing in listings" :key="listing.listingID" cols="auto">
                         <v-card class="mx-1" height="280" width="417" rounded="xl">
-                            <v-img :src="listing.url" height="174px" cover @click="navigateToListing(listing.listingID)"></v-img>
-                            <v-btn icon="mdi-bookmark-outline" base-color="transparent" variant="plain" @click.prevent="bookmarkListing(listing)">
-                                <v-icon icon="mdi-bookmark" size="50" color="white"></v-icon>
+                            <v-img :src="listing.url" height="174px" cover
+                                @click="navigateToListing(listing.listingID)"></v-img>
+                            <v-btn :icon="listing.bookmarked ? 'mdi-bookmark' : 'mdi-bookmark-outline'"
+                                base-color="transparent" variant="plain" @click.prevent="bookmarkListing(listing)">
+                                <v-icon :icon="listing.bookmarked ? 'mdi-bookmark' : 'mdi-bookmark-outline'" size="50"
+                                    color="white"></v-icon>
                             </v-btn>
                             <v-card-title>{{ listing.name }}</v-card-title>
                             <v-card-title class="location">{{ listing.details }}</v-card-title>
@@ -77,20 +89,20 @@
                     </v-col>
                 </v-row>
             </v-container>
-        </div> 
-    </div> 
+        </div>
+    </div>
 
 
-    <OutingSGFooter/>
+    <OutingSGFooter />
 </template>
-  
+
 <script>
 import NavBar from '@/components/NavBar.vue';
 import OutingSGFooter from '@/components/Footer.vue';
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, collection, doc, setDoc, getDoc, updateDoc, deleteDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, collection, doc, setDoc, getDoc, updateDoc, deleteDoc, getDocs, query, where, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getStorage } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 import firebaseConfig from './../../firebase/firebaseConfig.js';
 import shuffle from "./../../firebase/firebaseAuthServices.js"
@@ -107,6 +119,10 @@ const db = getFirestore(app);
 // Initialize Firebase Storage
 const storage = getStorage(app);
 
+const user = auth.currentUser;
+
+const userID = user ? user.uid : null;
+
 const querySnapshot = await getDocs(collection(db, "outings"));
 var outings = [];
 querySnapshot.forEach((doc) => {
@@ -119,7 +135,7 @@ querySnapshot.forEach((doc) => {
         price: price,
         minimumPrice: outing_details.min_price,
         url: outing_details.images.length > 0 ? outing_details.images[0] : null,
-        
+
     });
 });
 
@@ -127,9 +143,9 @@ outings = shuffle(outings);
 
 export default {
     name: 'explore',
-    
+
     components: {
-        NavBar, 
+        NavBar,
         OutingSGFooter
     },
     data: () => ({
@@ -145,11 +161,12 @@ export default {
         maxPax: 10,
         category: [],
         location: [],
-        user: auth.currentUser
+        // user: user,
+        userID: auth.currentUser ? auth.currentUser.uid : null
     }),
     methods: {
         // on every load retrieve another 10 listings
-        load ({ done }) {
+        load({ done }) {
             setTimeout(() => {
                 this.currentIndex += 10
                 this.listings.push(
@@ -158,7 +175,7 @@ export default {
                 done('ok')
             }, 1000)
         },
-        loadListings(){
+        loadListings() {
 
             console.log("test")
             this.listings = [];
@@ -170,23 +187,23 @@ export default {
             window.history.pushState({}, document.title, window.location.pathname); //remove the search query in the url
 
         },
-        searchListings(){
+        searchListings() {
 
             this.listings = []; // clear the existing array 
-            
+
             querySnapshot.forEach((doc) => {
                 var outing_details = doc.data();
-                
+
                 var outing_name = outing_details.name.toLowerCase()
                 var search_name = this.searchField.toLowerCase()
-                
-                if(outing_name.includes(search_name)){
-                    this.pushListings(outing_details);               
+
+                if (outing_name.includes(search_name)) {
+                    this.pushListings(outing_details);
                 }
             });
-            
+
         },
-        filter(){
+        filter() {
             this.listings = []; // clear the existing array
             console.log(this.category);
 
@@ -201,12 +218,12 @@ export default {
 
                 const selectedCategories = this.category;
                 console.log(selectedCategories);
-                if (selectedCategories.length == 0){
+                if (selectedCategories.length == 0) {
                     checkCat = true;
-                }else{
+                } else {
                     for (category of outing_details.category) {
                         var currCat = category.toLowerCase();
-                        if (selectedCategories.includes(currCat)){
+                        if (selectedCategories.includes(currCat)) {
                             checkCat = true;
                             console.log('break');
                             break;
@@ -217,82 +234,82 @@ export default {
 
                 // to be updated with the correct variable once finalised
                 const selectedLocations = this.location;
-                if (selectedLocations.length == 0){
+                if (selectedLocations.length == 0) {
                     checkLocation = true;
-                }else{
+                } else {
                     for (location of outing_details.location) {
                         var currLocation = location.toLowerCase();
-                        if (selectedLocations.includes(currLocation)){
+                        if (selectedLocations.includes(currLocation)) {
                             checkLocation = true;
                             break;
                         }
                     }
                 }
 
-                if((outing_details.min_price >= this.minPrice) && (outing_details.max_price <= this.maxPrice)){
+                if ((outing_details.min_price >= this.minPrice) && (outing_details.max_price <= this.maxPrice)) {
                     checkPrice = true;
                 }
 
-                if((this.minPax >= outing_details.min_recommended_pax) && (this.maxPax <= outing_details.max_recommended_pax)){
+                if ((this.minPax >= outing_details.min_recommended_pax) && (this.maxPax <= outing_details.max_recommended_pax)) {
                     checkPax = true;
                 }
 
-                if (checkCat && checkPrice && checkPax){
+                if (checkCat && checkPrice && checkPax) {
                     this.pushListings(outing_details);
                 }
 
             });
         },
-        sortListings(){
+        sortListings() {
             var selectedSort = this.selectedSort;
             var ascDesc = this.sorting; // true means asc, false means desc
 
-            if(selectedSort == "price"){
-                if(ascDesc == true){
+            if (selectedSort == "price") {
+                if (ascDesc == true) {
                     this.listings.sort((a, b) => {
-                    if (a.minimumPrice < b.minimumPrice) {
-                        return -1;
-                    }
-                    if (a.minimumPrice > b.minimumPrice) {
-                        return 1;
-                    }
-                    return 0;
+                        if (a.minimumPrice < b.minimumPrice) {
+                            return -1;
+                        }
+                        if (a.minimumPrice > b.minimumPrice) {
+                            return 1;
+                        }
+                        return 0;
                     });
-                    
-                }else{
+
+                } else {
                     this.listings.sort((a, b) => {
-                    if (a.minimumPrice > b.minimumPrice) {
-                        return -1;
-                    }
-                    if (a.minimumPrice < b.minimumPrice) {
-                        return 1;
-                    }
-                    return 0;
+                        if (a.minimumPrice > b.minimumPrice) {
+                            return -1;
+                        }
+                        if (a.minimumPrice < b.minimumPrice) {
+                            return 1;
+                        }
+                        return 0;
                     });
                 }
-                
 
-            }else if(selectedSort == "name"){
-                if(ascDesc == true){
+
+            } else if (selectedSort == "name") {
+                if (ascDesc == true) {
                     this.listings.sort((a, b) => {
-                    if (a.name < b.name) {
-                        return -1;
-                    }
-                    if (a.name > b.name) {
-                        return 1;
-                    }
-                    return 0;
+                        if (a.name < b.name) {
+                            return -1;
+                        }
+                        if (a.name > b.name) {
+                            return 1;
+                        }
+                        return 0;
                     });
-                    
-                }else{
+
+                } else {
                     this.listings.sort((a, b) => {
-                    if (a.name > b.name) {
-                        return -1;
-                    }
-                    if (a.name < b.name) {
-                        return 1;
-                    }
-                    return 0;
+                        if (a.name > b.name) {
+                            return -1;
+                        }
+                        if (a.name < b.name) {
+                            return 1;
+                        }
+                        return 0;
                     });
                 }
             }
@@ -300,18 +317,18 @@ export default {
         navigateToListing(listingID) {
             this.$router.push({ name: 'individualListing', params: { listingID } });
         },
-        bookmarkListing(listing) {
-            console.log('Bookmark clicked for:', listing);
-            // Implement bookmark functionality here
-            if (this.user) {
-                // Bookmark the listing
-                console.log('bookmarked');
-            } else {
-                // Show login dialog
-                alert('Please login to save outings');
-            }
-        },
-        pushListings(outing_details){
+        // bookmarkListing(listing) {
+        //     console.log('Bookmark clicked for:', listing);
+        //     // Implement bookmark functionality here
+        //     if (user) {
+        //         // Bookmark the listing
+        //         console.log('bookmarked');
+        //     } else {
+        //         // Show login dialog
+        //         alert('Please login to save outings');
+        //     }
+        // },
+        pushListings(outing_details) {
             let price = outing_details.max_price === 0 ? "Free" : `$${outing_details.min_price} ~ $${outing_details.max_price}`;
             this.listings.push({
                 listingID: doc.id,
@@ -325,19 +342,74 @@ export default {
         fetchCategoryFilter() { // for navigation from homepage category buttons
             this.category = this.$route.query.category;
             console.log(this.category);
-            if (this.category != null){
+            if (this.category != null) {
                 this.filter();
             }
-        }
+        },
+        async checkBookmarkedListings() {
+            const user = auth.currentUser;
+            if (!user) return;
+
+            const userDocRef = doc(db, "users", this.userID); // Use this.userID
+            const userDocSnap = await getDoc(userDocRef);
+
+            if (userDocSnap.exists()) {
+                const userData = userDocSnap.data();
+                const savedOutings = userData.savedOutings || [];
+                this.listings.forEach(outing => {
+                    if (savedOutings.includes(outing.listingID)) {
+                        outing.bookmarked = true;
+                    } else {
+                        outing.bookmarked = false; // Ensure non-bookmarked listings are correctly marked as such
+                    }
+                });
+            }
+        },
+        async bookmarkListing(listing) {
+            const user = auth.currentUser;
+            if (user) {
+                const userDocRef = doc(db, "users", user.uid);
+
+                try {
+                    if (listing.bookmarked) {
+                        // Remove from bookmarks
+                        await updateDoc(userDocRef, {
+                            savedOutings: arrayRemove(listing.listingID)
+                        });
+                    } else {
+                        // Add to bookmarks
+                        await updateDoc(userDocRef, {
+                            savedOutings: arrayUnion(listing.listingID)
+                        });
+                    }
+
+                    // Toggle bookmarked status locally
+                    listing.bookmarked = !listing.bookmarked;
+                } catch (error) {
+                    console.error('Error updating document:', error);
+                }
+            } else {
+                alert('Please login to save outings');
+            }
+        },
     },
     created() {
+        this.checkBookmarkedListings();
+        // Debug
+        const user = auth.currentUser;
+        if (user) {
+            console.log(user.displayName);
+        } else {
+            console.log("Not logged in");
+        }
+        // End debug
         const navSearch = new URLSearchParams(window.location.search).get('search');
 
-        if (navSearch !== null){
+        if (navSearch !== null) {
             this.searchListings();
         }
 
-        
+
     },
     mounted() {
         this.category.push(this.$route.params.categoryName);
@@ -349,11 +421,10 @@ export default {
 </script>
 
 <style scoped>
-
 .v-btn {
-  position: absolute;
-  top: -6px;
-  right: 8px;
+    position: absolute;
+    top: -6px;
+    right: 8px;
 }
 
 .price {
@@ -363,7 +434,7 @@ export default {
     font-weight: normal;
 }
 
-.location{
+.location {
     position: absolute;
     left: 0px;
     bottom: 0px;
@@ -375,39 +446,39 @@ label {
     font-weight: 100;
 }
 
-.wrapper { 
+.wrapper {
     display: flex;
-} 
+}
 
-.main { 
-    width: 80%; 
-    height: 200vh; 
-    min-height: 1000px; 
-    display: flex; 
-    flex-direction: column; 
-    background: white; 
-    padding-left: 10px; 
+.main {
+    width: 80%;
+    height: 200vh;
+    min-height: 1000px;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    padding-left: 10px;
     margin-top: 55px;
     padding: 30px;
-    background-color: var(--bg) !important; 
-} 
+    background-color: var(--bg) !important;
+}
 
-.sidebar { 
-    width: 25%; 
-    height: 100vh; 
-    min-height: 200px; 
-    overflow: auto; 
+.sidebar {
+    width: 25%;
+    height: 100vh;
+    min-height: 200px;
+    overflow: auto;
     background: var(--light-grey);
-    position: -webkit-sticky; 
-    position: sticky; 
+    position: -webkit-sticky;
+    position: sticky;
     top: 55px;
     padding: 10px;
     padding-left: 20px;
-} 
+}
 
-li { 
+li {
     list-style: none;
-} 
+}
 
 .title {
     font-weight: 800;
@@ -425,13 +496,13 @@ select {
     border-radius: 5px;
     margin-left: 10px;
 }
-  
+
 /* listings style */
 
 .v-btn {
     position: absolute;
     top: -6px;
-    right:  8px;
+    right: 8px;
 }
 
 .price {
@@ -440,7 +511,7 @@ select {
     bottom: 0px;
 }
 
-.btn{
+.btn {
     background-color: var(--secondary);
     border: solid var(--secondary);
     color: white !important;
@@ -460,7 +531,7 @@ select {
     width: 50px !important;
 }
 
-.ranges{
+.ranges {
     accent-color: var(--secondary);
 }
 
@@ -486,12 +557,12 @@ select {
 }
 
 .v-card:hover {
-    opacity: 0.8; /* Optional: Add hover effect */
+    opacity: 0.8;
+    /* Optional: Add hover effect */
     cursor: pointer;
 }
 
 .hideScroll {
     scrollbar-width: none;
 }
-
 </style>

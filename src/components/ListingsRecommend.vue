@@ -11,8 +11,8 @@
           <v-col v-for="listing in listings" :key="listing.listingID" cols="auto">
             <v-card class="mx-1" height="280" width="417" rounded="xl">
               <v-img :src="listing.url" height="174px" cover @click="navigateToListing(listing.listingID)"></v-img>
-              <v-btn icon="mdi-bookmark-outline" base-color="transparent" variant="plain" @click.prevent="bookmarkListing(listing)">
-                <v-icon icon="mdi-bookmark" size="50" color="white"></v-icon>
+              <v-btn :icon="listing.bookmarked ? 'mdi-bookmark' : 'mdi-bookmark-outline'" base-color="transparent" variant="plain" @click.prevent="bookmarkListing(listing)">
+                <v-icon :icon="listing.bookmarked ? 'mdi-bookmark' : 'mdi-bookmark-outline'" size="50" color="white"></v-icon>
               </v-btn>
               <v-card-title>{{ listing.name }}</v-card-title>
               <v-card-title class="location">{{ listing.details }}</v-card-title>
@@ -26,8 +26,8 @@
 
 <script>
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, collection, doc, getDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, doc, getDoc, getDocs, updateDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import firebaseConfig from './../../firebase/firebaseConfig.js';
 import shuffle from "./../../firebase/firebaseAuthServices.js";
 
@@ -41,36 +41,42 @@ const auth = getAuth(firebaseApp);
 const db = getFirestore(firebaseApp);
 
 export default {
-    name: 'ListingsRecommend',
+    name: 'ListingsDisplay',
     data() {
         return {
             listings: [],
             currentIndex: 0,
             outings: [],
             user_preferences: [],
+            user: null,
+            userID: null,
         };
     },
-    props: ['user'],
     async created() {
-        const user = auth.currentUser;
-        const userID = user ? user.uid : null;
-        //debugging line
-        if (!userID) {
-            console.log("error 401: user not authenticated");
-            return;
-        }
-        const docRef = doc(db, "users", userID);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-            const user_details = docSnap.data();
-            this.user_preferences = user_details.category.slice(0, 3); // Get top 3 preferences
-            await this.loadOutings();
-        } else {
-            console.log("error 404: user not found");
-            return;
-        }
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                this.user = user;
+                this.userID = user.uid;
+                await this.loadUserPreferences();
+            } else {
+                this.user = null;
+                this.userID = null;
+            }
+        });
     },
     methods: {
+        async loadUserPreferences() {
+            if (!this.userID) return;
+            const docRef = doc(db, "users", this.userID);
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                const user_details = docSnap.data();
+                this.user_preferences = user_details.category.slice(0, 3); // Get top 3 preferences
+                await this.loadOutings();
+            } else {
+                console.log("error 404: user not found");
+            }
+        },
         async loadOutings() {
             const querySnapshot = await getDocs(collection(db, "outings"));
             querySnapshot.forEach((doc) => {
@@ -83,35 +89,68 @@ export default {
                             name: outing_details.name,
                             details: outing_details.location,
                             price: price,
-                            url: outing_details.images.length > 0 ? outing_details.images[0] : null
+                            url: outing_details.images.length > 0 ? outing_details.images[0] : null,
+                            bookmarked: false,
                         });
                         break;
                     }
                 }
             });
+            await this.checkBookmarkedListings();
             this.outings = shuffle(this.outings);
             this.listings = this.outings.slice(0, 10);
+        },
+        async checkBookmarkedListings() {
+            if (!this.userID) return;
+            const userDocRef = doc(db, "users", this.userID);
+            const userDocSnap = await getDoc(userDocRef);
+            if (userDocSnap.exists()) {
+                const userData = userDocSnap.data();
+                const savedOutings = userData.savedOutings || [];
+                this.outings.forEach(outing => {
+                    if (savedOutings.includes(outing.listingID)) {
+                        outing.bookmarked = true;
+                    }
+                });
+            }
         },
         loadMoreListings({ done }) {
             setTimeout(() => {
                 this.currentIndex += 10;
-                this.listings.push(...this.outings.slice(this.currentIndex, this.currentIndex + 10));
-                done('ok');
+                const newListings = this.outings.slice(this.currentIndex, this.currentIndex + 10);
+                if (newListings.length > 0) {
+                    this.listings.push(...newListings);
+                } else {
+                    // Show "No more outings to be shown" message
+                    done('No more outings to be shown');
+                }
+                if (done) done();
             }, 1000);
         },
         navigateToListing(listingID) {
             this.$router.push({ name: 'individualListing', params: { listingID } });
-            console.log("navigating to listing"); //Debug
         },
-        bookmarkListing(listing) {
-            console.log('Bookmark clicked for:', listing);
-            // Implement bookmark functionality here
-            if (this.user) {
-            // Bookmark the listing
-                console.log('bookmarked');
+        async bookmarkListing(listing) {
+            if (!this.user) {
+                this.$router.push("/login");
+                return;
+            }
+
+            const userDocRef = doc(db, "users", this.userID);
+            const listingDocRef = doc(db, "outings", listing.listingID);
+
+            if (listing.bookmarked) {
+                // Remove from bookmarks
+                await updateDoc(userDocRef, {
+                    savedOutings: arrayRemove(listing.listingID)
+                });
+                listing.bookmarked = false;
             } else {
-            // Show login dialog
-                alert('Please login to outings');
+                // Add to bookmarks
+                await updateDoc(userDocRef, {
+                    savedOutings: arrayUnion(listing.listingID)
+                });
+                listing.bookmarked = true;
             }
         }
     }

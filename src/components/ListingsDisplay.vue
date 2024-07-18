@@ -25,35 +25,6 @@
       </v-infinite-scroll>
     </v-container>
   </template>
-  <v-container fluid class="mx-auto">
-    <v-infinite-scroll
-      height="700"
-      color="var(--secondary)"
-      mode="manual"
-      @load="loadMoreListings"
-      empty-text="No more recommended listings"
-    >
-      <v-row align="start" justify="center">
-        <v-col v-for="listing in listings" :key="listing.listingID" cols="auto">
-          <v-card class="mx-1" height="280" width="417" rounded="xl">
-            <v-img :src="listing.url" height="174px" cover></v-img>
-            <v-btn
-              :icon="listing.bookmarked ? 'mdi-bookmark' : 'mdi-bookmark-outline'"
-              base-color="transparent"
-              variant="plain"
-              @click.prevent="bookmarkListing(listing)"
-            >
-              <v-icon :icon="listing.bookmarked ? 'mdi-bookmark' : 'mdi-bookmark-outline'" size="50" color="white"></v-icon>
-            </v-btn>
-            <v-card-title>{{ listing.name }}</v-card-title>
-            <v-card-title class="location">{{ listing.details }}</v-card-title>
-            <v-card-title class="price">{{ listing.price }}</v-card-title>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-infinite-scroll>
-  </v-container>
-</template>
 
 <script>
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";

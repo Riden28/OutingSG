@@ -39,7 +39,7 @@
             </div>
             <button @click="toggleForm" class="closeform">&#10006;</button>
         </form>
-
+    </form>
 </template>
 
 <script>
