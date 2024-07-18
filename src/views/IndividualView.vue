@@ -11,9 +11,7 @@
                 <ReviewActions :outingID=listingID />
         
                 <!-- row for reviews -->
-                <Review/>
-                <Review/>
-                <Review/>
+                <Review :outingID=listingID />
             </div>
         </div>
         
