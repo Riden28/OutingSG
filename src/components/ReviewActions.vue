@@ -102,6 +102,14 @@ export default {
                 const userData = userDoc.data();
                 if (userData.reviews.includes(this.outingID)) {
                     this.notReviewed = false;
+                    //retrieve review details
+                    const reviewRef = doc(collection(doc(db, "outings", this.outingID), "reviews"), userId);
+                    const reviewDoc = await getDoc(reviewRef);
+                    if (reviewDoc.exists()) {
+                        const reviewData = reviewDoc.data();
+                        this.rating = reviewData.rating;
+                        this.review = reviewData.review;
+                    }
                 }
             }
         }
