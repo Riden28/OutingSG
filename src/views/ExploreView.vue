@@ -40,12 +40,11 @@
             <input type="checkbox" id="price3"><label for="price3">$$$</label><br> -->
 
             <h4 class="title">Location</h4>
-            <input type="checkbox" v-model="location" id="north" value="north"><label for="north">North</label><br>
-            <input type="checkbox" v-model="location" id="south" value="south"><label for="south">South</label><br>
-            <input type="checkbox" v-model="location" id="east" value="east"><label for="east">East</label><br>
-            <input type="checkbox" v-model="location" id="west" value="west"><label for="west">West</label><br>
-            <input type="checkbox" v-model="location" id="central" value="central"><label
-                for="central">Central</label><br>
+            <input type="checkbox" v-model="filterRegion" id="North" value="North"><label for="North">North</label><br>
+            <input type="checkbox" v-model="filterRegion" id="South" value="South"><label for="South">South</label><br>
+            <input type="checkbox" v-model="filterRegion" id="East" value="East"><label for="East">East</label><br>
+            <input type="checkbox" v-model="filterRegion" id="West" value="West"><label for="West">West</label><br>
+            <input type="checkbox" v-model="filterRegion" id="Central" value="Central"><label for="Central">Central</label><br>
 
 
             <h4 class="title">Recommended Pax</h4>
@@ -161,9 +160,8 @@ export default {
         minPax: 1,
         maxPax: 10,
         category: [],
-        location: [],
+        filterRegion: [],
         selectedSort: "",
-        // user: user,
         userID: auth.currentUser ? auth.currentUser.uid : null
     }),
     methods: {
@@ -184,7 +182,7 @@ export default {
             this.category = [];
             querySnapshot.forEach((doc) => {
                 var outing_details = doc.data();
-                this.pushListings(outing_details);
+                this.pushListings(outing_details, doc.id);
             });
             window.history.pushState({}, document.title, window.location.pathname); //remove the search query in the url
 
@@ -200,7 +198,7 @@ export default {
                 var search_name = this.searchField.toLowerCase()
 
                 if (outing_name.includes(search_name)) {
-                    this.pushListings(outing_details);
+                    this.pushListings(outing_details, doc.id);
                 }
             });
 
@@ -215,11 +213,11 @@ export default {
                 var checkCat = false;
                 var checkPrice = false;
                 var checkPax = false;
-                var checkLocation = false;
+                var checkRegion = false;
 
                 const selectedCategories = this.category;
 
-                if (selectedCategories.length == 0) {
+                if (selectedCategories[0] == undefined) {
                     checkCat = true;
                 } else {
                     for (category of outing_details.category) {
@@ -233,17 +231,12 @@ export default {
                     }
                 }
 
-                // to be updated with the correct variable once finalised
-                const selectedLocations = this.location;
-                if (selectedLocations.length == 0) {
-                    checkLocation = true;
+                const selectedRegions = this.filterRegion;
+                if (selectedRegions.length == 0) {
+                    checkRegion = true;
                 } else {
-                    for (location of outing_details.location) {
-                        var currLocation = location.toLowerCase();
-                        if (selectedLocations.includes(currLocation)) {
-                            checkLocation = true;
-                            break;
-                        }
+                    if (selectedRegions.includes(outing_details.Region)) {
+                        checkRegion = true;
                     }
                 }
 
@@ -255,8 +248,8 @@ export default {
                     checkPax = true;
                 }
 
-                if (checkCat && checkPrice && checkPax) {
-                    this.pushListings(outing_details);
+                if (checkCat && checkPrice && checkPax && checkRegion) {
+                    this.pushListings(outing_details, doc.id);
                 }
 
             });
@@ -329,10 +322,10 @@ export default {
         //         alert('Please login to save outings');
         //     }
         // },
-        pushListings(outing_details) {
+        pushListings(outing_details, docID) {
             let price = outing_details.max_price === 0 ? "Free" : `$${outing_details.min_price} ~ $${outing_details.max_price}`;
             this.listings.push({
-                listingID: doc.id,
+                listingID: docID,
                 name: outing_details.name,
                 details: outing_details.location,
                 price: price,
