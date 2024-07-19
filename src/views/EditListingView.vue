@@ -29,12 +29,13 @@
                     </div>
                     <div class="outing-description">
                         <h5>Outing Description</h5>
-                        <input id='outingDescription' required type="text" v-model="outingDescription" placeholder="Description Here" class="text-grey desc formInput">
+                        <textarea id='outingDescription' required v-model="outingDescription" placeholder="Description Here" class="text-grey desc formInput"></textarea>
                     </div>
                 </div>
             </div>
             <div class="bottom v-row">
                 <div class="v-col-5">
+                    <h3> <p style="color:red;"> Current listing images will be overwritten with new uploaded images. <br> Leave empty to retain current images. </p></h3>
                     <!-- here goes the google maps selector -->
                     <!-- <GoogleMaps/> -->
                 </div>
@@ -79,20 +80,20 @@
                     </div>
                     <div class="row2">
                         <div class="area">
-                        <h5>Location</h5>
-                            <label><input id="outingLocation1" type="radio" northChecked v-model="outingLocation" value="North" class='ranges'/> North </label>
-                            <br>
-                            <label><input id="outingLocation2" type="radio" southChecked v-model="outingLocation" value="South" class='ranges'/> South </label>
-                            <br>
-                            <label><input id="outingLocation3" type="radio" eastChecked v-model="outingLocation" value="East" class='ranges'/> East </label>
-                            <br>
-                            <label><input id="outingLocation4" type="radio" westChecked v-model="outingLocation" value="West" class='ranges'/> West </label>
-                            <br>
-                            <label><input id="outingLocation5" type="radio" centralChecked v-model="outingLocation" value="Central" class='ranges'/> Central </label>
+                        <h5>Region</h5>
+                        <label><input id="outingRegion" northChecked type="radio" v-model="outingRegion" value="North" class='ranges' required/> North </label>
+                        <br>
+                        <label><input id="outingRegion" southChecked type="radio" v-model="outingRegion" value="South" class='ranges' required/> South </label>
+                        <br>
+                        <label><input id="outingRegion" eastChecked type="radio" v-model="outingRegion" value="East" class='ranges' required/> East </label>
+                        <br>
+                        <label><input id="outingRegion" westChecked type="radio" v-model="outingRegion" value="West" class='ranges' required/> West </label>
+                        <br>
+                        <label><input id="outingRegion" centralChecked type="radio" v-model="outingRegion" value="Central" class='ranges' required/> Central </label>
                         </div>
                         <div class="location">
                             <h5>Exact Location: </h5>
-                            <input v-model="exactLocation" placeholder="location" />
+                            <input v-model="location" placeholder="location" />
                         </div>
                     </div>
                 </div>
@@ -102,7 +103,7 @@
                     Cancel
                 </router-link>
                 <button class="btn btn-primary" @click.prevent="editOuting">
-                    Post Outing
+                    Update Outing
                 </button>
             </div>
         </form>
@@ -140,16 +141,11 @@ export default {
             outingMaxPrice: 1000,
             minRecommendedPax: 0,
             maxRecommendedPax: 20,
-            Region: null,
+            outingRegion: "North",
             location: '',
             files: [],
             imageUrl: null,
-            images: [],
-            northChecked: '',
-            southChecked: '',
-            eastChecked: '',
-            westChecked: '',
-            centralChecked: '',
+            images: []
         }
     },
     async mounted() {
@@ -176,24 +172,9 @@ export default {
         this.outingMaxPrice = data.max_price;
         this.minRecommendedPax = data.min_recommended_pax;
         this.maxRecommendedPax = data.max_recommended_pax;
-        this.outingLocation = data.location;
-        this.exactLocation = data.exactLocation;
+        this.outingRegion = data.Region;
+        this.location = data.location;
         this.images = data.images;
-        if (this.outingLocation === "South"){
-            this.southChecked = "checked";
-        }
-        else if (this.outingLocation === "North"){
-            this.northChecked = "checked";
-        }
-        else if (this.outingLocation === "East"){
-            this.eastChecked = "checked";
-        }
-        else if (this.outingLocation === "West"){
-            this.westChecked = "checked";
-        }
-        else if (this.outingLocation === "Central"){
-            this.centralChecked = "checked";
-        }
     },
     methods: {
         async editOuting() {
@@ -205,8 +186,8 @@ export default {
                 max_price: parseInt(this.outingMaxPrice),
                 min_recommended_pax: parseInt(this.minRecommendedPax),
                 max_recommended_pax: parseInt(this.maxRecommendedPax),
-                location: this.outingLocation,
-                exactLocation: this.exactLocation,
+                location: this.location,
+                Region: this.outingRegion,
             };
 
             if (docData.min_price > docData.max_price || docData.min_recommended_pax > docData.max_recommended_pax) {
@@ -214,6 +195,15 @@ export default {
                 return;
             }
 
+            if (this.files.length != 0) {
+                await this.editImages(docData);
+            } else {
+                await updateDoc(doc(db, "outings", this.listingID), docData);
+                console.log('Document successfully updated');
+                this.$router.push("/listing/" + this.listingID);
+            }
+            },
+        async editImages(docData){
             // File upload logic
             const uploadPromises = this.files.map(file => {
                 const storageRef = ref(storage, `${this.listingID}/${file.name}`);
@@ -237,7 +227,6 @@ export default {
                     );
                 });
             });
-
             try {
                 const downloadURLs = await Promise.all(uploadPromises);
                 await updateDoc(doc(db, "outings", this.listingID), {
@@ -298,7 +287,7 @@ export default {
       margin-left: 3rem;
     }
     .text-grey {
-      color: white !important;
+      color: black !important;
       width: 100%;
       border-radius: 5px;
     }

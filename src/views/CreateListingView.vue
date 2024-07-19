@@ -29,7 +29,7 @@
           </div>
           <div class="outing-description">
             <h5>Outing Description</h5>
-            <input id='outingDescription' required type="text" v-model="outingDescription" placeholder="Description Here" class="text-grey desc formInput">
+            <textarea id='outingDescription' required v-model="outingDescription" placeholder="Description Here" class="text-grey desc formInput"></textarea>
           </div>
         </div>
       </div>
