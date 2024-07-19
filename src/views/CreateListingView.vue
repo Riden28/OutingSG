@@ -80,15 +80,15 @@
           <div class="row2">
             <div class="area">
               <h5>Region</h5>
-              <label><input id="outingRegion" selected type="radio" v-model="outingRegion" value="North" class='ranges'/> North </label>
+              <label><input id="outingRegion" type="radio" v-model="outingRegion" value="North" class='ranges' required/> North </label>
               <br>
-              <label><input id="outingRegion" type="radio" v-model="outingRegion" value="South" class='ranges'/> South </label>
+              <label><input id="outingRegion" type="radio" v-model="outingRegion" value="South" class='ranges' required/> South </label>
               <br>
-              <label><input id="outingRegion" type="radio" v-model="outingRegion" value="East" class='ranges'/> East </label>
+              <label><input id="outingRegion" type="radio" v-model="outingRegion" value="East" class='ranges' required/> East </label>
               <br>
-              <label><input id="outingRegion" type="radio" v-model="outingRegion" value="West" class='ranges'/> West </label>
+              <label><input id="outingRegion" type="radio" v-model="outingRegion" value="West" class='ranges' required/> West </label>
               <br>
-              <label><input id="outingRegion" type="radio" v-model="outingRegion" value="Central" class='ranges'/> Central </label>
+              <label><input id="outingRegion" type="radio" v-model="outingRegion" value="Central" class='ranges' required/> Central </label>
             </div>
             <div class="location">
               <h5>Exact Location: </h5>
@@ -108,7 +108,8 @@
     </form>
   </div>
   <OutingSGFooter/>
-</template> 
+</template>
+
 
 <script> 
 import NavBar from '@/components/NavBar.vue'; 
@@ -139,9 +140,9 @@ export default {
       outingCategory: [],
       outingMinPrice: 0,
       outingMaxPrice: 1000,
-      minRecommendedPax: 0,
+      minRecommendedPax: 1,
       maxRecommendedPax: 20,
-      outingRegion: 'north',
+      outingRegion: 'North',
       exactLocation: '',
       files: [],
       imageUrl: null,
@@ -265,7 +266,7 @@ export default {
     width: 100%;
   }
   .v-col-7 {
-    color:black;
+    color: black;
   }
   .row1 {
     display: flex;
@@ -283,7 +284,7 @@ export default {
     margin-left: 3rem;
   }
   .text-grey {
-    color: white !important;
+    color: black !important;
     width: 100%;
     border-radius: 5px;
   }
@@ -309,7 +310,7 @@ export default {
     accent-color: var(--secondary);
   }
 
-  .btn{
+  .btn {
     background-color: var(--secondary);
     border: solid var(--secondary);
     color: white !important;
