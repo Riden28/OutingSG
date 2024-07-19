@@ -8,7 +8,7 @@
     <v-col>
       <img src="../assets/icons/gif/location.gif" class='image info' alt="">
       <h5>Location</h5>
-      <p>{{ outing_details.location }}</p>
+      <p>{{ outing_details.Region }}</p>
     </v-col>
     <v-col>
       <img src="../assets/icons/gif/pax.gif" class='image info' alt="">

@@ -12,11 +12,11 @@
                 <h2 class="outing-name"><b>{{ outing_details.name }}</b></h2>
             </div>
             <div>
-                <router-link v-if="showEdit" to="/edit" class="btn btn-primary listingBtns" role="button" style='margin-right: 1px;'>
+                <button v-if="showEdit" class="btn btn-primary listingBtns" role="button" @click.prevent="editListing" style='margin-right: 1px;'>
                     <img src='../assets/icons/gif/edit.gif' style='width: 30px;'>
                     <span style='color:black;'> Edit Listing</span>
-                </router-link>
-                <p class="btn btn-primary listingBtns" role="button" @click="share()">
+                </button>
+                <p class="btn btn-primary listingBtns" role="button" @click="share">
                     <img src='../assets/icons/gif/share.gif' style='width: 30px;'>
                 </p>
             </div>
@@ -98,6 +98,9 @@ export default {
                 img.onload = () => resolve();
                 img.onerror = () => reject();
             });
+        },
+        editListing() {
+            this.$router.push({ name: 'edit', params: { listingID: this.outingID } });
         }
     },
     async mounted() {

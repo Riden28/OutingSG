@@ -79,20 +79,20 @@
           </div>
           <div class="row2">
             <div class="area">
-              <h5>Location</h5>
-              <label><input id="outingLocation1" type="radio" selected v-model="outingLocation" value="north" class='ranges'/> North </label>
+              <h5>Region</h5>
+              <label><input id="outingRegion" selected type="radio" v-model="outingRegion" value="North" class='ranges'/> North </label>
               <br>
-              <label><input id="outingLocation2" type="radio" v-model="outingLocation" value="south" class='ranges'/> South </label>
+              <label><input id="outingRegion" type="radio" v-model="outingRegion" value="South" class='ranges'/> South </label>
               <br>
-              <label><input id="outingLocation3" type="radio" v-model="outingLocation" value="east" class='ranges'/> East </label>
+              <label><input id="outingRegion" type="radio" v-model="outingRegion" value="East" class='ranges'/> East </label>
               <br>
-              <label><input id="outingLocation4" type="radio" v-model="outingLocation" value="west" class='ranges'/> West </label>
+              <label><input id="outingRegion" type="radio" v-model="outingRegion" value="West" class='ranges'/> West </label>
               <br>
-              <label><input id="outingLocation5" type="radio" v-model="outingLocation" value="central" class='ranges'/> Central </label>
+              <label><input id="outingRegion" type="radio" v-model="outingRegion" value="Central" class='ranges'/> Central </label>
             </div>
             <div class="location">
               <h5>Exact Location: </h5>
-              <input v-model="exactLocation" placeholder="location" />
+              <input v-model="exactLocation" required placeholder="location" />
             </div>
           </div>
         </div>
@@ -116,7 +116,7 @@ import OutingSGFooter from '@/components/Footer.vue';
 import GoogleMaps from '@/components/GoogleMaps.vue';
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, collection, addDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, collection, doc, addDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 import firebaseConfig from '../../firebase/firebaseConfig.js';
 
@@ -141,7 +141,7 @@ export default {
       outingMaxPrice: 1000,
       minRecommendedPax: 0,
       maxRecommendedPax: 20,
-      outingLocation: null,
+      outingRegion: 'north',
       exactLocation: '',
       files: [],
       imageUrl: null,
@@ -155,6 +155,10 @@ export default {
   },
   methods: {
     async createOuting() {
+      if (this.outingCategory.length === 0) {
+        alert("Please select at least one category");
+        return;
+      }
       const docData = {
         name: this.outingName,
         description: this.outingDescription,
@@ -163,8 +167,8 @@ export default {
         max_price: parseInt(this.outingMaxPrice),
         min_recommended_pax: parseInt(this.minRecommendedPax),
         max_recommended_pax: parseInt(this.maxRecommendedPax),
-        location: this.outingLocation,
-        exactLocation: this.exactLocation,
+        Region: this.outingRegion,
+        location: this.exactLocation,
       };
 
       if (docData.min_price>docData.max_price || docData.min_recommended_pax>docData.max_recommended_pax) {
