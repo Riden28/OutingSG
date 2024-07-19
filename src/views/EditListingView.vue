@@ -119,8 +119,8 @@ import NavBar from '@/components/NavBar.vue';
 import OutingSGFooter from '@/components/Footer.vue';
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+import { getFirestore, doc, getDoc, updateDoc, deleteDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject, listAll} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 import firebaseConfig from '../../firebase/firebaseConfig.js';
 
 const firebaseApp = initializeApp(firebaseConfig);
@@ -255,15 +255,37 @@ export default {
                 fileReader.readAsDataURL(this.files[0]);
             }
         },
-        deleteListing (){
-            if (confirm("Are you sure you want to delete this listing?")) {
-                console.log("confirm");
-            } else {
-                console.log("cancel");
+        async deleteListing() {
+        if (confirm("Are you sure you want to delete this listing?")) {
+            try {
+            // Retrieve and delete all reviews associated with the listing
+            const querySnapshot = await getDocs(collection(db, 'outings', this.listingID, 'reviews'));
+            for (const reviewDoc of querySnapshot.docs) {
+                await deleteDoc(doc(db, 'outings', this.listingID, 'reviews', reviewDoc.id));
             }
+            // Delete the listing document
+            await deleteDoc(doc(db, 'outings', this.listingID));
+            console.log("Document successfully deleted!");
+
+            // Delete the images associated with the listing
+            const imagesRef = ref(storage, this.listingID + '/');
+            const listResult = await listAll(imagesRef);
+            for (const itemRef of listResult.items) {
+                await deleteObject(itemRef);
+            }
+            console.log("Images successfully deleted!");
+
+            this.$router.push("/");
+
+            } catch (error) {
+            console.error("Error removing document: ", error);
+            }
+        } else {
+            console.log("cancel");
+        }
         }
     }
-};
+}
 </script>
   
   <style scoped>
