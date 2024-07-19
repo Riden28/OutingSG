@@ -290,6 +290,7 @@ export default {
   }
   .desc {
     height: 200px;
+    padding: 10px;
   }
   .images {
     display: flex;

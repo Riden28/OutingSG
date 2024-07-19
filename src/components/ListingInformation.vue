@@ -173,7 +173,7 @@ p {
     margin-left: 20px;
 }
 .listingBtns:hover {
-    background-color: white;
+    background-color: white !important;
     border: solid black;
 }
 </style>

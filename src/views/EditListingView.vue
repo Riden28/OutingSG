@@ -20,9 +20,12 @@
                     <img v-if="imageUrl" :src="imageUrl" />
                 </div>
                 <div class="v-col-7">
+                    <button class="btn btn-primary listingBtns" role="button" @click.prevent="deleteListing" style='margin-right: 1px;'>
+                        <img src='../assets/icons/gif/delete.gif' style='width: 30px;'>
+                        <span style='color:black;'> Delete Listing</span>
+                    </button>
                     <h3 style='font-weight: 700;'>Edit Outing</h3>
                     <hr>
-                    <br>
                     <div class="name">
                         <h5>Outing Name</h5>
                         <input id='outingName' required type="text" v-model="outingName" placeholder="Name Here" class="text-grey formInput">
@@ -35,7 +38,7 @@
             </div>
             <div class="bottom v-row">
                 <div class="v-col-5">
-                    <h3> <p style="color:red;"> Current listing images will be overwritten with new uploaded images. <br> Leave empty to retain current images. </p></h3>
+                    <h4> <p style="color:red;"> Current listing images will be overwritten with new uploaded images. <br> Leave empty to retain current images. </p></h4>
                     <!-- here goes the google maps selector -->
                     <!-- <GoogleMaps/> -->
                 </div>
@@ -251,6 +254,13 @@ export default {
                 };
                 fileReader.readAsDataURL(this.files[0]);
             }
+        },
+        deleteListing (){
+            if (confirm("Are you sure you want to delete this listing?")) {
+                console.log("confirm");
+            } else {
+                console.log("cancel");
+            }
         }
     }
 };
@@ -293,6 +303,7 @@ export default {
     }
     .desc {
       height: 200px;
+      padding: 10px;
     }
     .images {
       display: flex;
@@ -347,6 +358,18 @@ export default {
   
     .fileInput {
       border: solid #d1d1d1;
+    }
+
+    .listingBtns {
+        background-color: white;
+        margin-right: -20px;
+        margin-left: 20px;
+        float: right;
+        padding: 10px 20px;
+    }
+    .listingBtns:hover {
+        background-color: white !important;
+        border: solid black;
     }
   </style>
   
