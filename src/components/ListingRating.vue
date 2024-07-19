@@ -18,7 +18,7 @@
     <v-col>
       <img src="../assets/icons/gif/rating.gif" class='image info' alt="">
       <h5>Rating</h5>
-      <p>4.2 / 5 (92)</p>
+      <p>{{ ratingText }}</p>
     </v-col>
   </v-row>
 
@@ -33,12 +33,11 @@
       <img src='../assets/icons/description.png' style='width: 70%; text-align:right !important;'>
     </v-col>
   </v-row>
-
 </template>
 
 <script>
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import firebaseConfig from './../../firebase/firebaseConfig.js';
 
 // Initialize Firebase
@@ -50,7 +49,9 @@ export default {
   props: ['outingID'],
   data() {
     return {
-      outing_details: {}
+      outing_details: {},
+      numReviews: 0,
+      averageRating: 0
     };
   },
   async mounted() {
@@ -60,11 +61,36 @@ export default {
 
       if (docSnap.exists()) {
         this.outing_details = docSnap.data();
+        await this.fetchRatings();
       } else {
         console.log("No such document!");
       }
     } catch (error) {
       console.error("Error fetching document:", error);
+    }
+  },
+  methods: {
+    async fetchRatings() {
+      try {
+        const reviewsRef = collection(db, "outings", this.outingID, "reviews");
+        const reviewsSnapshot = await getDocs(reviewsRef);
+
+        let totalRating = 0;
+        let count = 0;
+
+        reviewsSnapshot.forEach(doc => {
+          const data = doc.data();
+          if (data.rating) {
+            totalRating += data.rating;
+            count += 1;
+          }
+        });
+
+        this.numReviews = count;
+        this.averageRating = count > 0 ? (totalRating / count) : 0;
+      } catch (error) {
+        console.error("Error fetching reviews:", error);
+      }
     }
   },
   computed: {
@@ -77,6 +103,14 @@ export default {
     },
     rec_pax() {
       return `${this.outing_details.min_recommended_pax} ~ ${this.outing_details.max_recommended_pax}`;
+    },
+    ratingText() {
+      if (this.numReviews === 0) {
+        return "No reviews yet";
+      } else {
+        const roundedRating = this.averageRating % 1 === 0 ? this.averageRating.toFixed(0) : this.averageRating.toFixed(1);
+        return `${roundedRating} / 5 (${this.numReviews})`;
+      }
     }
   }
 };
@@ -121,7 +155,6 @@ img {
   display: flex;
   justify-content: center;
   align-items: center;
-  
 }
 
 .v-col img {
