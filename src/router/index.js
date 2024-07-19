@@ -14,6 +14,7 @@ import ExploreView from '@/views/ExploreView.vue'
 import TNCView from '@/views/TNCView.vue' 
 import SavedOutingsView from '@/views/SavedOutingsView.vue' 
 import CreatedOutingsView from '@/views/CreatedOutingsView.vue'
+import MyReviewsView from '@/views/MyReviewsView.vue'
 import EditListingView from '@/views/EditListingView.vue'
 
 const router = createRouter({
@@ -89,6 +90,11 @@ const router = createRouter({
       path: "/created",
       name: "created",
       component: CreatedOutingsView,
+    },
+    {
+      path: "/myReviews",
+      name: "myReviews",
+      component: MyReviewsView,
     },
     {
       path: "/edit/:listingID",

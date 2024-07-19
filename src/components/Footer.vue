@@ -24,7 +24,7 @@
     }
 </script>
 
-<style>
+<style scoped>
     .footer {
         clear: both;
         position: relative;
@@ -33,6 +33,7 @@
         /*position: fixed;  if its long scroll then comment out, if not, uncomment*/
         bottom: 0;
         padding: 20px;
+        width: 100%;
     }
 
     a {
