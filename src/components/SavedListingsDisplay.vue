@@ -16,7 +16,7 @@
             <v-card class="mx-1" height="280" width="417" rounded="xl">
               <v-img :src="listing.url" height="174px" cover @click="navigateToListing(listing.listingID)"></v-img>
               <v-btn :icon="listing.bookmarked ? 'mdi-bookmark' : 'mdi-bookmark-outline'" base-color="transparent" variant="plain" @click.prevent="bookmarkListing(listing)">
-                <v-icon :icon="listing.bookmarked ? 'mdi-bookmark' : 'mdi-bookmark-outline'" size="50" color="white"></v-icon>
+                <v-icon :icon="listing.bookmarked ? 'mdi-bookmark' : 'mdi-bookmark-outline'" size="50" color="var(--primary)"></v-icon>
               </v-btn>
               <v-card-title>{{ listing.name }}</v-card-title>
               <v-card-title class="location">{{ listing.details }}</v-card-title>

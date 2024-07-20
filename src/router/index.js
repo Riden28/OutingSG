@@ -15,6 +15,7 @@ import TNCView from '@/views/TNCView.vue'
 import SavedOutingsView from '@/views/SavedOutingsView.vue' 
 import CreatedOutingsView from '@/views/CreatedOutingsView.vue'
 import EditListingView from '@/views/EditListingView.vue'
+import HistoryView from '@/views/HistoryView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -94,6 +95,11 @@ const router = createRouter({
       path: "/edit/:listingID",
       name: "edit",
       component: EditListingView
+    }, 
+    {
+      path: "/myHistory",
+      name: "myHistory", 
+      component: HistoryView
     }
     // {
     //   path: '/about',
