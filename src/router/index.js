@@ -17,6 +17,7 @@ import CreatedOutingsView from '@/views/CreatedOutingsView.vue'
 import MyReviewsView from '@/views/MyReviewsView.vue'
 import EditListingView from '@/views/EditListingView.vue'
 import HistoryView from '@/views/HistoryView.vue'
+import AboutUsView from '@/views/AboutUsView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -106,6 +107,11 @@ const router = createRouter({
       path: "/myHistory",
       name: "myHistory", 
       component: HistoryView
+    }, 
+    {
+      path: "/about",
+      name: "aboutUs", 
+      component: AboutUsView
     }
     // {
     //   path: '/about',
