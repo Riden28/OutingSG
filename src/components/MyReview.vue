@@ -1,14 +1,15 @@
 <template>
     <v-row class="my-review-row" dense >
         <v-col cols="4">
-        <v-card class="mx-1" height="280" rounded="xl" @click="navigateToListing(listing.listingID)">
-            <v-img src="https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F88d26018-fa1a-4b92-a8b9-d8ed3f9e178e_3840x2160.png" height="174px" cover></v-img>
-            <v-btn flat icon="mdi-bookmark" base-color="transparent" @click.stop.prevent="bookmarkListing(listing)">
-            <v-icon icon="mdi-bookmark-outline" size="50" color="var(--primary)" class="bookmark-icon"></v-icon>
-            </v-btn>
-            <v-card-title>asdf</v-card-title>
-            <v-card-text class="location">asdf</v-card-text>
-            <v-card-title class="price">adfs</v-card-title>
+        <v-card class="mx-1" height="280" rounded="xl" @click="navigateToListing(this.reviewID)">
+            <v-img :src="image" height="174px" cover></v-img>
+            <v-btn flat :icon="bookmarked ? 'mdi-bookmark' : 'mdi-bookmark-outline'" base-color="transparent" @click.stop.prevent="bookmarkListing(this.reviewID)">
+                <v-icon :icon="bookmarked ? 'mdi-bookmark' : 'mdi-bookmark-outline'" size="50" color="var(--primary)" class="bookmark-icon"></v-icon>
+              </v-btn>
+            <v-card-title>{{ outing.name }}</v-card-title>
+            <v-card-text class="location">{{outing.location}}</v-card-text>
+            <v-card-title class="price">{{price}}</v-card-title>
+
         </v-card>
         </v-col>
 
@@ -18,7 +19,7 @@
             <div class="v-row labels">
                 <div class="v-col-4 review-header">
                     <!-- <h4>{{ review.displayName.toUpperCase() }}</h4> -->
-                    <h4 class="display-name">DISPLAY NAME</h4>
+                    <h4 class="display-name">{{ displayName }}</h4>
                     <div class="stars">
                         <!-- <span v-for="n in 5" :key="n" class="fa fa-star" :class="{ 'checked': n <= review.rating }"></span> -->
                         <span v-for="n in 5" :key="n" class="fa fa-star checked"></span>
@@ -27,12 +28,12 @@
                 <div class="v-col-8">
                     <div class="date">
                         <!-- <p>{{ new Date(review.date.seconds * 1000).toLocaleDateString() }}</p> -->
-                        <p>Date</p>
+                        <p>{{ review.date ? new Date(review.date.seconds * 1000).toLocaleDateString() : '' }}</p>
                     </div>  
                 </div>
             </div>
         <div class="description">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam pulvinar ex ultricies nibh porta, a laoreet nibh fringilla. Proin sit amet nisl sit amet ipsum ultrices ullamcorper. Donec eu ultricies lacus. Praesent ornare elit tellus, a ullamcorper arcu viverra a. Cras ultricies dapibus orci vitae rhoncus. Vestibulum egestas porttitor aliquet. Quisque a sapien non lacus cursus placerat et vitae est. Etiam venenatis scelerisque ante, luctus mollis lectus facilisis eu. Integer sit amet ligula pharetra, hendrerit eros quis, molestie tellus. Nam dictum enim non iaculis convallis. Nunc ornare, nibh ac eleifend fermentum, turpis risus porttitor urna, et sollicitudin dui mi eget urna. Fusce nec velit tincidunt, volutpat eros quis, congue enim. Ut eu faucibus lacus. Sed elementum nibh quis augue pretium suscipit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae;</p>
+            <p>{{review.review}}</p>
         </div>
         </v-col>
     </v-row>
@@ -58,61 +59,71 @@
   export default {
     name: 'MyReview',
     data() {
-      return {};
+      return {
+        review: {},
+        displayName: '',
+        outing: {},
+        price: '',
+        image: '',
+        bookmarked: false
+      };
+    },
+    props: {
+        reviewID: {
+            type: String,
+            required: true
+        }
     },
     components: {
       Review
     },
+    async mounted(){
+        await this.loadReview();
+        await this.retrieveOuting();
+    },
     methods: {
-      async loadUserPreferences() {
-        if (!this.userID) return;
-        const docRef = doc(db, "users", this.userID);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          const user_details = docSnap.data();
-          this.user_preferences = user_details.category.slice(0, 3); // Get top 3 preferences
-          await this.loadOutings();
+      async retrieveOuting(){
+        const outingRef = doc(db, "outings", this.reviewID);
+        const outingDoc = await getDoc(outingRef);
+        if (outingDoc.exists()) {
+            this.outing = outingDoc.data();
         } else {
-          console.log("error 404: user not found");
+            console.error("Outing document not found");
         }
+        this.price = this.outing.max_price === 0 ? "Free" : `$${this.outing.min_price} ~ $${this.outing.max_price}`;
+        this.image = this.outing.images[0];
       },
-      async loadOutings() {
-        const querySnapshot = await getDocs(collection(db, "outings"));
-        querySnapshot.forEach((doc) => {
-          const outing_details = doc.data();
-          for (const preference of this.user_preferences) {
-            if (outing_details.category.includes(preference)) {
-              let price = outing_details.max_price === 0 ? "Free" : `$${outing_details.min_price} ~ $${outing_details.max_price}`;
-              this.outings.push({
-                listingID: doc.id,
-                name: outing_details.name,
-                details: outing_details.location,
-                price: price,
-                url: outing_details.images.length > 0 ? outing_details.images[0] : null,
-                bookmarked: false,
-              });
-              break;
-            }
-          }
-        });
-        await this.checkBookmarkedListings();
-        this.outings = shuffle(this.outings);
-        this.listings = this.outings.slice(0, 10);
-      },
-      async checkBookmarkedListings() {
-        if (!this.userID) return;
-        const userDocRef = doc(db, "users", this.userID);
+      async loadReview() {
+    try {
+        // Get user displayName
+        const userDocRef = doc(db, "users", auth.currentUser.uid);
         const userDocSnap = await getDoc(userDocRef);
         if (userDocSnap.exists()) {
-          const userData = userDocSnap.data();
-          const savedOutings = userData.savedOutings || [];
-          this.outings.forEach(outing => {
-            if (savedOutings.includes(outing.listingID)) {
-              outing.bookmarked = true;
+            const userData = userDocSnap.data();
+            this.displayName = userData.displayName;
+            const savedOutings = userData.savedOutings || [];
+            if (savedOutings.includes(this.reviewID)) {
+              this.bookmarked = true;
             }
-          });
+        } else {
+            console.error("User document not found");
+            return;
         }
-      },
+
+        // Get review document from the subcollection within the outings collection
+        const reviewID = this.reviewID; // Assuming reviewID is stored in this.reviewID
+        const userID = auth.currentUser.uid;
+        const reviewDocRef = doc(db, "outings", reviewID, "reviews", userID);
+        const reviewDocSnap = await getDoc(reviewDocRef);
+        if (reviewDocSnap.exists()) {
+            this.review = reviewDocSnap.data()
+        } else {
+            console.error("Review document not found for this user");
+        }
+      } catch (error) {
+          console.error("Error loading review:", error);
+      }
+    },
       loadMoreListings({ done }) {
         setTimeout(() => {
           this.currentIndex += 10;
@@ -135,25 +146,23 @@
                 const userDocRef = doc(db, "users", user.uid);
 
                 try {
-                    if (listing.bookmarked) {
+                    if (this.bookmarked) {
                         // Remove from bookmarks
                         await updateDoc(userDocRef, {
-                            savedOutings: arrayRemove(listing.listingID)
+                            savedOutings: arrayRemove(this.reviewID)
                         });
                     } else {
                         // Add to bookmarks
                         await updateDoc(userDocRef, {
-                            savedOutings: arrayUnion(listing.listingID)
+                            savedOutings: arrayUnion(this.reviewID)
                         });
                     }
 
                     // Toggle bookmarked status locally
-                    listing.bookmarked = !listing.bookmarked;
+                    this.bookmarked = !this.bookmarked;
                 } catch (error) {
                     console.error('Error updating document:', error);
                 }
-            } else {
-                alert('Please login to save outings');
             }
       }
     }

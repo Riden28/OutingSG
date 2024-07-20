@@ -104,6 +104,9 @@ const auth = getAuth(firebaseApp);
                     this.$router.push('/');
                 })
             }
+        },
+        mounted(){
+            window.scrollTo(0, 0);
         }
     };
 </script>

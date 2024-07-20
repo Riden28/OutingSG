@@ -110,6 +110,7 @@ export default {
         }
     },
     async mounted() {
+        window.scrollTo(0, 0);
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 await this.getUserDetails();

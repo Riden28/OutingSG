@@ -153,6 +153,7 @@ export default {
     if (!auth.currentUser) {
       this.$router.push("/login");
     }
+      window.scrollTo(0, 0);
   },
   methods: {
     async createOuting() {

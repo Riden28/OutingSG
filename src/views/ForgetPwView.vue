@@ -74,6 +74,9 @@ export default {
             errorMessage: ''
         };
     },
+    mounted() {
+        window.scrollTo(0, 0);
+    },
     methods: {
         resetPassword() {
             //console.log("method called!") // Debug

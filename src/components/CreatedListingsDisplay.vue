@@ -137,13 +137,13 @@
           if (listing.bookmarked) {
             // Remove from bookmarks
             await updateDoc(userDocRef, {
-              created: arrayRemove(listing.listingID)
+              saved: arrayRemove(listing.listingID)
             });
             listing.bookmarked = false;
           } else {
             // Add to bookmarks
             await updateDoc(userDocRef, {
-              created: arrayUnion(listing.listingID)
+              saved: arrayUnion(listing.listingID)
             });
             listing.bookmarked = true;
           }

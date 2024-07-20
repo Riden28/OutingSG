@@ -92,6 +92,9 @@ export default {
             errorMessage: '' // Add error message state
         };
     },
+    mounted(){
+        window.scrollTo(0, 0);
+    },
     methods: {
         async logIn() {
             try {
