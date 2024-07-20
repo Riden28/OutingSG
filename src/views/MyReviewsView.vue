@@ -77,6 +77,7 @@
       flex-direction: column;
       margin-bottom: 0px;
       bottom: 0;
+      position: fixed;
     }
     
     .title {

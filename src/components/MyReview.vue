@@ -203,11 +203,11 @@
 
 .display-name {
     align-content: center;
-    padding-left: 20px;
 }
 .labels {
     display: flex;
     justify-content: space-around;
+    padding: 10px;
 }
 .v-col-8 {
     display: flex;
