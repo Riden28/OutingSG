@@ -1,25 +1,23 @@
 <template>
   <div class="v-carousel">
     <v-carousel
-      show-arrows="hover"
+      show-arrows="hover" 
       cycle
-      :height="carousel_height"
+      :height=carousel_height
       hide-delimiter-background>
       <template v-for="(slide, index) in slides" :key="index">
         <router-link v-if="isHomepage" :to="'/listing/' + slide.listingID" class="carousel-link">
           <v-carousel-item class="clickable">
-            <img class="carousel-image" v-lazy="slide.url" :alt="'Slide ' + index" />
+            <img v-lazy="slide.url" :alt="'Slide ' + index" width="100%" />
           </v-carousel-item>
         </router-link>
         <div v-else class="carousel-link">
           <v-carousel-item>
-            <img class="carousel-image" v-lazy="slide.url" :alt="'Slide ' + index" />
+            <img v-lazy="slide.url" :alt="'Slide ' + index" width="100%" />
           </v-carousel-item>
         </div>
       </template>
-      <div class="carousel_title" v-if="isHomepage">
-        <h3><b>Trending activities</b></h3>
-      </div>
+      <div class="carousel_title" v-if="isHomepage"><h3><b>Trending activities</b></h3></div>
     </v-carousel>
   </div>
 </template>
@@ -36,7 +34,7 @@ export default {
       return this.$route.path === '/';
     }
   },
-  data() {
+  data () {
     return {}
   }
 }
@@ -47,7 +45,6 @@ export default {
   position: relative;
   padding: 0px;
 }
-
 .carousel_title {
   position: absolute;
   text-align: center;
@@ -57,24 +54,16 @@ export default {
   display: flex;
   justify-content: center;
   text-shadow: 
-    -1px -1px 0 black,  
-     1px -1px 0 black,
-    -1px  1px 0 black,
-     1px  1px 0 black; /* black outline */
+  -1px -1px 0 black,  
+   1px -1px 0 black,
+  -1px  1px 0 black,
+   1px  1px 0 black; /* black outline */
 }
-
 .carousel-link {
   display: block;
   width: 100%;
   height: 100%;
 }
-
-.carousel-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* Ensures the image covers the entire carousel item */
-}
-
 .clickable:hover {
   opacity: 0.8; /* Optional: Add hover effect */
   cursor: pointer;
