@@ -119,7 +119,7 @@ import NavBar from '@/components/NavBar.vue';
 import OutingSGFooter from '@/components/Footer.vue';
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, getDoc, updateDoc, deleteDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, getDoc, updateDoc, deleteDoc, collection, getDocs, arrayRemove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject, listAll} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 import firebaseConfig from '../../firebase/firebaseConfig.js';
 
@@ -275,6 +275,20 @@ export default {
                 await deleteObject(itemRef);
             }
             console.log("Images successfully deleted!");
+
+            // Remove the listing from the user's created list
+            const userID = auth.currentUser.uid;
+            const docRef = doc(db, "users", userID);
+
+            // Ensure the user document exists before updating
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                await updateDoc(docRef, {
+                    created: arrayRemove(this.listingID)
+                });
+            } else {
+                console.log("No such document!");
+            }
 
             this.$router.push("/");
 

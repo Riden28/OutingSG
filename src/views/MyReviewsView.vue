@@ -5,7 +5,10 @@
     
     <div class="content">
         <h2 class="title">Your Reviews</h2>
-        <MyReview />
+        <div v-for="reviewID in reviews" :key="reviewID">
+          <MyReview :reviewID="reviewID" />
+          <br><br>
+        </div>
       
       
     </div>
@@ -41,7 +44,7 @@
       data() {
         return {
           user: auth.currentUser,
-
+          reviews: []
         }
       },
       name: 'myReviews',
@@ -53,14 +56,21 @@
         
 
       },
+      mounted(){
+        const userID = auth.currentUser.uid;
+        const userRef = doc(db, "users", userID);
+        getDoc(userRef).then((doc) => {
+          if (doc.exists()) {
+            this.reviews = doc.data().reviews.reverse();
+          } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+          }
+        }).catch((error) => {
+          console.log("Error getting document:", error);
+        });
+      },
     };
-  
-    console.log(auth.currentUser);
-    if (auth.currentUser) {
-      console.log('logged in');
-    } else {
-      console.log('not logged in');
-    }
   </script>
   
   <style scoped>

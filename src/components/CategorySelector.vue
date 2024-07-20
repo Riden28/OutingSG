@@ -50,7 +50,7 @@ export default {
         { id: 'Adventure', name: 'Adventure', icon: 'mdi-airballoon-outline' },
         { id: 'Shopping', name: 'Shopping', icon: 'mdi-shopping-outline' },
         { id: 'Wellness', name: 'Wellness', icon: 'mdi-spa-outline' },
-        { id: 'Events and Festivals', name: 'Events & Festivals', icon: 'mdi-calendar' },
+        { id: 'Events and Festivals', name: 'Events and Festivals', icon: 'mdi-calendar' },
       ],
     };
   },
