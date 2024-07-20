@@ -34,6 +34,7 @@
         bottom: 0;
         padding: 20px;
         width: 100%;
+        text-align: center;
     }
 
     a {
