@@ -34,7 +34,7 @@
 <script>
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, collection, getDocs, doc, getDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import firebaseConfig from './../../firebase/firebaseConfig.js';
 
 const firebaseApp = initializeApp(firebaseConfig);
@@ -64,9 +64,10 @@ export default {
     },
     methods: {
         async fetchReviews() {
-            const reviewsRef = collection(db, "outings/" + this.outingID + "/reviews");
-            const reviewsSnap = await getDocs(reviewsRef);
             const tempReviews = [];
+            const reviewsRef = collection(db, "outings/" + this.outingID + "/reviews");
+            const reviewsQuery = query(reviewsRef, orderBy("date", "desc"));
+            const reviewsSnap = await getDocs(reviewsQuery);
 
             for (const reviewDoc of reviewsSnap.docs) {
                 let reviewDetails = reviewDoc.data();
