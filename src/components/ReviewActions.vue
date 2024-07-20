@@ -42,8 +42,10 @@
                     <div class="stars">
                         <star-rating 
                             :star-size="20" 
+                            :rating="this.rating"
                             v-model="rating" 
-                            @rating-selected="updateRating">
+                            id="rating"
+                            @update:rating ="setRating">
                         </star-rating>
                     </div>
                 </div>
@@ -200,8 +202,9 @@ export default {
             }
         }
         },
-        updateRating(rating) {
+        setRating(rating) {
             this.rating = rating;
+            console.log("Rating updated: ", rating);
         }
     }
 };
