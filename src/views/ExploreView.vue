@@ -32,7 +32,7 @@
             <h4 class="title">Price</h4>
             <p>Minimum Price: <input type='number' v-model='minPrice' class='userValues' min="0"></p>
             <input type="range" v-model="minPrice" min="0" class='ranges' />
-            <p>Maximum Price: <input type='number' v-model='maxPrice' class='userValues' min="0"></p>
+            <p>Maximum Price: <input type='number' v-model='maxPrice' class='userValues' min="0" max="1000"></p>
             <input type="range" v-model="maxPrice" min="0" class='ranges' />
 
             <!-- <input type="checkbox" id="price1"><label for="price1">$</label><br>
@@ -49,9 +49,9 @@
 
             <h4 class="title">Recommended Pax</h4>
             <p>Minimum Pax: <input type='number' v-model='minPax' class='userValues' min="1"></p>
-            <input type="range" v-model="minPax" min="1" class='ranges' />
+            <input type="range" v-model="minPax" min="1" max="20" class='ranges' />
             <p>Maximum Pax: <input type='number' v-model='maxPax' class='userValues' min="1"></p>
-            <input type="range" v-model="maxPax" min="1" class='ranges' />
+            <input type="range" v-model="maxPax" min="1" max="20" class='ranges' />
 
 
             <br><button class='btn' @click.prevent='filter()'>Filter</button><br><br>
@@ -177,7 +177,6 @@ export default {
         },
         loadListings() {
 
-            console.log("test")
             this.listings = [];
             this.category = [];
             querySnapshot.forEach((doc) => {
@@ -204,55 +203,73 @@ export default {
 
         },
         filter() {
-            this.listings = []; // clear the existing array
+            var checkPriceRange = true;
+            var checkPaxRange = true;
+            var alertMsg = "";
 
-            querySnapshot.forEach((doc) => {
-                var outing_details = doc.data();
-                var category;
+            if (this.minPrice > this.maxPrice){
+                checkPriceRange = false;
+                alertMsg += "Minimum Price has to be smaller than Maximum Price. ";
+            }
+            if (this.minPax > this.maxPax){
+                checkPaxRange = false;
+                alertMsg += "Minimum Pax has to be smaller than Maximum Pax.";
+            }
 
-                var checkCat = false;
-                var checkPrice = false;
-                var checkPax = false;
-                var checkRegion = false;
+            if(checkPaxRange && checkPriceRange){
+                this.listings = []; // clear the existing array
 
-                const selectedCategories = this.category;
+                querySnapshot.forEach((doc) => {
+                    var outing_details = doc.data();
+                    var category;
 
-                if (selectedCategories[0] == undefined) {
-                    checkCat = true;
-                } else {
-                    for (category of outing_details.category) {
-                        
-                        if (selectedCategories.includes(category)) {
-                            checkCat = true;
-                            // console.log('break');
-                            break;
+                    var checkCat = false;
+                    var checkPrice = false;
+                    var checkPax = false;
+                    var checkRegion = false;
+
+                    const selectedCategories = this.category;
+                    
+                    if (selectedCategories[0] == undefined && selectedCategories.length == 1) {
+                        checkCat = true;
+                    } else {
+                        for (category of outing_details.category) {
+                            
+                            if (selectedCategories.includes(category)) {
+                                checkCat = true;
+                                // console.log('break');
+                                break;
+                            }
+                            // console.log('no break');
                         }
-                        // console.log('no break');
                     }
-                }
 
-                const selectedRegions = this.filterRegion;
-                if (selectedRegions.length == 0) {
-                    checkRegion = true;
-                } else {
-                    if (selectedRegions.includes(outing_details.Region)) {
+                    const selectedRegions = this.filterRegion;
+                    if (selectedRegions.length == 0) {
                         checkRegion = true;
+                    } else {
+                        if (selectedRegions.includes(outing_details.Region)) {
+                            checkRegion = true;
+                        }
                     }
-                }
 
-                if ((outing_details.min_price >= this.minPrice) && (outing_details.max_price <= this.maxPrice)) {
-                    checkPrice = true;
-                }
+                    if ((outing_details.min_price >= this.minPrice) && (outing_details.max_price <= this.maxPrice)) {
+                        checkPrice = true;
+                    }
 
-                if ((this.minPax >= outing_details.min_recommended_pax) && (this.maxPax <= outing_details.max_recommended_pax)) {
-                    checkPax = true;
-                }
+                    if ((this.minPax >= outing_details.min_recommended_pax) && (this.maxPax <= outing_details.max_recommended_pax)) {
+                        checkPax = true;
+                    }
 
-                if (checkCat && checkPrice && checkPax && checkRegion) {
-                    this.pushListings(outing_details, doc.id);
-                }
+                    if (checkCat && checkPrice && checkPax && checkRegion) {
+                        this.pushListings(outing_details, doc.id);
+                    }
 
-            });
+                });
+            }else{
+                alert(alertMsg);
+            }
+            
         },
         sortListings() {
             var selectedSort = this.selectedSort;
@@ -324,17 +341,6 @@ export default {
             }
             this.$router.push({ name: 'individualListing', params: { listingID } });
         },
-        // bookmarkListing(listing) {
-        //     console.log('Bookmark clicked for:', listing);
-        //     // Implement bookmark functionality here
-        //     if (user) {
-        //         // Bookmark the listing
-        //         console.log('bookmarked');
-        //     } else {
-        //         // Show login dialog
-        //         alert('Please login to save outings');
-        //     }
-        // },
         pushListings(outing_details, docID) {
             let price = outing_details.max_price === 0 ? "Free" : `$${outing_details.min_price} ~ $${outing_details.max_price}`;
             this.listings.push({
@@ -536,7 +542,7 @@ select {
 }
 
 .userValues {
-    width: 50px !important;
+    width: 100px !important;
 }
 
 .ranges {
@@ -573,4 +579,5 @@ select {
 .hideScroll {
     scrollbar-width: none;
 }
+
 </style>
