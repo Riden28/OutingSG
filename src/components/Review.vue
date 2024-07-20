@@ -130,6 +130,7 @@ export default {
 .stars {
     margin-right: 50px;
     padding-top: 7px;
+    padding-left: 30px;
 }
 .description {
     padding: 10px 30px 10px 30px;
@@ -141,6 +142,8 @@ export default {
 }
 h4 {
     font-weight: 700;
+    padding-left:30px;
+    
     /* margin-left: -40px; */
 }
 .no-reviews{

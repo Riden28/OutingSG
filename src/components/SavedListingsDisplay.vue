@@ -9,17 +9,29 @@
       @load="load"
       empty-text="No more recommended listings"
     >
-      <!-- Conditional rendering based on listings array -->
       <div v-if="listings.length > 0">
         <v-row align="start" justify="center">
           <v-col v-for="listing in listings" :key="listing.listingID" cols="auto">
             <v-card class="mx-1" height="280" width="417" rounded="xl">
               <v-img :src="listing.url" height="174px" cover @click="navigateToListing(listing.listingID)"></v-img>
-              <v-btn :icon="listing.bookmarked ? 'mdi-bookmark' : 'mdi-bookmark-outline'" base-color="transparent" variant="plain" @click.prevent="bookmarkListing(listing)">
-                <v-icon :icon="listing.bookmarked ? 'mdi-bookmark' : 'mdi-bookmark-outline'" size="50" color="var(--primary)"></v-icon>
+              <v-btn
+                flat
+                border="0"
+                :icon="getIcon(listing)"
+                base-color="transparent"
+                @click.prevent="bookmarkListing(listing)"
+                @mouseover="onMouseOver(listing.listingID)"
+                @mouseleave="onMouseLeave"
+              >
+                <v-icon
+                  :icon="getIcon(listing)"
+                  size="50"
+                  color="var(--primary)"
+                  class="bookmark-icon"
+                ></v-icon>
               </v-btn>
-              <v-card-title>{{ listing.name }}</v-card-title>
-              <v-card-title class="location">{{ listing.details }}</v-card-title>
+              <v-card-title><b>{{ listing.name }}</b></v-card-title>
+              <v-card-text class="location">{{ listing.details }}</v-card-text>
               <v-card-title class="price">{{ listing.price }}</v-card-title>
             </v-card>
           </v-col>
@@ -52,7 +64,8 @@ export default {
       currentIndex: 0,
       outings: [],
       userID: null,
-      hasMoreOutings: true // Track if there are more outings to load
+      hasMoreOutings: true, // Track if there are more outings to load
+      hoveringID: null // Track the ID of the listing being hovered
     };
   },
   created() {
@@ -172,6 +185,18 @@ export default {
       } catch (error) {
         console.error('Error updating document:', error);
       }
+    },
+    onMouseOver(listingID) {
+      this.hoveringID = listingID;
+    },
+    onMouseLeave() {
+      this.hoveringID = null;
+    },
+    getIcon(listing) {
+      if (this.hoveringID === listing.listingID) {
+        return listing.bookmarked ? 'mdi-bookmark-outline' : 'mdi-bookmark';
+      }
+      return listing.bookmarked ? 'mdi-bookmark' : 'mdi-bookmark-outline';
     }
   }
 };
@@ -194,7 +219,6 @@ export default {
 .location {
   position: absolute;
   left: 0;
-  bottom: 0;
   font-weight: normal;
 }
 

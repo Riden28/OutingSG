@@ -17,7 +17,7 @@
               <v-btn flat icon="mdi-bookmark" base-color="transparent" size="50" class="bookmark-icon" @click.stop.prevent="bookmarkListing(listing)">
                 <v-icon icon="mdi-bookmark-outline" size="50" color="var(--primary)"></v-icon>
               </v-btn>
-              <v-card-title>{{ listing.name }}</v-card-title>
+              <v-card-title><b>{{ listing.name }}</b></v-card-title>
               <v-card-title class="location">{{ listing.details }}</v-card-title>
               <v-card-title class="price">{{ listing.price }}</v-card-title>
             </v-card>
@@ -109,7 +109,6 @@ import shuffle from "./../../firebase/firebaseAuthServices.js";
   .location {
     position: absolute;
     left: 0;
-    bottom: 0;
     font-weight: normal;
   }
 

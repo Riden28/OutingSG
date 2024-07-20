@@ -18,7 +18,7 @@
         </div>
       </template>
       <div class="carousel_title" v-if="isHomepage">
-        <h3><b>Trending activities</b></h3>
+        <h4><b>Trending activities</b></h4>
       </div>
     </v-carousel>
   </div>

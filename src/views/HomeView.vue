@@ -115,9 +115,9 @@ const storage = getStorage(firebaseApp);
 
 <style>
   .carousel {
-    margin-top: 55px;
+    top:-5px;
+    
   }
-
   .content {
     background-color: rgb(252, 243, 231);
   }

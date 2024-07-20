@@ -77,14 +77,20 @@
                         <v-card class="mx-1" height="280" width="417" rounded="xl" @click="navigateToListing(listing.listingID)">
                             <v-img :src="listing.url" height="174px" cover
                                ></v-img>
-                            <v-btn flat :icon="listing.bookmarked ? 'mdi-bookmark' : 'mdi-bookmark-outline'"
-                                base-color="transparent" @click.stop.prevent="bookmarkListing(listing)">
-                                <v-icon :icon="listing.bookmarked ? 'mdi-bookmark' : 'mdi-bookmark-outline'" size="50"
+                            <v-btn 
+                                flat
+                                border="0"
+                                icon="mdi-bookmark"
+                                base-color="transparent"
+                                @click.stop.prevent="bookmarkListing(listing)"
+                            >
+                                <v-icon
+                                    :icon="listing.bookmarked ? 'mdi-bookmark' : 'mdi-bookmark-outline'" size="50"
                                     color="var(--primary)"></v-icon>
                             </v-btn>
-                            <v-card-title>{{ listing.name }}</v-card-title>
+                            <v-card-title><b>{{ listing.name }}</b></v-card-title>
                             <v-card-text class="location">{{ listing.details }}</v-card-text>
-                            <v-card-text class="price">{{ listing.price }}</v-card-text>
+                            <v-card-title class="price">{{ listing.price }}</v-card-title>
                         </v-card>
                     </v-col>
                 </v-row>
@@ -451,7 +457,6 @@ export default {
 .location {
     position: absolute;
     left: 0px;
-    bottom: 0px;
     font-weight: normal;
 }
 
@@ -559,13 +564,6 @@ select {
 .price {
     position: absolute;
     right: 0;
-    bottom: 0;
-    font-weight: normal;
-}
-
-.location {
-    position: absolute;
-    left: 0;
     bottom: 0;
     font-weight: normal;
 }
