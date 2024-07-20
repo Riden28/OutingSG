@@ -65,9 +65,9 @@
             </div>
             <div class="price">
               <h5>Price: </h5>
-              <input type="number" step="1" required placeholder="min price" id="minPrice" v-model="outingMinPrice" />
+              <input type="number" step="1" required placeholder="min price" id="minPrice" v-model="outingMinPrice" min="0" />
               <br><br>
-              <input type="number" step="1" required placeholder="max price" id="maxPrice" v-model="outingMaxPrice" />
+              <input type="number" step="1" required placeholder="max price" id="maxPrice" v-model="outingMaxPrice" max="1000" />
             </div>
             <div class="recommended-pax">
               <h5>Recommended Pax</h5>
