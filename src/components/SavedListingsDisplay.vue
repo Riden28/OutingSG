@@ -67,9 +67,30 @@ export default {
     });
   },
   methods: {
-    navigateToListing(listingID) {
-        this.$router.push({ name: 'individualListing', params: { listingID } });
-      },
+    async navigateToListing(listingID) {
+      if (this.userID) {
+        const userDocRef = doc(db, "users", this.userID);
+        const userDocSnap = await getDoc(userDocRef);
+        if (userDocSnap.exists()) {
+          let listingsHistory = userDocSnap.data().listingsHistory || [];
+          
+          // Remove the listing if it's already in the history
+          listingsHistory = listingsHistory.filter(id => id !== listingID);
+          
+          // If the array is already at 10 listings, remove the earliest one
+          if (listingsHistory.length >= 10) {
+            listingsHistory.shift();
+          }
+
+          // Add the new listingID
+          listingsHistory.push(listingID);
+
+          // Update the user's document
+          await updateDoc(userDocRef, { listingsHistory });
+        }
+      }
+      this.$router.push({ name: 'individualListing', params: { listingID } });
+    },
     async getSavedOutings() {
       const userDocRef = doc(db, "users", this.userID);
       const userDocSnap = await getDoc(userDocRef);

@@ -44,7 +44,8 @@
             <input type="checkbox" v-model="filterRegion" id="South" value="South"><label for="South">South</label><br>
             <input type="checkbox" v-model="filterRegion" id="East" value="East"><label for="East">East</label><br>
             <input type="checkbox" v-model="filterRegion" id="West" value="West"><label for="West">West</label><br>
-            <input type="checkbox" v-model="filterRegion" id="Central" value="Central"><label for="Central">Central</label><br>
+            <input type="checkbox" v-model="filterRegion" id="Central" value="Central"><label
+                for="Central">Central</label><br>
 
 
             <h4 class="title">Recommended Pax</h4>
@@ -74,9 +75,9 @@
             <v-container fluid class="mx-auto overflow-auto hideScroll">
                 <v-row align="start" justify="center">
                     <v-col v-for="listing in listings" :key="listing.listingID" cols="auto">
-                        <v-card class="mx-1" height="280" width="417" rounded="xl" @click="navigateToListing(listing.listingID)">
-                            <v-img :src="listing.url" height="174px" cover
-                               ></v-img>
+                        <v-card class="mx-1" height="280" width="417" rounded="xl"
+                            @click="navigateToListing(listing.listingID)">
+                            <v-img :src="listing.url" height="174px" cover></v-img>
                             <v-btn flat :icon="listing.bookmarked ? 'mdi-bookmark' : 'mdi-bookmark-outline'"
                                 base-color="transparent" @click.stop.prevent="bookmarkListing(listing)">
                                 <v-icon :icon="listing.bookmarked ? 'mdi-bookmark' : 'mdi-bookmark-outline'" size="50"
@@ -101,7 +102,7 @@ import NavBar from '@/components/NavBar.vue';
 import OutingSGFooter from '@/components/Footer.vue';
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, collection, doc, setDoc, getDoc, updateDoc, deleteDoc, getDocs, query, where, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getStorage } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 import firebaseConfig from './../../firebase/firebaseConfig.js';
@@ -162,8 +163,15 @@ export default {
         category: [],
         filterRegion: [],
         selectedSort: "",
-        userID: auth.currentUser ? auth.currentUser.uid : null
+        userID: null
     }),
+    created() {
+        onAuthStateChanged(getAuth(app), async (user) => {
+            if (user) {
+                this.userID = user.uid;
+            }
+        });
+    },
     methods: {
         // on every load retrieve another 10 listings
         load({ done }) {
@@ -221,7 +229,7 @@ export default {
                     checkCat = true;
                 } else {
                     for (category of outing_details.category) {
-                        
+
                         if (selectedCategories.includes(category)) {
                             checkCat = true;
                             // console.log('break');
@@ -308,7 +316,28 @@ export default {
                 }
             }
         },
-        navigateToListing(listingID) {
+        async navigateToListing(listingID) {
+            if (this.userID) {
+                const userDocRef = doc(db, "users", this.userID);
+                const userDocSnap = await getDoc(userDocRef);
+                if (userDocSnap.exists()) {
+                    let listingsHistory = userDocSnap.data().listingsHistory || [];
+
+                    // Remove the listing if it's already in the history
+                    listingsHistory = listingsHistory.filter(id => id !== listingID);
+
+                    // If the array is already at 10 listings, remove the earliest one
+                    if (listingsHistory.length >= 10) {
+                        listingsHistory.shift();
+                    }
+
+                    // Add the new listingID
+                    listingsHistory.push(listingID);
+
+                    // Update the user's document
+                    await updateDoc(userDocRef, { listingsHistory });
+                }
+            }
             this.$router.push({ name: 'individualListing', params: { listingID } });
         },
         // bookmarkListing(listing) {
@@ -335,11 +364,11 @@ export default {
         },
         fetchCategoryFilter() { // for navigation from homepage category buttons
 
-            if (this.$route.query.category != undefined){
+            if (this.$route.query.category != undefined) {
                 this.category = [this.$route.query.category];
                 this.filter();
             }
-            
+
         },
         async checkBookmarkedListings() {
             const user = auth.currentUser;
