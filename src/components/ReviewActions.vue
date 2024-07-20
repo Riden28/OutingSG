@@ -1,16 +1,14 @@
 <template>
     <div>
         <!-- Section for showing reviews heading and add review button -->
-        <div class="v-row reviews">
-            <div class="filterbutton">
-                <input class="btn btn-primary" type="button" value="Filter">
-            </div>
-            <div class="text-h5 pl-16" style="text-align:center;">
-                <b>Reviews</b>
-                <p style="font-size: 16px;">
-                    Hear what visitors say about this outing!
-                </p>
-            </div>
+        <div class="text-h5 pl-16" style="text-align:center;">
+            <b>Reviews</b>
+            <p style="font-size: 16px;">
+                Hear what visitors say about this outing!
+            </p>
+        </div>
+        <br>
+        <div style="text-align: center; margin-bottom: 40px;">
             <div v-if="notReviewed" class="addreview">
                 <button @click.prevent="toggleForm" class="btn btn-primary listingBtns" role="button" style="margin-right: 1px;">
                     <img src="../assets/icons/gif/add.gif" style="width: 30px;">
@@ -22,13 +20,14 @@
                     <img src="../assets/icons/gif/edit.gif" style="width: 30px;">
                     <span class='btn'> Edit Review</span>
                 </button>
-                <!-- Add delete review button -->
                 <button @click.prevent="deleteReview" class="btn btn-danger listingBtns" role="button">
                     <img src="../assets/icons/gif/delete.gif" style="width: 30px;">
                     <span class='btn'> Delete Review</span>
                 </button>
             </div>
+
         </div>
+        
 
         <!-- Form for adding review -->
         <form v-show="formVisible" @submit.prevent="submitReview" class="reviewform">

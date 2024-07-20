@@ -40,13 +40,6 @@
                             </p>
                         </v-col>
                     </v-row>
-                    <v-row class='cols'>
-                        <!-- Remember Me -->
-                        <br>
-                        <input type="checkbox" id='rememberme' v-model="rememberme">
-                        <label for="rememberme" style="font-weight: 100; margin-top: 10px;">&nbsp;Remember Me</label>
-                    </v-row>
-                    
                     <!-- Error Message -->
                     <div v-if="errorMessage" class="error-message">
                         {{ errorMessage }}

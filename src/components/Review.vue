@@ -17,6 +17,7 @@
             <div class="description">
                 <p>{{ review.review }}</p>
             </div>
+            <hr>
         </div>
         <div v-if="displayedReviews.length === 0" class="no-reviews">
             <p>No reviews yet!</p>
@@ -154,8 +155,7 @@ h4 {
     text-align: center;
     margin: 20px 0;
     color: rgb(166, 166, 166);
-    margin-top: 20px;
-    background: var(--light-grey);
+    padding: 10px;
 }
 
 </style>
