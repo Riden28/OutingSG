@@ -2,7 +2,8 @@
     <NavBar />
     <div class="content">
         <router-link to="/settings">
-            <p><img src="../assets/icons/settings.png" class="settings"></p>
+            <p><img src="../assets/icons/gif/settings.gif" class="settings"></p>
+            
         </router-link>
         <center style="clear:both;">
             <img :src='profilePicture' class="profilePic" width="300px" height="250px">
@@ -25,10 +26,10 @@
             </span>
             </p>
             <br>
-            <v-row>
+            <v-row class='rows'>
                 <v-col>
                     <center>
-                        <img src="../assets/icons/history.png" class="icons"><br>
+                        <img src="../assets/icons/gif/history.gif" class="icons"><br>
                         <router-link to="/myHistory">
                             <button>Outings View History</button>
                         </router-link>
@@ -36,7 +37,7 @@
                 </v-col>
                 <v-col>
                     <center>
-                        <img src="../assets/icons/created.png" class="icons"><br>
+                        <img src="../assets/icons/gif/created.gif" class="icons"><br>
                         <router-link to="/created">
                             <button>Created Outings</button>
                         </router-link>
@@ -44,7 +45,7 @@
                 </v-col>
                 <v-col>
                     <center>
-                        <img src="../assets/icons/review.png" class="icons"><br>
+                        <img src="../assets/icons/gif/review.gif" class="icons"><br>
                         <router-link to="/myReviews">
                             <button>Your Reviews</button>
                         </router-link>
@@ -53,7 +54,7 @@
             </v-row>
         </div>
     </div>
-    <Footer />
+    <OutingSGFooter/>
 </template>
 
 <script>
@@ -64,7 +65,7 @@ import { getFirestore, collection, doc, setDoc, getDoc, updateDoc, deleteDoc, ge
 import { getStorage } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 import firebaseConfig from './../../firebase/firebaseConfig.js';
 import NavBar from '@/components/NavBar.vue';
-import Footer from '@/components/Footer.vue';
+import OutingSGFooter from '@/components/Footer.vue';
 
 const firebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(firebaseApp);
@@ -73,7 +74,7 @@ const db = getFirestore(firebaseApp);
 export default {
     name: 'Profile',
     components: {
-        NavBar, Footer
+        NavBar, OutingSGFooter
     },
     data() {
         return {
@@ -176,7 +177,24 @@ button:hover {
 
 .settings {
     float: right;
-    width: 40px;
-    margin: 15px 15px 0px 0px;
+    background-color: white;
+    margin: 20px;
+    border: solid var(--secondary);
+    width: 50px;
+    border-radius: 5px;
 }
+
+.settings:hover {
+    background-color: white !important;
+    border: solid black;
+}
+
+.rows {
+    background: white;
+    margin: 20px;
+    padding: 50px 20px;
+    border-radius: 10px;
+}
+
+
 </style>

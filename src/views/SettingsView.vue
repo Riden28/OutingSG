@@ -14,17 +14,20 @@
                                     id='oldPassword'
                                     placeholder="Enter your old password"
                                     required 
-                                    v-model="oldPassword">
+                                    v-model="oldPassword"
+                                    class='formInput'>
                         <br><input type="password" 
                                     id='newPassword'
                                     placeholder="Enter your new password"
                                     required 
-                                    v-model="newPassword">
+                                    v-model="newPassword"
+                                    class='formInput'>
                         <br><input type="password" 
                                     id='retypeNewPassword'
                                     placeholder="Re-type your new password"
                                     required 
-                                    v-model="retypeNewPassword">
+                                    v-model="retypeNewPassword"
+                                    class='formInput'>
                     </v-col>
                     
                     <v-col>
@@ -33,7 +36,8 @@
                                     id='email'
                                     placeholder="Enter your new email"
                                     required 
-                                    v-model="email">
+                                    v-model="email"
+                                    class='formInput'>
 
                         <br><br>
                         <label for="mobileNumber"><img src='../assets/icons/mobileNumber.png' class="smallIcon"> Change Mobile Number</label>
@@ -41,7 +45,8 @@
                                     id='mobileNumber'
                                     placeholder="Enter your new mobile number"
                                     required 
-                                    v-model="mobileNumber">
+                                    v-model="mobileNumber"
+                                    class='formInput'>
                     </v-col>
                 </v-row>
             
@@ -190,7 +195,7 @@ label {
 }
 
 input {
-    background: #f4f4f4 !important;
+    background: #ffffff !important;
     margin: 5px;
     width: 300px;
 }

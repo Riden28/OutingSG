@@ -10,7 +10,8 @@
                         id='displayName'
                         :placeholder="displayName"
                         required 
-                        v-model="displayName">
+                        v-model="displayName"
+                        class='formInput'>
         </center>
 
         <div class="aboutYou">
@@ -21,7 +22,8 @@
             <br><textarea id='bio'
                         placeholder="Enter your bio"
                         required 
-                        v-model="bio"></textarea>
+                        v-model="bio"
+                        class='formInput'></textarea>
             <br>
 
             <h5>Category Preferences</h5>
@@ -231,11 +233,12 @@ input {
 textarea {
     width: 100%;
     height: auto;
-    background-color:  #f5f5f5;
+    background-color:  white;
     padding: 10px;
 }
 
 label {
     padding-left: 5px;
 }
+
 </style>
