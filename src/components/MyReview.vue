@@ -21,8 +21,7 @@
                     <!-- <h4>{{ review.displayName.toUpperCase() }}</h4> -->
                     <h4 class="display-name">{{ displayName }}</h4>
                     <div class="stars">
-                        <!-- <span v-for="n in 5" :key="n" class="fa fa-star" :class="{ 'checked': n <= review.rating }"></span> -->
-                        <span v-for="n in 5" :key="n" class="fa fa-star checked"></span>
+                        <span v-for="n in 5" :key="n" class="fa fa-star" :class="{ 'checked': n <= review.rating }"></span>
                     </div>
                 </div>
                 <div class="v-col-8">

@@ -22,6 +22,11 @@
                     <img src="../assets/icons/gif/edit.gif" style="width: 30px;">
                     <span class='btn'> Edit Review</span>
                 </button>
+                <!-- Add delete review button -->
+                <button @click.prevent="deleteReview" class="btn btn-danger listingBtns" role="button">
+                    <img src="../assets/icons/gif/delete.gif" style="width: 30px;">
+                    <span class='btn'> Delete Review</span>
+                </button>
             </div>
         </div>
 
@@ -29,13 +34,17 @@
         <form v-show="formVisible" @submit.prevent="submitReview" class="reviewform">
             <div class="cover v-container">
                 <div class="title v-row">
-                    <h3 v-if="notReviewed" >Add a Review</h3>
+                    <h3 v-if="notReviewed">Add a Review</h3>
                     <h3 v-else>Edit Review</h3>
                 </div>
                 <div class="v-row rating">
                     <h4>Rating</h4>
                     <div class="stars">
-                        <star-rating :star-size="20" v-model="rating"></star-rating>
+                        <star-rating 
+                            :star-size="20" 
+                            v-model="rating" 
+                            @rating-selected="updateRating">
+                        </star-rating>
                     </div>
                 </div>
                 <div class="v-row desc">
@@ -59,7 +68,7 @@
 <script>
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, collection, setDoc , getDoc, doc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, collection, setDoc, getDoc, doc, updateDoc, arrayUnion, deleteDoc, arrayRemove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import firebaseConfig from './../../firebase/firebaseConfig.js';
 import StarRating from 'vue-star-rating';
 
@@ -164,6 +173,35 @@ export default {
                 console.error("Error adding review: ", error);
                 this.showNotification('Error adding review', 'error');
             }
+        },
+        async deleteReview() {
+            if (confirm("Are you sure you want to delete this review?")){
+            try {
+                const userId = auth.currentUser.uid;
+
+                // Delete review from outings collection
+                const reviewRef = doc(collection(doc(db, "outings", this.outingID), "reviews"), userId);
+                await deleteDoc(reviewRef);
+                console.log("Review deleted successfully");
+
+                // Remove outingID from user's reviews array
+                const userRef = doc(db, "users", userId);
+                await updateDoc(userRef, {
+                    reviews: arrayRemove(this.outingID),
+                });
+
+                // Notify the user and reset form
+                this.showNotification('Review deleted successfully', 'success');
+                this.rating = 5;
+                this.review = '';
+            } catch (error) {
+                console.error("Error deleting review: ", error);
+                this.showNotification('Error deleting review', 'error');
+            }
+        }
+        },
+        updateRating(rating) {
+            this.rating = rating;
         }
     }
 };
