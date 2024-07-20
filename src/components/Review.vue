@@ -130,7 +130,7 @@ export default {
     padding-top: 7px;
 }
 .description {
-    padding: 10px 30px 10px 50px;
+    padding: 10px 30px 10px 30px;
 }
 .date {
     padding-right: 30px;
@@ -139,7 +139,7 @@ export default {
 }
 h4 {
     font-weight: 700;
-    margin-left: -40px;
+    /* margin-left: -40px; */
 }
 .no-reviews{
     text-align: center;

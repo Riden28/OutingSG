@@ -23,7 +23,7 @@
     
   
     export default {
-      name: 'saved',
+      name: 'myHistory',
       
       components: {
         NavBar,
