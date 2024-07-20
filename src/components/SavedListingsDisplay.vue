@@ -6,7 +6,7 @@
       height="700"
       color="var(--secondary)"
       mode="manual"
-      @load="load"
+      @load="loadMoreListings"
       empty-text="No more recommended listings"
     >
       <div v-if="listings.length > 0">
