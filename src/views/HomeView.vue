@@ -107,13 +107,9 @@ const storage = getStorage(firebaseApp);
       ListingRecommend,
       OutingSGFooter
     },
-  };
-
-  console.log(auth.currentUser);
-  if (auth.currentUser) {
-    console.log('logged in');
-  } else {
-    console.log('not logged in');
+    mounted(){
+      window.scrollTo(0, 0);
+    }
   }
 </script>
 

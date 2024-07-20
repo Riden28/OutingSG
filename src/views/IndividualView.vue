@@ -50,6 +50,7 @@
             created() {
                 this.listingID = this.$route.params.listingID;
                 this.fetchListingDetails();
+                window.scrollTo(0, 0);
             }
         };
     </script>

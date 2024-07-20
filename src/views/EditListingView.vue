@@ -152,6 +152,7 @@ export default {
         }
     },
     async mounted() {
+        window.scrollTo(0, 0);
         this.listingID = this.$route.params.listingID;
         if (!auth.currentUser) {
             this.$router.push("/login");
