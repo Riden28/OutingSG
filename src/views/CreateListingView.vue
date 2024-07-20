@@ -151,6 +151,7 @@ export default {
   },
   created() {
     if (!auth.currentUser) {
+      alert("Please login first before accessing this page.")
       this.$router.push("/login");
     }
       window.scrollTo(0, 0);

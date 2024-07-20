@@ -62,6 +62,7 @@ export default {
         await this.getSavedOutings();
         this.loadMoreListings();
       } else {
+        alert("Please login first before accessing this page.")
         router.push("/login");
       }
     });
