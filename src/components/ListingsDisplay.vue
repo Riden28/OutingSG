@@ -14,7 +14,7 @@
           <v-col v-for="listing in listings" :key="listing.listingID" cols="auto">
             <v-card class="mx-1" height="280" width="417" rounded="xl"  @click="navigateToListing(listing.listingID)">
               <v-img :src="listing.url" height="174px" cover></v-img>
-              <v-btn flat icon="mdi-bookmark" base-color="transparent" size="50" class="bookmark-icon" @click.stop.prevent="bookmarkListing(listing)">
+              <v-btn flat border="0" icon="mdi-bookmark" base-color="transparent" size="50" class="bookmark-icon" @click.stop.prevent="bookmarkListing(listing)">
                 <v-icon icon="mdi-bookmark-outline" size="50" color="var(--primary)"></v-icon>
               </v-btn>
               <v-card-title><b>{{ listing.name }}</b></v-card-title>
