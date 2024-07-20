@@ -17,7 +17,7 @@
           </v-carousel-item>
         </div>
       </template>
-      <div class="carousel_title" v-if="isHomepage">Trending Activities</div>
+      <div class="carousel_title" v-if="isHomepage"><h3><b>Trending activities</b></h3></div>
     </v-carousel>
   </div>
 </template>
