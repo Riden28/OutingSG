@@ -5,8 +5,6 @@
         <p>
             <router-link to="/about">About Us </router-link>
             |
-            <router-link to="/contact"> Contact Us </router-link>
-            |
             <router-link to="/tnc"> Terms and Conditions</router-link>
         </p>
         <h6>© 2024 OutingSG. All rights reserved.</h6>
